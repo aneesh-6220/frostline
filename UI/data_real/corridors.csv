@@ -1,0 +1,4 @@
+corridor_id,name,kind,lat,lon,has_road_records
+dettah_bay,Dettah Ice Road (Yellowknife Bay),verified,62.43,-114.34,true
+aklavik_delta,Aklavik Ice Road (Mackenzie Delta),verified,68.29,-134.37,true
+custom,Custom,custom,65.0,-120.0,false
