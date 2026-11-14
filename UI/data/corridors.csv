@@ -1,0 +1,5 @@
+corridor_id,name,kind,lat,lon,has_road_records
+tibbitt_contwoyto,Tibbitt–Contwoyto,verified,64.5,-110.5,true
+inuvik_tuk,Inuvik–Tuktoyaktuk,verified,68.8,-133.5,true
+james_bay,James Bay,benchmark,53.5,-79.0,false
+custom,Custom,custom,65.0,-120.0,false

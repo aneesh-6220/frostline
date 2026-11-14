@@ -1,0 +1,10 @@
+corridor_id,metric,slope_per_decade,ci_low,ci_high,n_seasons,kendall_tau,p_value,plain_takeaway,synthetic
+tibbitt_contwoyto,fdd,-157.0,-200.22,-122.54,31,-0.763,0.0,"Winter freezing degree-days show a downward trend of about 157.0 °C-days per decade, indicating warming winter conditions.",true
+tibbitt_contwoyto,thaw_days,0.71,0.0,1.11,31,0.377,0.0061,"Mid-winter thaw days have increased by roughly 0.7 days per decade, showing more frequent thaw occurrences.",true
+inuvik_tuk,fdd,-157.83,-191.8,-130.0,31,-0.742,0.0,Freezing degree-days have declined by approximately 157.8 °C-days per decade across the northern delta corridor.,true
+inuvik_tuk,thaw_days,0.53,0.0,1.07,31,0.369,0.0077,Winter thaw days remain very low but show a slight upward trend of 0.5 days per decade.,true
+james_bay,fdd,-8.48,-37.33,21.57,31,-0.067,0.613,"Freezing degree-days have remained relatively stable, with a slight change of 8.5 °C-days per decade.",true
+james_bay,thaw_days,0.95,0.0,1.43,31,0.376,0.0055,Winter thaw days display moderate decadal variability with an estimated trend of 0.9 days per decade.,true
+james_bay,threshold_doy,1.0,0.0,2.0,31,0.264,0.0448,The sustained winter freeze date has shifted later by 1.0 days per decade.,true
+custom,fdd,-148.67,-176.69,-127.56,31,-0.716,0.0,Freezing degree-days show an estimated decadal reduction of about 148.7 °C-days per decade.,true
+custom,thaw_days,1.0,0.59,1.54,31,0.55,0.0001,Provisional thaw days exhibit a slight increase of approximately 1.0 days per decade.,true
