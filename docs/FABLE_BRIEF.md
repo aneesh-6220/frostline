@@ -22,3 +22,18 @@ Turn the existing Streamlit prototype in `UI/` into the final NorthLink app usin
 
 ## Do not
 Claim the tool predicts openings or ice safety; claim community validation; call POWER and MERRA-2 independent; present Aklavik's earlier-opening trend as robust (it vanishes in 2001-2024).
+
+---
+
+## Update: extended data (read this before building)
+
+New files are in `UI/data_real/` (copies of `data/processed/`):
+- `corridor_panel.csv`: one row per corridor (9), climate trend vs road-date trend. Use for a "9 corridors at a glance" view.
+- `extended_trends.csv`: Theil–Sen slope per decade, 95% CI, Mann–Kendall p for 14 metrics × 9 corridors.
+- `snow_vs_opening.csv`, `yellowknife_snow_by_season.csv`: Dettah snow-depth vs opening-day (Dec 1 snow depth, Spearman 0.54, p=0.007). Show as an exploratory chart labelled "hypothesis: early snow insulates ice", not a cause.
+- `pooled_anomaly_correlations.csv`: spring warmth vs closing day (rho about −0.29); p-values are optimistic (shared weather).
+- `station_summary_aklavik_inuvik.csv`: NASA vs station bias; NASA is colder, so show trends, not absolute temperatures.
+
+Full daily data: `data/processed/nasa_daily_variables.csv` (10 NASA POWER variables, 9 locations).
+
+Rules for the app (do not break): no people names; supplementary corridor coordinates are approximate; not a road-safety or opening-date predictor; Dettah opening later +10 d/decade is real but temperature trend is NOT supported, so never claim warming caused it; MODIS and Giovanni MERRA-2 monthly were not obtained, so say "NASA POWER (MERRA-2-derived)" only; remove the "Provisional synthetic data" banner only when pointing at `UI/data_real`.

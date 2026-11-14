@@ -1,0 +1,6 @@
+climate_metric,road_metric,spearman_rho,p,n,source
+snowfall_octdec_cm,open_day (Dettah),0.1411,0.5208,23,ECCC Yellowknife A
+sog_mean_nov_cm,open_day (Dettah),0.4994,0.01526,23,ECCC Yellowknife A
+sog_dec1_cm,open_day (Dettah),0.5369,0.006826,24,ECCC Yellowknife A
+precip_octdec_mm,open_day (Dettah),-0.3325,0.1124,24,NASA POWER PRECTOTCORR
+rank regression: open_day ~ snowfall + FDD,coef snowfall / coef FDD,0.1212,-0.1147,23,"exploratory; ranks; first number = snowfall coef, second (in p column) = FDD coef"
