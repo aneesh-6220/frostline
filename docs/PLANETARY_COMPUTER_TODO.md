@@ -1,9 +1,9 @@
 # TODO for the next collaborator: MODIS satellite data from Microsoft Planetary Computer
 
-**Status: NOT in the dataset yet. Everything in `data/processed/` is NASA POWER (MERRA-2-derived) + ECCC stations + NWT road records.** The pull was started and deliberately stopped by the team lead; nothing partial was saved or committed.
+**Status: OPTIONAL and NOT in the dataset. It is not required for the app and is not itself an official challenge resource (see `docs/CHALLENGE_ELIGIBILITY.md`).** Original note: **NOT in the dataset yet. Everything in `data/processed/` is NASA POWER (MERRA-2-derived) + ECCC stations + NWT road records.** The pull was started and deliberately stopped by the team lead; nothing partial was saved or committed.
 
 ## Why it is worth finishing
-Gives a true satellite (NASA MODIS) record: 8-day snow cover and lake-ice class at the road point (10A2) and day/night land-surface temperature (11A2), 2001-2024 winters. This directly tests the snow-insulation hypothesis from `snow_vs_opening.csv` (Dec 1 snow depth vs Dettah opening day, Spearman 0.54) and closes the "no satellite data" gap.
+Gives a true satellite (NASA MODIS) record: 8-day snow cover and lake-ice class at the road point (10A2) and day/night land-surface temperature (11A2), 2001-2024 winters. This directly tests the snow-insulation hypothesis from `snow_vs_opening.csv` (the leak-free snow association in `docs/APPROVED_FINDINGS.md` section D) and closes the "no satellite data" gap.
 
 ## How (about 20 minutes, public, no login, read-only requests)
 1. Open `https://planetarycomputer.microsoft.com/api/stac/v1/collections/modis-11A2-061` in a normal browser (must stay on that origin; shell and WebFetch cannot reach it).

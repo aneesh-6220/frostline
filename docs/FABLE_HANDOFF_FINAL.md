@@ -1,5 +1,7 @@
 # NorthLink: final implementation handoff for Fable 5.2
 
+**Entry point: `docs/FABLE_52_START_HERE.md`.** This file remains authoritative for scope, pages, prohibitions and wording; `docs/APP_IMPLEMENTATION_CONTRACT.md` is authoritative for data and acceptance rules; `docs/APPROVED_FINDINGS.md` (generated) holds the approved numbers.
+
 This is the single authoritative implementation specification. Anything in another file that contradicts it is outdated (`docs/FABLE_BRIEF.md` and `docs/HANDOFF_README.md` are marked SUPERSEDED).
 Branch with all remediation work: `remediation-final` (see delivery notes at the end). Event: NASA Space Apps 2026 Halifax, local judging Sun 2026-11-15, 3 PM.
 
@@ -31,7 +33,7 @@ UI/              northlink_app.py (legacy prototype), data/ (SYNTHETIC), data_re
 NASA POWER daily files downloaded 2026-11-14; NWT Table 108 workbook; ECCC bulk daily CSVs. Provenance and required acknowledgement: `docs/REFERENCES.md`, `docs/DATA_SOURCES.md`.
 
 ## 3. Processed data and schemas
-Data dictionary: `docs/DATA_DICTIONARY.md`. The files the app needs are in `UI/data_real/`: `corridors.csv`, `climate_annual.csv` (fdd, thaw_days per winter), `road_seasons.csv` (open_date, close_date, `season_length_days` = interval, not usable days), `trends.csv` (with caveat text), `extended_trends.csv`, `multiple_testing_126.csv`, `road_record_trends_all_routes.csv`, `hypothesis_families.csv`, `corridor_panel.csv`, `snow_vs_opening.csv`, `snow_trends.csv`, `yellowknife_snow_by_season.csv`, `station_summary_aklavik_inuvik.csv`. All are produced by `scripts/build_ui_data_real.py`; do not edit them by hand. `trends.csv` has empty `p_value`, `slope`, `ci` cells for thaw days (status mostly_tied or constant): render "not estimated", never 0 or 1.
+Data dictionary: `docs/DATA_DICTIONARY.md`. The files the app needs are all in `UI/data_real/`; the complete list with columns, dtypes and display limits is the generated `docs/APP_DATA_SCHEMA.md`. Key semantics: `climate_annual.csv` holds per-winter FDD and thaw days; `road_seasons.csv` holds open_date, close_date and `season_length_days` (the interval, not usable days); `season_metrics_extended.csv` and `road_operations_all_routes.csv` are the per-winter inputs for recomputing statistics for a user-selected period (`scripts/northlink_recompute.py`, rules in `docs/APP_IMPLEMENTATION_CONTRACT.md`). All are produced by `scripts/build_ui_data_real.py`; do not edit them by hand. `trends.csv` has empty `p_value`, `slope`, `ci` cells for thaw days (status mostly_tied or constant): render "not estimated", never 0 or 1.
 
 ## 4. Route and location definitions
 Primary: Dettah Ice Road, road_id `dettah`, point `dettah_bay` (62.43 N, -114.34 W). Comparison: Aklavik Ice Road, `aklavik_delta` (68.29 N, -134.37 W). Seven further corridors are supplementary with approximate coordinates (label "approximate"). Route identity, length ambiguity (Aklavik), the point-versus-road limitation and press-source status: `docs/ROUTE_IDENTITY.md`. The two roads are different objects (6.5 km lake crossing vs a delta road of about 112 to 117 km); present them as a "different settings" contrast, not replication.
@@ -84,7 +86,7 @@ Use these templates; do not paraphrase into stronger claims.
 - Never: predict, rank safety, or say "because".
 
 ## 14. Scientific acceptance tests
-`python3 -I -m unittest discover -s tests -v`. `tests/test_scientific_acceptance.py` checks raw checksums, the road-date validator, BH and Holm known values, the `mostly_tied` guard, leakage-free windows, the 126 and 51-test families, absence of pooled tests, bias figures, `RESULTS.md` equal to its generator, prohibited phrases, legacy UI containment. Add a UI test that loads `UI/data_real`, checks schema and that no `synthetic` value is true, and that no 380 metric exists in the app.
+`python3 -I -m unittest discover -s tests -v`. `tests/test_scientific_acceptance.py` checks raw checksums, the road-date validator, BH and Holm known values, the `mostly_tied` guard, leakage-free windows, the 126 and 51-test families, absence of pooled tests, bias figures, `RESULTS.md` equal to its generator, prohibited phrases, legacy UI containment. `tests/test_handoff_layer.py` adds the road-status counts, the app data contract, period recomputation, Giovanni-ingest strictness, handoff-document consistency and submission-number checks. Add a UI test that loads `UI/data_real`, checks schema and that no `synthetic` value is true, and that no 380 metric exists in the app.
 
 ## 15. Commands
 ```
@@ -98,13 +100,13 @@ cd UI && pip install -r requirements.txt && streamlit run northlink_app.py   # a
 `UI/northlink_app.py` was deliberately **not edited** (possible concurrent work by Fable or Shaurya). Integration: work on a branch from `remediation-final` (or merge it into main first). If `UI/data_real/*` conflicts, take either side and rerun `scripts/build_ui_data_real.py`. If `docs/RESULTS.md` conflicts, rerun `scripts/generate_results_md.py`. The loader currently reads relative `data/*.csv`; change it to `data_real/` and the schema additions above, then remove the synthetic banner (only then). Keep the app free of network calls for data.
 
 ## 17. NASA eligibility status
-`docs/CHALLENGE_ELIGIBILITY.md`. No required dataset found; POWER is not on the Resources list but T2M is a MERRA-2 model variable; plausible, not confirmed by an organizer. Giovanni extraction UNVERIFIED (needs an Earthdata login). Fit risk: the brief describes a general variable-and-region tool; NorthLink is a case study. AI use is allowed and must be described in the submission: this repository's code and documents were produced with AI assistance.
+`docs/CHALLENGE_ELIGIBILITY.md`. The challenge text names no required dataset, and POWER T2M is a MERRA-2 model variable, so it fits the challenge's own wording. But the Global Award rule (meaningful use of a NASA source from the challenge's Resources list) is **NOT DEMONSTRATED**: POWER is not on that list and the Giovanni extraction is blocked on an Earthdata login (owner Cason; steps and ingest script are ready). Do not state otherwise anywhere in the app or submission. Fit risk: the brief describes a general variable-and-region tool; NorthLink is a case study. AI use is allowed and must be described in the submission: this repository's code and documents were produced with AI assistance.
 
 ## 18. Unresolved issues requiring human approval
 1. Statistical sign-off by a named reviewer (none has reviewed the methods).
 2. Confirm the two flagged Tibbitt rows and the Fort Good Hope 1994 and Peel River 2006 rows with GNWT, or keep excluded.
 3. Decide whether to extend POWER to 1993/94 (needs a live re-download and a verification step).
-4. Giovanni cross-check, if a team member has an Earthdata login.
+4. Giovanni MERRA-2 monthly extraction (owner Cason; steps in `CHALLENGE_ELIGIBILITY.md`, ingest by `scripts/ingest_giovanni_monthly.py`).
 5. Confirm organizer acceptance of POWER (ask at the local event) and read the Project Submission Guide.
 6. Cause of the NASA cold bias (not established); verification of the Aklavik alignment.
 7. Repoint and test the UI; remove the 380 C-day metric.

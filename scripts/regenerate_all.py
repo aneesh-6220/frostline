@@ -46,7 +46,8 @@ run(["scripts/audit_daily_temperature.py", "data/processed/nasa_daily_temperatur
 xlsx = sorted(glob.glob(os.path.join(ROOT, "data/raw/roads/*.xlsx")))
 assert len(xlsx) == 1, xlsx
 run(["scripts/build_road_operations.py", os.path.relpath(xlsx[0], ROOT), "data/processed/road_operations.csv"])
-for s in ["run_analysis", "run_extended_analysis", "run_remediation_analysis", "diagnose_temperature_bias", "build_ui_data_real", "generate_results_md"]:
+for s in ["run_analysis", "run_extended_analysis", "run_remediation_analysis", "diagnose_temperature_bias", "build_ui_data_real",
+          "ingest_giovanni_monthly", "generate_approved_findings", "generate_data_schema_doc", "generate_results_md"]:  # ingest_giovanni_monthly is a no-op unless a real Giovanni file was placed in data/raw/nasa/giovanni/
     run([f"scripts/{s}.py"])
 after = raw_digest()
 if before != after:
@@ -54,7 +55,7 @@ if before != after:
 print("raw data digest unchanged:", after[:16])
 
 if "--check" in sys.argv:
-    d = subprocess.run(["git", "status", "--porcelain", "--", "data/processed", "UI/data_real", "docs/RESULTS.md"], cwd=ROOT, capture_output=True, text=True).stdout
+    d = subprocess.run(["git", "status", "--porcelain", "--", "data/processed", "UI/data_real", "docs/RESULTS.md", "docs/APPROVED_FINDINGS.md", "docs/APP_DATA_SCHEMA.md"], cwd=ROOT, capture_output=True, text=True).stdout
     if d.strip():
         print("DERIVED FILES DIFFER FROM COMMITTED VERSIONS:\n" + d)
         sys.exit(1)

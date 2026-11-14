@@ -84,7 +84,11 @@ for key, lab, d in [("mean_full_c", "Full-season mean (C)", 2), ("fdd_pre_cutoff
         r = tr[(tr.location_id == loc) & (tr.metric == key) & (tr.variant == "main (2001-2024)")].iloc[0]
         cells.append(f"{sgn(r.slope_per_decade, d)} ({ci(r.ci95_low, r.ci95_high, d)}), p {p3(r.mk_p)}, q not computed")
     w(f"| {lab} | " + " | ".join(cells) + " |")
-w("| Jan-Mar thaw days | not estimated (23 of 24 winters equal) | not estimated (constant series, 0 in all 24) |\n")
+_cl = pd.read_csv(P("UI/data_real/climate_annual.csv"))
+def _thaw(cid):
+    t = _cl[(_cl.corridor_id == cid) & (_cl.metric == "thaw_days")].value
+    return f"not estimated (thaw in {int((t > 0).sum())} of {len(t)} winters; total thaw days {int(t.sum())})"
+w(f"| Jan-Mar thaw days | {_thaw('dettah_bay')} | {_thaw('aklavik_delta')} |\n")
 w("`q` is across all 126 extended trend tests (section 3). The last two rows are outside that family (extra tests), so no adjusted value is given; the Aklavik pre-opening FDD result is a post-hoc window and should not be headlined. Sensitivity variants (drop first or last 5 winters, OLS) are in `trend_results.csv`.\n")
 
 # 3 multiplicity

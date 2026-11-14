@@ -31,7 +31,7 @@ On the 17 winters with complete Oct-Dec data in both series, NASA mean Oct-Dec F
 | Mar 15 to Apr 15 mean daily max (C) | -0.79 (-2.05 to 1.17), p 0.413, q 0.844 | +1.68 (0.10 to 3.30), p 0.045, q 0.280 |
 | Full-season mean (C) | +0.03 (-0.99 to 0.99), p 0.941, q not computed | +0.90 (-0.01 to 1.84), p 0.056, q not computed |
 | FDD to the day before the earliest opening (C-days) | -16 (-82 to 56), p 0.637, q not computed | -108 (-158 to -23), p 0.008, q not computed |
-| Jan-Mar thaw days | not estimated (23 of 24 winters equal) | not estimated (constant series, 0 in all 24) |
+| Jan-Mar thaw days | not estimated (thaw in 1 of 24 winters; total thaw days 1) | not estimated (thaw in 0 of 24 winters; total thaw days 0) |
 
 `q` is across all 126 extended trend tests (section 3). The last two rows are outside that family (extra tests), so no adjusted value is given; the Aklavik pre-opening FDD result is a post-hoc window and should not be headlined. Sensitivity variants (drop first or last 5 winters, OLS) are in `trend_results.csv`.
 

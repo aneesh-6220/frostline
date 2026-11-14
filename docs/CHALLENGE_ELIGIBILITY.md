@@ -25,12 +25,33 @@ The Background text names MERRA-2 and GLDAS as example models and MODIS, OMI, AI
 | AI ("Super Intelligence") use | Allowed; the submission must describe how such tools were used during development. NorthLink code and docs were produced with AI assistance and this must be disclosed in the submission. | VERIFIED (FAQ) |
 | Team rules | Teams of 1 to 6 for Local Events; one team, one challenge. Local event date, time and judging format (Halifax, Sun 2026-11-15 3 PM) come from the team brief and were not re-verified on the Local Events page. | PARTLY VERIFIED |
 
-## MERRA-2 / Giovanni direct extraction: UNVERIFIED
-An independent extraction from Giovanni was attempted through the browser and not completed: the tool needs an Earthdata login for full access, which cannot be entered here. POWER and MERRA-2 are not independent, so a Giovanni pull would verify provenance (that POWER T2M equals the MERRA-2 product at the same cell), not add independent data.
-Manual steps for a team member with an Earthdata account:
+## NASA Global Award resource requirement: NOT YET DEMONSTRATED (updated 2026-11-14 evening)
+
+The team supplied the official Resources list (it matches the verbatim list above). The Global Award guidance, as relayed by the team, requires meaningful use of at least one NASA data source from the chosen challenge's Resources. The NASA-listed sources are Giovanni, Hydrology Time Series (GES DISC), AppEEARS and NOAA Climate Data Online (the last is NOAA, not NASA). The challenge text also names MERRA-2 as a suitable model.
+
+| Question | Finding | Status |
+|---|---|---|
+| Does our current data path use a listed NASA source? | No. The temperatures come from NASA POWER, which is not on the list. POWER's meteorology is MERRA-2, a product that Giovanni also serves, but our files were not obtained through Giovanni, so the listed-source requirement is **not demonstrated**. This repository must not describe it as met. | NOT DEMONSTRATED |
+| Is POWER/MERRA-2 scientifically appropriate for the challenge? | Yes on the challenge's own wording (model variables are allowed). This is separate from the Global Award rule. | PLAUSIBLE |
+| Giovanni extraction (this review) | Attempted. The Giovanni page loads, but Earthdata Login is required to plot or download and no signed-in session exists in the review browser. Credentials must not be entered by an assistant. No data were obtained. | BLOCKED, owner Cason |
+| Hydrology Time Series (Data Rods) | The legacy endpoint redirected to a GES DISC notice titled "The Hydrology Data Rods service will be discontinued no earlier than October 31, 2025 and transitioned to a new data access method". No data were obtained; do not plan on it. | NOT USABLE as tested |
+| AppEEARS | Not attempted (needs the same Earthdata login). It serves MODIS products, which are a NASA instrument family the challenge names. A point sample of a MODIS snow or land-surface-temperature product would be a second eligible route. The existing Planetary Computer script (`docs/PLANETARY_COMPUTER_TODO.md`) uses the same MODIS products but is not itself a listed resource. | NOT ATTEMPTED |
+| Organizer view | Whether POWER counts toward the Global Award requirement has not been asked. | ASK at the Halifax event |
+
+Do not delay application development on this. The app, the findings and the statistics do not depend on it.
+
+### What a Giovanni extraction would and would not add
+POWER and Giovanni MERRA-2 are not independent datasets. A Giovanni pull is useful because (a) it uses a listed NASA tool on a model the challenge names, and (b) it verifies that POWER T2M equals the MERRA-2 product at the same cell (`giovanni_vs_power_check.csv`). Monthly means are used **only** for seasonal and annual mean-temperature trends. They never replace daily values: FDD, thaw days and road-date metrics stay on the POWER daily series (`docs/SCIENTIFIC_METHODS.md`). Expect the Giovanni monthly trends to resemble the POWER ones; that is a consistency check, not a new finding.
+
+### Manual action for Cason (about 30 minutes, needs an Earthdata login, which is free)
 1. Open https://giovanni.gsfc.nasa.gov/giovanni/ and log in.
-2. Plot type "Time Series, Area-Averaged"; date range 2001-10-01 to 2025-06-30 (UTC).
-3. Region: point box at 62.4 N, -114.375 W (the cell centre is 62.5 N, -114.375 W; confirm the cell used by POWER, whose header reports the average elevation 204.71 m for the region).
-4. Variable: MERRA-2 "2-meter air temperature" (M2T1NXSLV hourly or M2SDNXSLV daily; confirm the exact collection name in the picker, it was not confirmed here).
-5. Download the CSV. Compare daily means to `data/raw/nasa/power_daily_T2M_dettah_bay.csv`. Note that Giovanni daily averaging is in UTC; POWER's header says LST.
-Until done, treat "POWER T2M equals MERRA-2 T2M" as the provider's statement, not our verification.
+2. Plot type **Time Series, Area-Averaged** (a point is acceptable; Giovanni returns the cell containing it).
+3. Dates 2001-10-01 to 2025-06-30 (UTC).
+4. Variable: MERRA-2 monthly mean "2-meter air temperature", collection **M2TMNXSLV** (MERRA-2 tavgM_2d_slv_Nx), variable **T2M**. Confirm the collection short name and version in the variable picker and record them.
+5. Location: lat 62.43, lon -114.34 (the same point used for POWER, in MERRA-2 cell centre 62.5 N, -114.375 W). Repeat for lat 68.29, lon -134.37 for Aklavik.
+6. Download the data as CSV. Keep the header lines: the ingest script refuses a file whose header does not name M2TMNXSLV and T2M.
+7. Save as `data/raw/nasa/giovanni/giovanni_M2TMNXSLV_T2M_dettah_bay.csv` and `..._aklavik_delta.csv`. Do not edit the files.
+8. Add the files to the checksum manifest: from `data/raw` run `find . -type f | sort | xargs sha256sum > ../../tests/raw_checksums.sha256`, then check the diff only adds the new files.
+9. Run `python3 -I scripts/regenerate_all.py`. It ingests the files (`scripts/ingest_giovanni_monthly.py`) and writes `giovanni_monthly_t2m_seasonal.csv`, `giovanni_monthly_t2m_trends.csv` and `giovanni_vs_power_check.csv` to `data/processed/` and `UI/data_real/`.
+10. Record in this file the exact dataset identifier, version, variable, coordinates, units, period and access date shown in the Giovanni header, and change the table above only for what was actually demonstrated.
+Until step 9 succeeds, no document, slide or submission text may claim a Giovanni extraction or that the NASA-resource requirement is met. The ingest script is tested only on a synthetic fixture created in a temporary folder, never in `data/`.

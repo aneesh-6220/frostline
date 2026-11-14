@@ -1,0 +1,55 @@
+location_id,road_id,predictor_window,outcome,n_winters,n_winters_window_reaches_outcome,fraction_leaky,verdict
+dettah_bay,dettah,Oct 1 - Dec 31 (FDD/mean/precip/wind/RH/LW windows),opening_date,24,16,0.667,LEAKY (uses information from on/after the outcome)
+dettah_bay,dettah,Oct 1 - Nov 28 (leak-free opening window),opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+dettah_bay,dettah,Nov 28 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+dettah_bay,dettah,Dec 1 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+dettah_bay,dettah,Mar 15 - Apr 15 (T/Tmax/SW/LW windows),closing_date,24,11,0.458,LEAKY (uses information from on/after the outcome)
+dettah_bay,dettah,"Mar 15 - day before earliest closing (leak-free closing window; Dettah Apr 6, Aklavik Apr 15)",closing_date,24,0,0.0,no leakage in the 2001-2024 sample
+aklavik_delta,aklavik,Oct 1 - Dec 31 (FDD/mean/precip/wind/RH/LW windows),opening_date,24,21,0.875,LEAKY (uses information from on/after the outcome)
+aklavik_delta,aklavik,Oct 1 - Nov 28 (leak-free opening window),opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+aklavik_delta,aklavik,Nov 28 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+aklavik_delta,aklavik,Dec 1 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+aklavik_delta,aklavik,Mar 15 - Apr 15 (T/Tmax/SW/LW windows),closing_date,24,0,0.0,no leakage in the 2001-2024 sample
+aklavik_delta,aklavik,"Mar 15 - day before earliest closing (leak-free closing window; Dettah Apr 6, Aklavik Apr 15)",closing_date,24,0,0.0,no leakage in the 2001-2024 sample
+wrigley_tulita,wrigley_tulita,Oct 1 - Dec 31 (FDD/mean/precip/wind/RH/LW windows),opening_date,24,22,0.917,LEAKY (uses information from on/after the outcome)
+wrigley_tulita,wrigley_tulita,Oct 1 - Nov 28 (leak-free opening window),opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+wrigley_tulita,wrigley_tulita,Nov 28 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+wrigley_tulita,wrigley_tulita,Dec 1 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+wrigley_tulita,wrigley_tulita,Mar 15 - Apr 15 (T/Tmax/SW/LW windows),closing_date,24,24,1.0,LEAKY (uses information from on/after the outcome)
+wrigley_tulita,wrigley_tulita,"Mar 15 - day before earliest closing (leak-free closing window; Dettah Apr 6, Aklavik Apr 15)",closing_date,24,24,1.0,LEAKY (uses information from on/after the outcome)
+norman_wells_fgh,norman_wells_fort_good_hope,Oct 1 - Dec 31 (FDD/mean/precip/wind/RH/LW windows),opening_date,24,22,0.917,LEAKY (uses information from on/after the outcome)
+norman_wells_fgh,norman_wells_fort_good_hope,Oct 1 - Nov 28 (leak-free opening window),opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+norman_wells_fgh,norman_wells_fort_good_hope,Nov 28 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+norman_wells_fgh,norman_wells_fort_good_hope,Dec 1 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+norman_wells_fgh,norman_wells_fort_good_hope,Mar 15 - Apr 15 (T/Tmax/SW/LW windows),closing_date,24,23,0.958,LEAKY (uses information from on/after the outcome)
+norman_wells_fgh,norman_wells_fort_good_hope,"Mar 15 - day before earliest closing (leak-free closing window; Dettah Apr 6, Aklavik Apr 15)",closing_date,24,23,0.958,LEAKY (uses information from on/after the outcome)
+deline,deline,Oct 1 - Dec 31 (FDD/mean/precip/wind/RH/LW windows),opening_date,24,5,0.208,LEAKY (uses information from on/after the outcome)
+deline,deline,Oct 1 - Nov 28 (leak-free opening window),opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+deline,deline,Nov 28 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+deline,deline,Dec 1 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+deline,deline,Mar 15 - Apr 15 (T/Tmax/SW/LW windows),closing_date,24,23,0.958,LEAKY (uses information from on/after the outcome)
+deline,deline,"Mar 15 - day before earliest closing (leak-free closing window; Dettah Apr 6, Aklavik Apr 15)",closing_date,24,23,0.958,LEAKY (uses information from on/after the outcome)
+liard_fort_simpson,liard_fort_simpson,Oct 1 - Dec 31 (FDD/mean/precip/wind/RH/LW windows),opening_date,24,24,1.0,LEAKY (uses information from on/after the outcome)
+liard_fort_simpson,liard_fort_simpson,Oct 1 - Nov 28 (leak-free opening window),opening_date,24,11,0.458,LEAKY (uses information from on/after the outcome)
+liard_fort_simpson,liard_fort_simpson,Nov 28 snow on ground,opening_date,24,11,0.458,LEAKY (uses information from on/after the outcome)
+liard_fort_simpson,liard_fort_simpson,Dec 1 snow on ground,opening_date,24,15,0.625,LEAKY (uses information from on/after the outcome)
+liard_fort_simpson,liard_fort_simpson,Mar 15 - Apr 15 (T/Tmax/SW/LW windows),closing_date,24,4,0.167,LEAKY (uses information from on/after the outcome)
+liard_fort_simpson,liard_fort_simpson,"Mar 15 - day before earliest closing (leak-free closing window; Dettah Apr 6, Aklavik Apr 15)",closing_date,24,4,0.167,LEAKY (uses information from on/after the outcome)
+tibbitt_contwoyto,tibbitt_contwoyto,Oct 1 - Dec 31 (FDD/mean/precip/wind/RH/LW windows),opening_date,22,0,0.0,no leakage in the 2001-2024 sample
+tibbitt_contwoyto,tibbitt_contwoyto,Oct 1 - Nov 28 (leak-free opening window),opening_date,22,0,0.0,no leakage in the 2001-2024 sample
+tibbitt_contwoyto,tibbitt_contwoyto,Nov 28 snow on ground,opening_date,22,0,0.0,no leakage in the 2001-2024 sample
+tibbitt_contwoyto,tibbitt_contwoyto,Dec 1 snow on ground,opening_date,22,0,0.0,no leakage in the 2001-2024 sample
+tibbitt_contwoyto,tibbitt_contwoyto,Mar 15 - Apr 15 (T/Tmax/SW/LW windows),closing_date,22,21,0.955,LEAKY (uses information from on/after the outcome)
+tibbitt_contwoyto,tibbitt_contwoyto,"Mar 15 - day before earliest closing (leak-free closing window; Dettah Apr 6, Aklavik Apr 15)",closing_date,22,21,0.955,LEAKY (uses information from on/after the outcome)
+sambaa_ke,sambaa_ke,Oct 1 - Dec 31 (FDD/mean/precip/wind/RH/LW windows),opening_date,24,21,0.875,LEAKY (uses information from on/after the outcome)
+sambaa_ke,sambaa_ke,Oct 1 - Nov 28 (leak-free opening window),opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+sambaa_ke,sambaa_ke,Nov 28 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+sambaa_ke,sambaa_ke,Dec 1 snow on ground,opening_date,24,0,0.0,no leakage in the 2001-2024 sample
+sambaa_ke,sambaa_ke,Mar 15 - Apr 15 (T/Tmax/SW/LW windows),closing_date,24,24,1.0,LEAKY (uses information from on/after the outcome)
+sambaa_ke,sambaa_ke,"Mar 15 - day before earliest closing (leak-free closing window; Dettah Apr 6, Aklavik Apr 15)",closing_date,24,24,1.0,LEAKY (uses information from on/after the outcome)
+nahanni_butte,nahanni_butte,Oct 1 - Dec 31 (FDD/mean/precip/wind/RH/LW windows),opening_date,24,24,1.0,LEAKY (uses information from on/after the outcome)
+nahanni_butte,nahanni_butte,Oct 1 - Nov 28 (leak-free opening window),opening_date,24,2,0.083,LEAKY (uses information from on/after the outcome)
+nahanni_butte,nahanni_butte,Nov 28 snow on ground,opening_date,24,2,0.083,LEAKY (uses information from on/after the outcome)
+nahanni_butte,nahanni_butte,Dec 1 snow on ground,opening_date,24,3,0.125,LEAKY (uses information from on/after the outcome)
+nahanni_butte,nahanni_butte,Mar 15 - Apr 15 (T/Tmax/SW/LW windows),closing_date,24,18,0.75,LEAKY (uses information from on/after the outcome)
+nahanni_butte,nahanni_butte,"Mar 15 - day before earliest closing (leak-free closing window; Dettah Apr 6, Aklavik Apr 15)",closing_date,24,18,0.75,LEAKY (uses information from on/after the outcome)

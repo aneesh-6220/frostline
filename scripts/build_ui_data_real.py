@@ -80,4 +80,11 @@ pd.DataFrame(tr, columns=["corridor_id", "metric", "slope_per_decade", "ci_low",
 for f in ["extended_trends", "corridor_panel", "snow_vs_opening", "snow_trends", "station_summary_aklavik_inuvik", "yellowknife_snow_by_season",
           "multiple_testing_126", "road_record_trends_all_routes", "hypothesis_families"]:
     shutil.copyfile(P("data/processed", f + ".csv"), P(OUT, f + ".csv"))
+# per-winter inputs that let the app recompute statistics for a user-selected period with the approved methods
+shutil.copyfile(P("data/processed", "extended_season_metrics.csv"), P(OUT, "season_metrics_extended.csv"))
+shutil.copyfile(P("data/processed", "road_operations.csv"), P(OUT, "road_operations_all_routes.csv"))
+for src, dst in [("diagnostics/bias_by_month.csv", "bias_by_month.csv"), ("road_climate_correlations.csv", "road_climate_correlations.csv"),
+                 ("leakage_audit.csv", "leakage_audit.csv"), ("headline_trend_sensitivity.csv", "headline_trend_sensitivity.csv"),
+                 ("station_fdd_by_season.csv", "station_fdd_by_season.csv")]:
+    shutil.copyfile(P("data/processed", src), P(OUT, dst))
 print("UI/data_real regenerated")
