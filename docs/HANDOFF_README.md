@@ -55,3 +55,5 @@ Not a safety or prediction tool; no usable-days claim; one grid cell is not the 
 
 ## Extended package (latest)
 Run `python3 -I scripts/run_extended_analysis.py` to regenerate the extended outputs. See RESULTS.md "Extended analysis" for findings and caveats. For the app: show Dettah snow-depth vs opening-day as an exploratory chart, the 9-corridor panel (`corridor_panel.csv`), and clearly label supplementary corridor coordinates as approximate.
+
+**Next step for any collaborator:** MODIS satellite pull from Microsoft Planetary Computer is scripted but not run. See docs/PLANETARY_COMPUTER_TODO.md.

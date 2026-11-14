@@ -26,4 +26,4 @@ Cite NASA POWER ("These data were obtained from the NASA Langley Research Center
 ## Added sources
 - NASA POWER daily, 10 variables (T2M, T2M_MAX, T2M_MIN, TS, PRECTOTCORR, WS10M, RH2M, PS, ALLSKY_SFC_SW_DWN, ALLSKY_SFC_LW_DWN), 9 corridors, 2001-10-01 to 2025-06-30: `data/raw/nasa/power_daily_ext_<id>.csv` (MERRA-2/CERES-derived; not independent of MERRA-2).
 - ECCC multi-station daily (Yellowknife A 1706/51058, Aklavik A 1623/52962, Inuvik 1669/31470/41883/51477): `data/raw/weather_stations/eccc_stations_daily_2001_2025.csv` incl. snowfall and snow on ground.
-- Not obtained: MODIS (MOD10A2/MOD11A2), Giovanni MERRA-2 monthly.
+- Not obtained yet: MODIS (see docs/PLANETARY_COMPUTER_TODO.md for the ready-to-run pull script), Giovanni MERRA-2 monthly.
