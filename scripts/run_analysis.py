@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the NorthLink analysis defined in docs/SCIENTIFIC_METHODS.md.
+"""Run the Frostline analysis defined in docs/SCIENTIFIC_METHODS.md.
 
 Usage (from repo root): python3 -I scripts/run_analysis.py
 Reads  data/processed/nasa_daily_temperature.csv, road_operations.csv, locations.csv,

@@ -1,4 +1,4 @@
-// NorthLink: pull MODIS 8-day snow cover (MOD10A2/MYD10A2) and land-surface temperature (MOD11A2)
+// Frostline: pull MODIS 8-day snow cover (MOD10A2/MYD10A2) and land-surface temperature (MOD11A2)
 // at the 9 corridor points from Microsoft Planetary Computer (public, no login).
 // HOW TO RUN: open https://planetarycomputer.microsoft.com/api/stac/v1/collections/modis-11A2-061 in any browser
 // (it must be on that origin), open DevTools console, paste this file. The shell/WebFetch cannot reach the site; a browser can.

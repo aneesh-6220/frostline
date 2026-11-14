@@ -256,10 +256,47 @@ class SubmissionDraft(unittest.TestCase):
     def test_required_sections_and_placeholders(self):
         s = read_doc("submission/SUBMISSION_DRAFT.md")
         for h in ("Problem statement", "Challenge alignment", "Scientific contribution", "Prior work and originality limits", "NASA data use", "Other sources",
-                  "Real finding and its uncertainty", "Real-world relevance", "What NorthLink does not claim", "AI-use disclosure", "Links to fill in after deployment"):
+                  "Real finding and its uncertainty", "Real-world relevance", "What Frostline does not claim", "AI-use disclosure", "Links to fill in after deployment"):
             self.assertIn(f"## {h}", s)
         self.assertIn("not yet done", s)
         self.assertIn("[____]", s)
+
+
+class Branding(unittest.TestCase):
+    """Public product is Frostline by Strongest Soldiers. Legacy names may survive only as technical identifiers
+    (northlink_*.py module names) and in the North Star's migration note."""
+    LEGACY = re.compile(r"Asterfen|NorthLink|NORTHLINK|North Link|North-Link", re.I)
+    # lowercase code identifiers such as northlink_metrics / northlink_app.py are preserved on purpose
+    IDENT = re.compile(r"northlink_[a-z_]+(\.py)?|load_northlink_data")
+
+    def public_files(self):
+        out = ["README.md", "UI/README.md", "UI/northlink_app.py", "UI/standalone_prototype.html", "submission/SUBMISSION_DRAFT.md"]
+        out += [f"docs/{n}" for n in sorted(os.listdir(os.path.join(ROOT, "docs"))) if n.endswith(".md") and n != "FROSTLINE_NORTH_STAR.md"]
+        return out
+
+    def test_no_legacy_branding_in_public_files(self):
+        for f in self.public_files():
+            lines = open(os.path.join(ROOT, f), encoding="utf-8").read().splitlines()
+            # a line tagged "[legacy-name note]" is an accurately labelled historical migration note
+            text = self.IDENT.sub("", "\n".join(l for l in lines if "[legacy-name note]" not in l))
+            m = self.LEGACY.search(text)
+            self.assertIsNone(m, f"{f}: legacy name {m.group(0) if m else ''}")
+
+    def test_north_star_exists_with_required_scope(self):
+        s = read_doc("docs/FROSTLINE_NORTH_STAR.md").lower()
+        for k in ("strongest soldiers", "frostline", "be an earth system trend detective", "guided judge demo", "northern atlas", "variable discovery",
+                  "trend detective", "regional trend comparison", "corridor investigation", "timeline", "evidence engine", "source disagreement",
+                  "evidence brief", "nasa data eligibility"):
+            self.assertIn(k, s, k)
+
+    def test_start_here_names_product_team_and_north_star(self):
+        s = read_doc("docs/FABLE_52_START_HERE.md")
+        for k in ("Frostline", "Strongest Soldiers", "docs/FROSTLINE_NORTH_STAR.md", "Cason owns Giovanni", "Yao owns scientific sign-off"):
+            self.assertIn(k, s, k)
+
+    def test_app_title_is_frostline(self):
+        app = open(os.path.join(ROOT, "UI/northlink_app.py"), encoding="utf-8").read()
+        self.assertIn('page_title="Frostline - by Strongest Soldiers"', app)
 
 
 if __name__ == "__main__":

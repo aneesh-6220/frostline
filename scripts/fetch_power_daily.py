@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Download NASA POWER daily T2M CSVs for both NorthLink locations into data/raw/nasa/.
+"""Download NASA POWER daily T2M CSVs for both Frostline locations into data/raw/nasa/.
 
 Run on a machine with internet access (the Claude workspace cannot reach NASA):
     python3 scripts/fetch_power_daily.py

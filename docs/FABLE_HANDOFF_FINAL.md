@@ -1,4 +1,4 @@
-# NorthLink: final implementation handoff for Fable 5.2
+# Frostline: final implementation handoff for Fable 5.2
 
 **Entry point: `docs/FABLE_52_START_HERE.md`.** This file remains authoritative for scope, pages, prohibitions and wording; `docs/APP_IMPLEMENTATION_CONTRACT.md` is authoritative for data and acceptance rules; `docs/APPROVED_FINDINGS.md` (generated) holds the approved numbers.
 
@@ -100,7 +100,7 @@ cd UI && pip install -r requirements.txt && streamlit run northlink_app.py   # a
 `UI/northlink_app.py` was deliberately **not edited** (possible concurrent work by Fable or Shaurya). Integration: work on a branch from `remediation-final` (or merge it into main first). If `UI/data_real/*` conflicts, take either side and rerun `scripts/build_ui_data_real.py`. If `docs/RESULTS.md` conflicts, rerun `scripts/generate_results_md.py`. The loader currently reads relative `data/*.csv`; change it to `data_real/` and the schema additions above, then remove the synthetic banner (only then). Keep the app free of network calls for data.
 
 ## 17. NASA eligibility status
-`docs/CHALLENGE_ELIGIBILITY.md`. The challenge text names no required dataset, and POWER T2M is a MERRA-2 model variable, so it fits the challenge's own wording. But the Global Award rule (meaningful use of a NASA source from the challenge's Resources list) is **NOT DEMONSTRATED**: POWER is not on that list and the Giovanni extraction is blocked on an Earthdata login (owner Cason; steps and ingest script are ready). Do not state otherwise anywhere in the app or submission. Fit risk: the brief describes a general variable-and-region tool; NorthLink is a case study. AI use is allowed and must be described in the submission: this repository's code and documents were produced with AI assistance.
+`docs/CHALLENGE_ELIGIBILITY.md`. The challenge text names no required dataset, and POWER T2M is a MERRA-2 model variable, so it fits the challenge's own wording. But the Global Award rule (meaningful use of a NASA source from the challenge's Resources list) is **NOT DEMONSTRATED**: POWER is not on that list and the Giovanni extraction is blocked on an Earthdata login (owner Cason; steps and ingest script are ready). Do not state otherwise anywhere in the app or submission. Fit risk: the brief describes a general variable-and-region tool; Frostline is a case study. AI use is allowed and must be described in the submission: this repository's code and documents were produced with AI assistance.
 
 ## 18. Unresolved issues requiring human approval
 1. Statistical sign-off by a named reviewer (none has reviewed the methods).

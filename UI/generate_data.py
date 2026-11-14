@@ -1,4 +1,4 @@
-"""Generate synthetic test data for NorthLink following the locked schema.
+"""Generate synthetic test data for Frostline following the locked schema.
 """
 import math
 import numpy as np

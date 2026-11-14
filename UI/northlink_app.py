@@ -1,4 +1,4 @@
-"""NorthLink · Northern Seasonal Road Winter Climate Intelligence
+"""Frostline - by Strongest Soldiers (legacy prototype on synthetic data)
 Streamlit Application
 """
 
@@ -16,7 +16,7 @@ import streamlit.components.v1 as components
 # 0. Page Configuration & Theme
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="NorthLink · Northern Seasonal Road Climate Intelligence",
+    page_title="Frostline - by Strongest Soldiers",
     page_icon="❄️",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -142,7 +142,7 @@ st.markdown(
 # -----------------------------------------------------------------------------
 @st.cache_data
 def load_northlink_data() -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Loads CSV files strictly adhering to the locked NorthLink schema."""
+    """Loads CSV files strictly adhering to the locked Frostline schema."""
     df_corridors = pd.read_csv("data/corridors.csv")
     df_climate = pd.read_csv("data/climate_annual.csv")
     df_roads = pd.read_csv("data/road_seasons.csv")
@@ -171,7 +171,7 @@ st.markdown(
 # -----------------------------------------------------------------------------
 col_h1, col_h2 = st.columns([3, 1])
 with col_h1:
-    st.markdown('<h1 style="font-size: 2.1rem; font-weight: 700; margin-bottom: 4px; color: #1c1917;">NorthLink</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="font-size: 2.1rem; font-weight: 700; margin-bottom: 4px; color: #1c1917;">Frostline</h1>', unsafe_allow_html=True)
     st.markdown(
         '<p style="font-size: 1.05rem; color: #57534e; margin-top: 0; margin-bottom: 24px;">'
         'Winter Climate Trends & Historical Operating Intelligence for Northern Seasonal Roads'
@@ -872,7 +872,7 @@ st.markdown('<hr style="border: 0; border-top: 1px solid #e7e5e4; margin: 30px 0
 st.markdown(
     """
     <div style="font-size: 0.75rem; color: #a8a29e; text-align: center; margin-bottom: 24px;">
-        NorthLink Platform · Environmental Intelligence for Northern Logistics · NASA POWER Daily & NWT Bureau of Statistics records
+        Frostline by Strongest Soldiers · Trace the evidence behind changing winters · NASA POWER Daily & NWT Bureau of Statistics records
     </div>
     """,
     unsafe_allow_html=True,

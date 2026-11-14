@@ -1,4 +1,6 @@
-# NorthLink
+# Frostline - by Strongest Soldiers
+
+*Trace the evidence behind changing winters.*
 
 NASA Space Apps 2026 (Halifax), challenge "Be An Earth System Trend Detective!".
 Question: how are freezing-season conditions (NASA POWER / MERRA-2 reanalysis) and recorded ice-road opening and closing dates changing in the Northwest Territories, and are the changes statistically supported? Exploratory analysis. Not a safety, ice-thickness or prediction tool.

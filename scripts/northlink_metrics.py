@@ -1,4 +1,4 @@
-"""NorthLink reference implementation of every metric in docs/SCIENTIFIC_METHODS.md.
+"""Frostline reference implementation of every metric in docs/SCIENTIFIC_METHODS.md.
 
 Pure functions, only numpy/pandas/scipy. Shaurya/Fable should reuse or re-implement
 these and must pass tests/test_metrics.py (docs/VALIDATION_CASES.md).

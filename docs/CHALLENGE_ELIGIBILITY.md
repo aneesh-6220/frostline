@@ -12,17 +12,17 @@ NASA data and resources: Giovanni; Hydrology Time Series (GES DISC); AppEEARS; N
 
 The Background text names MERRA-2 and GLDAS as example models and MODIS, OMI, AIRS and GPM as example instruments.
 
-## Findings for NorthLink
+## Findings for Frostline
 
 | Question | Answer | Status |
 |---|---|---|
 | Does the page require use of a specific dataset? | No requirement found in the challenge text or Resources tab. | VERIFIED (absence in the page text read) |
 | Is NASA POWER T2M acceptable? | POWER is not on the Resources list. T2M is a MERRA-2 variable (an Earth science model product the Background names). Acceptable on the page's own wording ("variables ... produced by Earth science models"), but not confirmed by an organizer or local judge. | PLAUSIBLE, not confirmed |
 | Are non-NASA data allowed (ECCC stations, NWT road records)? | Nothing in the pages read forbids them; NOAA and CSA sources are listed. Terms of each source must be followed. | NOT FORBIDDEN, not confirmed |
-| Fit to the brief | The brief describes a general variable-and-region selection tool. NorthLink as built is a case study of one road corridor family with a fixed variable set. This may score lower on generality than a variable picker, and there is a challenge-specific risk that a winter-road narrative is read as off-scope. This is an assessment, not a rule. | RISK (judgment) |
+| Fit to the brief | The brief describes a general variable-and-region selection tool. Frostline as built is a case study of one road corridor family with a fixed variable set. This may score lower on generality than a variable picker, and there is a challenge-specific risk that a winter-road narrative is read as off-scope. This is an assessment, not a rule. | RISK (judgment) |
 | Statistical expectation | A trend with rate and a significance test (Mann-Kendall, CI) is exactly what is asked; the repo implements Theil-Sen, Mann-Kendall and CIs. Multiple-comparison and leakage controls go beyond the stated scope. | MATCH |
 | Project submission | Submit through the team project page on spaceappschallenge.org; the Project Submission Guide was due on 2026-11-13 and has not been read here. | UNVERIFIED (guide not read) |
-| AI ("Super Intelligence") use | Allowed; the submission must describe how such tools were used during development. NorthLink code and docs were produced with AI assistance and this must be disclosed in the submission. | VERIFIED (FAQ) |
+| AI ("Super Intelligence") use | Allowed; the submission must describe how such tools were used during development. Frostline code and docs were produced with AI assistance and this must be disclosed in the submission. | VERIFIED (FAQ) |
 | Team rules | Teams of 1 to 6 for Local Events; one team, one challenge. Local event date, time and judging format (Halifax, Sun 2026-11-15 3 PM) come from the team brief and were not re-verified on the Local Events page. | PARTLY VERIFIED |
 
 ## NASA Global Award resource requirement: NOT YET DEMONSTRATED (updated 2026-11-14 evening)

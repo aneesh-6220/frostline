@@ -1,18 +1,20 @@
-# NorthLink: submission and presentation draft
+# Frostline - by Strongest Soldiers: submission and presentation draft
+
+*Trace the evidence behind changing winters.*
 
 Status: DRAFT for the team to edit. Every number below is checked by `tests/test_handoff_layer.py` against `UI/data_real/canonical_facts.json`. Items in [BRACKETS] are to be filled in by a named team member after the fact; do not invent them. No AI-generated imagery is used.
 
 ## Problem statement
-Seasonal winter roads, built on frozen lakes and rivers, are critical links for remote communities in northern Canada. Public discussion of "shorter winter road seasons" often mixes weather, ice conditions and operating decisions. NorthLink asks a narrower question: what do independent public records show about how winter conditions and road opening and closing dates have changed, and how sure can we be?
+Seasonal winter roads, built on frozen lakes and rivers, are critical links for remote communities in northern Canada. Public discussion of "shorter winter road seasons" often mixes weather, ice conditions and operating decisions. Frostline asks a narrower question: what do independent public records show about how winter conditions and road opening and closing dates have changed, and how sure can we be?
 
 ## Challenge alignment ("Be An Earth System Trend Detective!")
-The user chooses a location, a variable and a period; the app shows the time series, the rate of change per decade, a confidence interval and a Mann-Kendall significance test, and states in plain words whether the change is distinguishable from no change. Where the challenge calls a non-significant result still interesting, NorthLink reports it as exactly that. [Link to the live demonstration: ____]
+The user chooses a location, a variable and a period; the app shows the time series, the rate of change per decade, a confidence interval and a Mann-Kendall significance test, and states in plain words whether the change is distinguishable from no change. Where the challenge calls a non-significant result still interesting, Frostline reports it as exactly that. [Link to the live demonstration: ____]
 
 ## Scientific contribution
 An open, reproducible, deliberately cautious analysis, not a new method. It uses Theil-Sen slopes, Mann-Kendall tests and block-bootstrap intervals, controls for multiple testing across declared families, and removes predictor windows that overlapped the outcome. It documents a measured disagreement between NASA reanalysis temperatures and a station and carries that caveat into every temperature display.
 
 ## Prior work and originality limits
-Winter-road climate sensitivity has been studied, for example in Ontario's western James Bay region (Hori et al., 2016 to 2018), for the Tibbitt to Contwoyto road (Song et al., 2026; Mullan et al., 2021). NorthLink does not replicate or extend those studies and does not apply their thresholds (the 380 degree-day figure is a James Bay result). Its contribution is an open comparison of two Northwest Territories routes with a public, reproducible record and a statement of limits. Full citations: `docs/REFERENCES.md`. Statistical sign-off by a named reviewer is pending [owner: Yao].
+Winter-road climate sensitivity has been studied, for example in Ontario's western James Bay region (Hori et al., 2016 to 2018), for the Tibbitt to Contwoyto road (Song et al., 2026; Mullan et al., 2021). Frostline does not replicate or extend those studies and does not apply their thresholds (the 380 degree-day figure is a James Bay result). Its contribution is an open comparison of two Northwest Territories routes with a public, reproducible record and a statement of limits. Full citations: `docs/REFERENCES.md`. Statistical sign-off by a named reviewer is pending [owner: Yao].
 
 ## NASA data use
 Temperatures, precipitation and companion variables come from NASA POWER daily data (MERRA-2 reanalysis, 0.5 x 0.625 degree cells). POWER itself is not on the challenge's Resources list; whether it satisfies the Global Award resource requirement has not been confirmed [to ask an organizer]. An extraction of MERRA-2 monthly temperature through Giovanni is planned but **not yet done** [owner: Cason; status: ____]. Do not state it as done until `giovanni_*` files exist in `UI/data_real/`. POWER acknowledgement (required wording): see `docs/REFERENCES.md`.
@@ -27,9 +29,9 @@ Environment and Climate Change Canada station records (Yellowknife A, Aklavik, I
 - A snow association with Dettah opening dates is a hypothesis; snow itself shows no trend, so it does not explain the change.
 
 ## Real-world relevance
-Winter roads connect communities and carry supplies. A transparent record of how opening and closing dates have changed, with its uncertainty, is useful context for discussion. NorthLink does not assess whether any road is safe and does not tell anyone when to use one.
+Winter roads connect communities and carry supplies. A transparent record of how opening and closing dates have changed, with its uncertainty, is useful context for discussion. Frostline does not assess whether any road is safe and does not tell anyone when to use one.
 
-## What NorthLink does not claim
+## What Frostline does not claim
 No road-safety assessment or prediction. No claim that warming, snow or anything else caused a change in opening dates. No claim of community adoption, stakeholder interviews, endorsements or scientific review beyond what has actually occurred [none recorded].
 
 ## AI-use disclosure

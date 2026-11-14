@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extended NorthLink analysis: more NASA POWER variables, 9 corridors, station snow data.
+"""Extended Frostline analysis: more NASA POWER variables, 9 corridors, station snow data.
 
 Usage (from repo root): python3 -I scripts/run_extended_analysis.py
 Reads  data/raw/nasa/power_daily_ext_<id>.csv, data/raw/weather_stations/eccc_stations_daily_2001_2025.csv,

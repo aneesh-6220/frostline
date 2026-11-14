@@ -1,4 +1,4 @@
-"""Statistical helpers for the NorthLink remediation analysis (multiple testing, dependence-aware CIs).
+"""Statistical helpers for the Frostline remediation analysis (multiple testing, dependence-aware CIs).
 
 Pure numpy/scipy. Deterministic: every resampling function takes an explicit seed.
 Conventions: trends are per decade; years are winter start years.

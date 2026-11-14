@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Authoritative statistical layer for NorthLink (run AFTER run_analysis.py and run_extended_analysis.py).
+"""Authoritative statistical layer for Frostline (run AFTER run_analysis.py and run_extended_analysis.py).
 
 Usage (repo root): python3 -I scripts/run_remediation_analysis.py
 Writes data/processed/: hypothesis_families.csv, multiple_testing_126.csv, road_record_trends_all_routes.csv,

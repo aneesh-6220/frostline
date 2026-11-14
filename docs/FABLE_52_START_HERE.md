@@ -1,18 +1,27 @@
-# Fable 5.2: start here
+# Frostline by Strongest Soldiers: Fable 5.2 start here
 
-Read this file first. It points to the authoritative files; it does not restate or change the science. Where a detail lives elsewhere, follow the link and do not copy it from memory. Event: NASA Space Apps Halifax, Nov 14-15 2026 (local judging Sun Nov 15, 3 PM Halifax; presentation intent due 2 PM; official submission closes Sun 11:59 PM local).
+*Trace the evidence behind changing winters.*
+
+## 0. Who and what (read first)
+- The public product is **Frostline**. The team is **Strongest Soldiers**. Public branding is "Frostline - by Strongest Soldiers". [legacy-name note] The earlier names (NorthLink for the product, Asterfen for the team) must never appear in anything a user or judge sees. Technical file names that still contain `northlink` (`UI/northlink_app.py`, `scripts/northlink_metrics.py`, `scripts/northlink_stats.py`, `scripts/northlink_recompute.py`) are preserved on purpose so imports, tests and the regeneration pipeline keep working; renaming them is optional and only safe if every import, test and doc is updated together.
+- **`docs/FROSTLINE_NORTH_STAR.md` is the authoritative product specification** and your primary execution instruction. Build the **complete Frostline application**, not a demo. The Guided Demo must be a path through the real production components and real `UI/data_real/` data, never a separate mockup.
+- **Scientific methods and generated results remain the source of numerical truth** (`docs/SCIENTIFIC_METHODS.md`, `docs/APPROVED_FINDINGS.md`, `docs/RESULTS.md`, `UI/data_real/`). The North Star does not authorize inventing or changing any scientific finding. Preserve all validated scientific outputs.
+- Ownership: **Fable (with Shaurya) owns the application**; **Cason owns Giovanni acquisition**; **Yao owns scientific sign-off**. Fable must implement the outstanding app-level acceptance tests (`docs/APP_IMPLEMENTATION_CONTRACT.md` section 6: AC-1, AC-3, AC-4, AC-5, AC-8 data side and AC-13 already exist as repo tests; the rows marked "app" - AC-2, AC-6, AC-7, AC-9 to AC-12, AC-14 and the display side of AC-8 - still have to be written).
+- Do not assume NASA-resource eligibility, deployment or human scientific validation is complete. As of this commit none of the three is: the Giovanni extraction has not been done, no app URL exists, and no statistician sign-off is recorded.
+
+Read this file first. It points to the authoritative files; it does not restate or change the science. Where a detail lives elsewhere, follow the link and do not copy it from memory. Event: NASA Space Apps Halifax, Nov 14-15 2026. **Official NASA deadline:** project page submission closes Nov 15 2026, 11:59 PM local time. **Locally provided (Halifax organizer, not an official NASA deadline):** local judging Sun Nov 15 at 3 PM Atlantic, presentation intent due 2 PM.
 
 ## 1. Objective and challenge
-NorthLink is an **Earth-system trend detective** for winter-road conditions in northern Canada, not an ice-road safety predictor. Challenge: "Be An Earth System Trend Detective!" (https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/). The challenge asks for a tool where a user picks variables, a region and a period, sees the time series, and gets a rate of change with a significance test (Mann-Kendall, confidence intervals) and an honest statement of what is and is not supported. Details and eligibility: `docs/CHALLENGE_ELIGIBILITY.md`.
+Frostline is an **Earth-system trend detective** for winter-road conditions in northern Canada, not an ice-road safety predictor. Challenge: "Be An Earth System Trend Detective!" (https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/). The challenge asks for a tool where a user picks variables, a region and a period, sees the time series, and gets a rate of change with a significance test (Mann-Kendall, confidence intervals) and an honest statement of what is and is not supported. Details and eligibility: `docs/CHALLENGE_ELIGIBILITY.md`.
 
 ## 2. Verified repository state
 - Scientific base: branch `remediation-final`, commit `a8675ec2e9a0965d98dbdee3c96aa219f75b6416` (all of it is contained in this branch's history).
-- This branch (`fable-ready`) adds the final handoff layer. Its head is the commit you checked out: run `git rev-parse HEAD` and quote that when reporting.
+- This branch (`fable-ready`) adds the final handoff layer, the Frostline North Star and the rebrand. Its head is the commit you checked out: run `git rev-parse HEAD` and quote that when reporting. Create `frostline-implementation` from it; do not commit to `fable-ready` directly.
 - `main` is unchanged (0520097) and no implementation branch existed when this branch was cut.
 - Verify before starting: `python3 -I -m unittest discover -s tests` must pass and `python3 -I scripts/regenerate_all.py --check` must say "regeneration is a no-op".
 
 ## 3. Authoritative data (read-only for the app)
-Everything the app reads is in `UI/data_real/`; the file list, columns and dtypes are in `docs/APP_DATA_SCHEMA.md` (generated). Raw sources are in `data/raw/` and are never modified (`tests/raw_checksums.sha256`). Machine-readable headline numbers and the required bias caveat are in `UI/data_real/canonical_facts.json`.
+Everything the app reads is in `UI/data_real/` (20 CSV files plus `canonical_facts.json`; the North Star's "twenty files" counts the CSVs only); the file list, columns and dtypes are in `docs/APP_DATA_SCHEMA.md` (generated). Raw sources are in `data/raw/` and are never modified (`tests/raw_checksums.sha256`). Machine-readable headline numbers and the required bias caveat are in `UI/data_real/canonical_facts.json`.
 
 ## 4. Source-of-truth files (precedence)
 1. `docs/SCIENTIFIC_METHODS.md`: methods, seasons, metrics, claim rules (the science).
@@ -42,15 +51,17 @@ Section F of `APPROVED_FINDINGS.md` and section 0 of `FABLE_HANDOFF_FINAL.md`. N
 python3 -I scripts/regenerate_all.py            # rebuild every derived file from cached raw data; no network
 python3 -I scripts/regenerate_all.py --check    # after a commit: fails if committed outputs differ
 python3 -I -m unittest discover -s tests -v     # scientific, data and contract tests
-pip install -r UI/requirements.txt && streamlit run UI/northlink_app.py   # only after repointing it to UI/data_real/
+pip install -r UI/requirements.txt
+streamlit run UI/northlink_app.py   # LEGACY synthetic prototype; the real Frostline entrypoint does not exist yet
 ```
+The legacy entrypoint `UI/northlink_app.py` reads synthetic `UI/data/` and must not be shown as real. The production Frostline entrypoint is yours to create and then record here and in the submission draft (do not invent a path in advance). `UI/requirements.txt` currently lists only streamlit, pandas, altair and numpy; the North Star needs Plotly, PyDeck and SciPy (SciPy is already used by `scripts/`), so add and pin them when you build.
 Reproducibility proven here is from **cached** sources, not a live re-download.
 
 ## 11. Suggested order
 1. Run the two verification commands above. 2. Build a data layer that loads `UI/data_real/` with the failure rules of the contract (AC-1, AC-2). 3. Add `northlink_recompute` calls and the selection-matches-statistics logic (AC-3 to AC-6). 4. Build the pages in `FABLE_HANDOFF_FINAL.md` section 12 in this order: trend explorer (Dettah, Aklavik), road dates, evidence and bias, multiple testing, exploratory associations, overview map. 5. Delete the 380 C-day metric and any import of `UI/data/`; remove the synthetic banner only then. 6. Add the app-level acceptance tests (contract section 6). 7. Add the AI-use disclosure and citations from `docs/REFERENCES.md`. 8. Deploy and fill the links in `submission/SUBMISSION_DRAFT.md`.
 
 ## 12. Deployment
-A public URL that works without credentials, loads only `UI/data_real/`, and fails visibly if data are absent. Streamlit Community Cloud, Render or Vercel are acceptable; pin the dependencies in `UI/requirements.txt`. Record the URL in the submission draft only after you have opened it from a clean browser.
+A public URL that works without credentials, loads only `UI/data_real/`, and fails visibly if data are absent. Streamlit Community Cloud, Render or Vercel are acceptable. Set the main file to the Frostline entrypoint you create and point the dependency file at `UI/requirements.txt` (pinned). The GitHub repository stays **private**; on Streamlit Community Cloud a private repo can be deployed, but the app itself must then be set to publicly viewable so judges can open it without logging in. No deployment URL exists yet; record one in the submission draft only after you have opened it from a clean private browser window. The default investigation must not need a live NASA API call.
 
 ## 13. Acceptance
 All items AC-1 to AC-14 in the contract pass; the full test suite passes; the app displays no prohibited claim; every number on screen can be traced to a file in `UI/data_real/`.
