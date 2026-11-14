@@ -12,8 +12,10 @@ import argparse, csv, datetime as dt, os, re, sys
 p = argparse.ArgumentParser()
 p.add_argument("files", nargs="+")
 p.add_argument("-o", "--out", required=True)
+p.add_argument("--precip-out", help="optional: also write daily PRECTOTCORR (mm/day)")
 a = p.parse_args()
 rows = []
+prows = []
 for f in a.files:
     loc = re.search(r"power_daily_T2M_(.+)\.csv$", os.path.basename(f)).group(1)
     lines = open(f, encoding="utf-8").read().splitlines()
@@ -27,6 +29,13 @@ for f in a.files:
         seen.add((loc, d))
         t = float(r["T2M"])
         rows.append([loc, d.isoformat(), "" if t <= -990 else repr(t), "nasa_power_daily_t2m"])
+        if "PRECTOTCORR" in r:
+            pv = float(r["PRECTOTCORR"])
+            prows.append([loc, d.isoformat(), "" if pv <= -990 else repr(pv), "nasa_power_daily_prectotcorr"])
 with open(a.out, "w", newline="", encoding="utf-8") as fh:
     w = csv.writer(fh); w.writerow(["location_id", "date", "temperature_c", "source_id"]); w.writerows(rows)
 print("wrote", len(rows), "rows")
+if a.precip_out and prows:
+    with open(a.precip_out, "w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh); w.writerow(["location_id", "date", "precip_mm_per_day", "source_id"]); w.writerows(prows)
+    print("wrote", len(prows), "precip rows")

@@ -1,0 +1,8 @@
+metric,n_common,diff_slope_per_decade,ci95_low,ci95_high,mk_p,status
+fdd_octdec,24,81.912,-25.753,190.52,0.14334,ok
+thaw_days_janmar,24,-0,-0,-0,0.66473,ok
+longest_thaw_run_janmar,24,-0,-0,-0,0.66473,ok
+mean_octdec_c,24,-0.78321,-2.0711,0.3599,0.18863,ok
+mean_janmar_c,24,-1.1169,-2.7151,0.79396,0.33336,ok
+mean_full_c,24,-0.67438,-2.1579,0.44529,0.18863,ok
+fdd_pre_cutoff,24,72.789,-31.167,152.5,0.20586,ok

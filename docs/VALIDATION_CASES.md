@@ -1,6 +1,6 @@
 # Validation cases
 
-Run: `python3 -I -m unittest discover -s tests -v` from the repository root. Current result: **26 tests, all passing** (run 2026-11-14).
+Run: `python3 -I -m unittest discover -s tests -v` from the repository root. Current result: **29 tests, all passing** (run 2026-11-14), including 3 tests on the real NASA file.
 
 | # | Required check | Test | Expected |
 |---|---|---|---|
@@ -24,7 +24,8 @@ Dettah 2024/25 (NWT workbook): opened 2024-12-21, closed 2025-04-08. Hand count:
 For Dettah (n = 32): our Theil-Sen slope for opening day is +9.00 days per decade, 95% CI 3.57 to 12.35, Mann-Kendall p = 0.0003; scipy's `kendalltau` gives p = 0.0003. Open-to-close interval: -10.24 days per decade (CI -15.83 to -5.29), p = 0.0007 for both. Closing day: -1.43 per decade (CI -4.00 to 0.00), p = 0.125 (not significant). Aklavik opening day: -6.67 per decade (CI -14.17 to 0.00), p = 0.024; interval +8.30 per decade (CI 1.67 to 15.00), p = 0.007.
 (Earlier spreadsheet values used scipy's `kendalltau` p-value, which differs from the tie-corrected Mann-Kendall p by up to about 0.004. Use the tie-corrected value everywhere from now on.)
 
-## Still required once NASA data exist
-- A hand-checked FDD for one real Dettah winter: pick Oct 1 to Oct 10 daily values from the CSV, sum max(0, -T) by hand and compare with the code.
-- Confirm the CSV has 92 + 90/91 records per season per location.
-- Compare POWER T2M with the ECCC station on matched days (mean bias, mean absolute error) if the station file is obtained.
+## Real-data checks (done)
+- Hand-checked FDD: Dettah Oct 1-10 2001 daily T2M = 4.85, 4.75, -1.13, -1.78, 0.5, 3.31, 4.45, 1.08, 1.4, 1.57; only -1.13 and -1.78 are below zero, so FDD = 1.13 + 1.78 = 2.91 C-days (`tests/test_real_data.py`).
+- All 24 winters at both locations have 92 + 90/91 records and no duplicates (same test file; also `season_audit.csv`).
+- Monthly POWER file equals the mean of the daily file (max difference 0.005 C, 138 months).
+- Station comparison done: see docs/RESULTS.md section 5 (NASA about 4.5 C colder than the station in Oct-Mar; correlation 0.96).

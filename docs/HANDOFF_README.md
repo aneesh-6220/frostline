@@ -1,52 +1,54 @@
-# NorthLink data handoff (version of 2026-11-14)
+# NorthLink data handoff (updated 2026-11-14)
 
 ## Bottom line
-Not ready for Fable to implement end-to-end yet: **the real NASA daily temperature file does not exist.** The road data, route selection, methods, data-quality policy, tested reference code and research notes are done. Everything else depends on downloading NASA data on a machine with internet access (steps below). The work in this folder is not committed to GitHub: there is no repository attached to this session, so no commit hash exists. Create the repo, add this folder, and commit.
+The scientific data package is built and checked: real NASA daily temperature for two ice-road locations, road dates, station validation, tested metric code and a first full set of results (`docs/RESULTS.md`). Still open: Yao's scientific sign-off, the challenge Resources-tab eligibility check, and verification of the research citations. Fable can implement the app from these inputs now.
 
-## What is authoritative
+## Authoritative files
 | File | Status |
 |---|---|
-| `data/processed/road_operations.csv` | DONE. 544 rows, 17 routes, 514 verified. |
-| `data/processed/locations.csv` | DONE (CHECK Inuvik coordinates, Aklavik station). |
-| `data/processed/nasa_daily_temperature.csv` | NOT CREATED. Needs the NASA download. |
-| `data/processed/station_validation.csv` | Not created (optional). |
-| `docs/GEOGRAPHIC_SCOPE.md`, `SCIENTIFIC_METHODS.md`, `DATA_QUALITY.md`, `VALIDATION_CASES.md`, `DATA_SOURCES.md`, `DATA_DICTIONARY.md`, `RESEARCH_EVIDENCE.md` | DONE (first versions). Yao must review `SCIENTIFIC_METHODS.md`. |
-| `scripts/northlink_metrics.py`, `tests/` | DONE: 26 tests pass. |
+| `data/processed/nasa_daily_temperature.csv` | DONE. location_id, date, temperature_c, source_id. 2001-10-01 to 2025-06-30, 8,674 days x 2 locations, no missing values. |
+| `data/processed/road_operations.csv` | DONE. 544 route-season rows, 514 verified. |
+| `data/processed/locations.csv` | DONE (Inuvik coordinate still to verify). |
+| `data/processed/station_validation.csv`, `station_summary.csv` | DONE for Dettah (ECCC Yellowknife A). No Aklavik station checked. |
+| `data/processed/season_metrics.csv`, `trend_results.csv`, `regional_comparison.csv`, `road_climate_correlations.csv` | DONE (first run). |
+| `data/processed/nasa_daily_precipitation.csv` | Extra (POWER PRECTOTCORR); not used in any approved analysis yet. |
+| `docs/RESULTS.md` | The numbers to show. Read this first. |
+| Other docs | GEOGRAPHIC_SCOPE, SCIENTIFIC_METHODS, DATA_QUALITY, VALIDATION_CASES, DATA_SOURCES, DATA_DICTIONARY, RESEARCH_EVIDENCE. |
+| `scripts/`, `tests/` | 29 passing tests (`python3 -I -m unittest discover -s tests -v`). |
 
 ## Final selection
-Primary road: **Dettah Ice Road** (lake ice, Yellowknife Bay). Location `dettah_bay` (62.43, -114.34). Comparison: **Aklavik ice road**, location `aklavik_delta` (68.29, -134.37). Winters 2001/02 to 2024/25 for NASA temperatures (road records 1993/94 to 2024/25). Season key: `season_start_year` = year of the preceding October.
+Primary: **Dettah Ice Road** (lake ice, Yellowknife Bay), location `dettah_bay` (62.43, -114.34). Comparison: **Aklavik ice road**, `aklavik_delta` (68.29, -134.37). NASA winters 2001/02 to 2024/25 (24); road records 1993/94 to 2024/25 (32). `season_start_year` = year of the preceding October.
 
-## NASA source for each analysis
-- Daily FDD, thaw days, seasonal mean: NASA POWER daily T2M (derived from MERRA-2), to be downloaded.
-- Supporting monthly trend and challenge eligibility: MERRA-2 monthly T2M via Giovanni (user is downloading it).
-- Independent check: ECCC Yellowknife A (optional).
-- POWER and MERRA-2 are not independent.
+## NASA source per analysis
+- Daily FDD, thaw days, seasonal means: NASA POWER daily T2M (MERRA-2-derived), LST day definition, downloaded 2026-11-14 through the POWER API (`power_daily_T2M_<location>.csv` in `data/raw/nasa/`).
+- Monthly cross-check: the user's POWER monthly file (T2M, T2M_MAX, 1993-2024); identical to the monthly mean of the daily file.
+- Independent validation: ECCC Yellowknife A daily (`data/raw/weather_stations/`).
+- POWER and MERRA-2 are not independent. The Giovanni MERRA-2 monthly file the team started to download has NOT been received.
 
-## Reproduce data preparation (needs internet; Python 3 with pandas, scipy, openpyxl)
+## Headline findings (details and CIs in RESULTS.md)
+1. No statistically supported 2001-2024 trend in the NASA temperature metrics at Dettah; only weak, uncertain warming and fewer freezing degree-days at Aklavik.
+2. Dettah opens about 9 days later per decade (1993-2024) and its open-to-close interval is about 10 days shorter; the temperature metrics do not explain it.
+3. Aklavik's earlier-opening trend is fragile (gone in 2001-2024).
+4. NASA POWER is about 4.5 C colder than the station in Oct-Mar (correlation 0.96). Trends agree with the station; absolute values must not be used against thresholds.
+5. Jan-Mar thaw days are almost always 0 (1 day in 24 winters at Dettah; 0 at Aklavik), so that metric is uninformative here.
+
+## Reproduce
 ```
 python3 -I scripts/build_road_operations.py data/raw/roads/NWT_Table108_Winter_Road_Opening_and_Closing_Dates_1993_94_to_2024.xlsx data/processed/road_operations.csv
-python3 scripts/fetch_power_daily.py            # saves data/raw/nasa/power_daily_T2M_<location_id>.csv
-python3 -I scripts/build_nasa_daily_temperature.py data/raw/nasa/power_daily_T2M_dettah_bay.csv data/raw/nasa/power_daily_T2M_aklavik_delta.csv -o data/processed/nasa_daily_temperature.csv
+python3 -I scripts/build_nasa_daily_temperature.py data/raw/nasa/power_daily_T2M_dettah_bay.csv data/raw/nasa/power_daily_T2M_aklavik_delta.csv -o data/processed/nasa_daily_temperature.csv --precip-out data/processed/nasa_daily_precipitation.csv
 python3 -I scripts/audit_daily_temperature.py data/processed/nasa_daily_temperature.csv data/processed/season_audit.csv
+python3 -I scripts/run_analysis.py
 python3 -I -m unittest discover -s tests -v
 ```
-The POWER URL and CSV layout in the scripts were written from documentation and have not been tested against a live download; if the converter fails, send the first 30 lines of a raw file and it can be fixed quickly.
-
-## Metrics Fable must calculate and approved methods
-See `docs/SCIENTIFIC_METHODS.md`: FDD (Oct to Dec), thaw days (Jan to Mar), seasonal mean, road open/close day and interval; Theil-Sen per decade with 95% CI, tie-corrected Mann-Kendall, lag-1 autocorrelation, sensitivity runs, difference-series comparison, exploratory Spearman. Yao has NOT yet approved these; they are proposed.
-
-## Confirmed data coverage
-Road records: complete for Dettah and Aklavik (32 of 32 winters). Temperature: none confirmed.
-
-## Unavailable or not done
-ECCC station validation; MODIS and SMAP; daily temperature audit; hand-check of one real FDD; the 380 degree-C day benchmark (not applicable to NWT); April to May temperatures for closing-date analysis.
+Raw downloads came from `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M,PRECTOTCORR&community=SB&longitude=<lon>&latitude=<lat>&start=20011001&end=20250630&format=CSV` and from the ECCC bulk daily CSV (stationID 1706 for 2001-2012, 51058 for 2013 onward).
 
 ## Limitations the website must show
-Not a safety or prediction tool; no usable-days claim; one grid cell is not the whole road; POWER and MERRA-2 not independent; unadjusted p-values; 24 to 32 winters; opening depends on ice thickness, snow, overflow and decisions; Dettah has an all-season alternative.
+Not a safety or prediction tool; no usable-days claim; one grid cell is not the whole road; cold bias in NASA absolute temperatures; POWER and MERRA-2 not independent; unadjusted p-values and many tests; 24 winters of NASA data; opening depends on ice thickness, snow, overflow and decisions; Dettah has an all-season alternative road.
 
-## Outstanding issues (decisions needed)
-1. **Daily vs monthly:** the team earlier said monthly NASA data is enough; this handoff requires daily. Decide. Monthly fallback is in SCIENTIFIC_METHODS.md section G.
-2. **Challenge Resources tab** not checked (the official page was not reachable): someone must paste it.
-3. No GitHub repo yet.
-4. Verify Inuvik coordinates and find an Aklavik station.
-5. Record the POWER time standard once downloaded.
+## Not done / open
+1. Yao's review and sign-off of SCIENTIFIC_METHODS.md and RESULTS.md.
+2. Challenge Resources tab eligibility check (official page unreachable; paste the tab text).
+3. Giovanni MERRA-2 monthly file (for the eligibility story) not received.
+4. Optional satellite variable (MODIS snow or SMAP) not added; no Aklavik station; Inuvik coordinates to verify.
+5. RESEARCH_EVIDENCE.md citations need checking against full texts.
+6. April-June closing-date analysis uses only the Mar 15 to Apr 15 mean temperature; no snow or precipitation analysis was run.

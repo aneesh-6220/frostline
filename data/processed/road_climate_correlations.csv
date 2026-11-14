@@ -1,0 +1,9 @@
+location_id,climate_metric,road_metric,spearman_rho,p,n,note
+aklavik_delta,fdd_octdec,open_day,-0.28947,0.17007,24,exploratory; association only; Oct-Dec FDD includes days after some openings (retrospective)
+aklavik_delta,fdd_pre_cutoff,open_day,-0.18802,0.37895,24,exploratory; association only
+aklavik_delta,mean_octdec_c,open_day,0.29296,0.16474,24,exploratory; association only
+aklavik_delta,mean_mar15_apr15_c,close_day,0.028372,0.8953,24,exploratory; association only
+dettah_bay,fdd_octdec,open_day,-0.1277,0.55209,24,exploratory; association only; Oct-Dec FDD includes days after some openings (retrospective)
+dettah_bay,fdd_pre_cutoff,open_day,-0.18,0.4,24,exploratory; association only
+dettah_bay,mean_octdec_c,open_day,0.12639,0.5562,24,exploratory; association only
+dettah_bay,mean_mar15_apr15_c,close_day,-0.34133,0.10261,24,exploratory; association only

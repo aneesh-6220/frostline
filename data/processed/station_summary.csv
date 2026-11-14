@@ -1,0 +1,6 @@
+subset,n_days,bias_nasa_minus_station_c,mae_c,rmse_c,pearson_r
+all matched days,8574,-2.255,3.034,4.198,0.9871
+Oct-Mar only,4340,-4.548,4.714,5.666,0.9581
+station 1706 era (to 2012),4123,-2.25,3.03,4.251,0.9857
+station 51058 era (2013+),4451,-2.259,3.038,4.148,0.9884
+"Oct-Dec FDD, seasons with complete station data (n=17)",17,492.3,492.3,496.7,0.9177

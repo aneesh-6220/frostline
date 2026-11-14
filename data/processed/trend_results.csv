@@ -1,0 +1,69 @@
+location_id,metric,variant,n_seasons,slope_per_decade,ci95_low,ci95_high,mk_tau,mk_z,mk_p,lag1_resid_autocorr,status
+aklavik_delta,fdd_octdec,main (2001-2024),24,-74.494,-150.47,6.4667,-0.25362,-1.7115,0.086988,0.006277,ok
+aklavik_delta,fdd_octdec,drop first 5 winters,19,-125.87,-199.12,-8.95,-0.36842,-2.1691,0.030075,-0.14113,ok
+aklavik_delta,fdd_octdec,drop last 5 winters,19,-97.287,-222.8,24.467,-0.22807,-1.3295,0.1837,0.070342,ok
+aklavik_delta,fdd_octdec,OLS slope (comparison only),24,-68.314,-154.69,18.058,,,0.13536,,ols
+aklavik_delta,thaw_days_janmar,main (2001-2024),24,0,0,0,,,,,constant_series
+aklavik_delta,thaw_days_janmar,drop first 5 winters,19,0,0,0,,,,,constant_series
+aklavik_delta,thaw_days_janmar,drop last 5 winters,19,0,0,0,,,,,constant_series
+aklavik_delta,thaw_days_janmar,OLS slope (comparison only),24,0,,,,,,,ols
+aklavik_delta,longest_thaw_run_janmar,main (2001-2024),24,0,0,0,,,,,constant_series
+aklavik_delta,longest_thaw_run_janmar,drop first 5 winters,19,0,0,0,,,,,constant_series
+aklavik_delta,longest_thaw_run_janmar,drop last 5 winters,19,0,0,0,,,,,constant_series
+aklavik_delta,longest_thaw_run_janmar,OLS slope (comparison only),24,0,,,,,,,ols
+aklavik_delta,mean_octdec_c,main (2001-2024),24,0.77653,-0.06619,1.8143,0.26087,1.7611,0.078219,0.011746,ok
+aklavik_delta,mean_octdec_c,drop first 5 winters,19,1.3199,0.096739,2.1745,0.38012,2.2391,0.025151,-0.13368,ok
+aklavik_delta,mean_octdec_c,drop last 5 winters,19,0.9808,-0.24348,2.4989,0.23977,1.3994,0.16169,0.075441,ok
+aklavik_delta,mean_octdec_c,OLS slope (comparison only),24,0.74446,-0.20275,1.6917,,,0.13771,,ols
+aklavik_delta,mean_janmar_c,main (2001-2024),24,1.1923,-0.27621,3.0808,0.23188,1.5627,0.11813,0.35277,ok
+aklavik_delta,mean_janmar_c,drop first 5 winters,19,1.4871,-0.52228,5.2583,0.29825,1.7493,0.080243,0.52981,ok
+aklavik_delta,mean_janmar_c,drop last 5 winters,19,3.1622,1.0327,5.8442,0.45029,2.6589,0.0078395,-0.051964,ok
+aklavik_delta,mean_janmar_c,OLS slope (comparison only),24,1.0978,-0.30841,2.5041,,,0.14023,,ols
+aklavik_delta,mean_full_c,main (2001-2024),24,0.90483,-0.0077869,1.8411,0.28261,1.9099,0.056141,0.41534,ok
+aklavik_delta,mean_full_c,drop first 5 winters,19,1.2463,0.10737,3.0313,0.34503,2.0292,0.042442,0.50759,ok
+aklavik_delta,mean_full_c,drop last 5 winters,19,1.9128,0.12921,3.3619,0.36842,2.1691,0.030075,0.16193,ok
+aklavik_delta,mean_full_c,OLS slope (comparison only),24,0.91893,0.063847,1.774,,,0.046809,,ols
+aklavik_delta,fdd_pre_cutoff,main (2001-2024),24,-108.18,-158.22,-23.117,-0.3913,-2.6541,0.0079527,0.079186,ok
+aklavik_delta,fdd_pre_cutoff,drop first 5 winters,19,-124.45,-193.36,-44.08,-0.47368,-2.7988,0.0051286,-0.087969,ok
+aklavik_delta,fdd_pre_cutoff,drop last 5 winters,19,-131.79,-208.35,-17.738,-0.39181,-2.309,0.020941,0.15781,ok
+aklavik_delta,fdd_pre_cutoff,OLS slope (comparison only),24,-79.777,-140.86,-18.69,,,0.017868,,ols
+dettah_bay,fdd_octdec,main (2001-2024),24,14.648,-107.88,111.14,0.043478,0.27285,0.78497,-0.079542,ok
+dettah_bay,fdd_octdec,drop first 5 winters,19,-45.54,-214.44,81.46,-0.1345,-0.76968,0.44149,0.11445,ok
+dettah_bay,fdd_octdec,drop last 5 winters,19,100.09,-65.6,240.19,0.22807,1.3295,0.1837,-0.19279,ok
+dettah_bay,fdd_octdec,OLS slope (comparison only),24,8.9171,-86.447,104.28,,,0.85626,,ols
+dettah_bay,thaw_days_janmar,main (2001-2024),24,-0,-0,-0,0.025362,0.43339,0.66473,-0.04529,ok
+dettah_bay,thaw_days_janmar,drop first 5 winters,19,-0,-0,-0,0.011696,0.091287,0.92726,-0.05848,ok
+dettah_bay,thaw_days_janmar,drop last 5 winters,19,-0,-0,-0,0.070175,1.0042,0.3153,-0.05848,ok
+dettah_bay,thaw_days_janmar,OLS slope (comparison only),24,0.030435,-0.089523,0.15039,,,0.62393,,ols
+dettah_bay,longest_thaw_run_janmar,main (2001-2024),24,-0,-0,-0,0.025362,0.43339,0.66473,-0.04529,ok
+dettah_bay,longest_thaw_run_janmar,drop first 5 winters,19,-0,-0,-0,0.011696,0.091287,0.92726,-0.05848,ok
+dettah_bay,longest_thaw_run_janmar,drop last 5 winters,19,-0,-0,-0,0.070175,1.0042,0.3153,-0.05848,ok
+dettah_bay,longest_thaw_run_janmar,OLS slope (comparison only),24,0.030435,-0.089523,0.15039,,,0.62393,,ols
+dettah_bay,mean_octdec_c,main (2001-2024),24,-0.24667,-1.26,1.2283,-0.072464,-0.47128,0.63744,-0.099338,ok
+dettah_bay,mean_octdec_c,drop first 5 winters,19,0.51617,-0.84891,2.0549,0.087719,0.4898,0.62428,0.12301,ok
+dettah_bay,mean_octdec_c,drop last 5 winters,19,-1.2112,-2.6782,0.25635,-0.29825,-1.7493,0.080243,-0.26916,ok
+dettah_bay,mean_octdec_c,OLS slope (comparison only),24,-0.041455,-1.1189,1.036,,,0.94057,,ols
+dettah_bay,mean_janmar_c,main (2001-2024),24,0.24236,-1.4496,1.357,0.065217,0.42167,0.67326,0.091767,ok
+dettah_bay,mean_janmar_c,drop first 5 winters,19,-0.084722,-2.753,1.3889,-0.005848,0,1,-0.0079573,ok
+dettah_bay,mean_janmar_c,drop last 5 winters,19,0.85574,-2.0154,2.7743,0.1462,0.83965,0.4011,0.017499,ok
+dettah_bay,mean_janmar_c,OLS slope (comparison only),24,-0.037021,-1.3466,1.2725,,,0.95631,,ols
+dettah_bay,mean_full_c,main (2001-2024),24,0.033064,-0.98564,0.98533,0.014493,0.074413,0.94068,-0.044926,ok
+dettah_bay,mean_full_c,drop first 5 winters,19,0.12653,-1.124,1.5266,0.040936,0.20991,0.83374,0.082452,ok
+dettah_bay,mean_full_c,drop last 5 winters,19,-0.09533,-1.9719,1.2052,-0.052632,-0.27988,0.77957,-0.094272,ok
+dettah_bay,mean_full_c,OLS slope (comparison only),24,-0.039529,-0.92469,0.84563,,,0.93104,,ols
+dettah_bay,fdd_pre_cutoff,main (2001-2024),24,-15.805,-81.65,55.684,-0.072464,-0.47128,0.63744,-0.20722,ok
+dettah_bay,fdd_pre_cutoff,drop first 5 winters,19,-42.775,-133.29,58.038,-0.16959,-0.9796,0.32729,0.034806,ok
+dettah_bay,fdd_pre_cutoff,drop last 5 winters,19,38.458,-42.885,132.89,0.18129,1.0496,0.29392,-0.49445,ok
+dettah_bay,fdd_pre_cutoff,OLS slope (comparison only),24,-23.341,-78.536,31.855,,,0.4161,,ols
+dettah_bay,road_open_day,road record 1993-2024,32,9,3.5714,12.353,0.44758,3.5933,0.00032652,0.16991,ok
+dettah_bay,road_open_day,road record 2001-2024,24,10.333,3.3333,17.222,0.4529,3.0856,0.0020316,-0.053606,ok
+dettah_bay,road_close_day,road record 1993-2024,32,-1.4286,-4,-0,-0.19153,-1.5344,0.12493,-0.1955,ok
+dettah_bay,road_close_day,road record 2001-2024,24,-2.5,-7.1429,0.76923,-0.24638,-1.6677,0.095371,-0.10744,ok
+dettah_bay,road_open_to_close_days,road record 1993-2024,32,-10.238,-15.833,-5.2941,-0.42339,-3.3931,0.00069105,0.27627,ok
+dettah_bay,road_open_to_close_days,road record 2001-2024,24,-15,-23.571,-6,-0.46739,-3.1779,0.0014835,0.099595,ok
+aklavik_delta,road_open_day,road record 1993-2024,32,-6.6667,-14.167,-0,-0.28226,-2.2624,0.023671,0.033312,ok
+aklavik_delta,road_open_day,road record 2001-2024,24,-0.54094,-10.769,3.75,-0.061594,-0.39963,0.68943,0.034616,ok
+aklavik_delta,road_close_day,road record 1993-2024,32,0.78462,-1.25,3.3333,0.08871,0.69995,0.48396,-0.090532,ok
+aklavik_delta,road_close_day,road record 2001-2024,24,-1.1438,-5,2.2727,-0.11594,-0.77291,0.43958,-0.34111,ok
+aklavik_delta,road_open_to_close_days,road record 1993-2024,32,8.2971,1.6667,15,0.33871,2.7153,0.0066216,0.036614,ok
+aklavik_delta,road_open_to_close_days,road record 2001-2024,24,1.5833,-4.4444,10,0.11957,0.79792,0.42491,-0.050444,ok
