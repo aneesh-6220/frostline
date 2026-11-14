@@ -40,3 +40,22 @@ All weak and not significant: Dettah Oct-Dec FDD vs opening day rho -0.13 (p 0.5
 1. Over 2001 to 2024 the NASA temperature metrics show no statistically supported trend at Dettah, and only weak, uncertain warming signals at Aklavik.
 2. Dettah's ice road nevertheless opened later (about 9 to 10 days per decade) and its open-to-close interval shortened. The temperature metrics we computed do not explain this, so the honest statement is: the cause is untested; snow cover, ice thickness, overflow, construction and decisions are candidates (reported by news sources).
 3. The data are a short record from large grid cells with a cold bias; non-significant is not proof of no change.
+
+---
+
+## Extended analysis (added): 9 corridors, 10 NASA POWER variables, snow cross-check
+
+Script: `scripts/run_extended_analysis.py`. Outputs in `data/processed/`: `nasa_daily_variables.csv`, `extended_season_metrics.csv`, `extended_trends.csv`, `corridor_panel.csv`, `pooled_anomaly_correlations.csv`, `snow_vs_opening.csv`, `yellowknife_snow_by_season.csv`, `station_summary_aklavik_inuvik.csv`, `station_validation_aklavik_inuvik.csv`.
+Same rules as before: complete-coverage windows only, Theil–Sen per decade with 95% CI, Mann–Kendall p unadjusted (many tests; treat as exploratory), 24 NASA winters 2001–2024. Primary (pre-registered) metrics are unchanged; everything below is supporting evidence.
+
+**Corridors.** Dettah and Aklavik (primary/comparison) plus 7 supplementary NWT roads: Wrigley–Tulita, Norman Wells–Fort Good Hope, Déline, Liard–Fort Simpson (ice crossing), Tibbitt–Contwoyto (mining road), Sambaa K'e, Nahanni Butte. Coordinates for the supplementary corridors are approximate community/route points (NASA POWER grid ≈ 50 km), so they are indicative only.
+
+**Findings (honest framing)**
+- Dettah: opening day later by about +10 days/decade (p<0.01) and open-to-close interval shorter by about 15 days/decade, while Oct–Dec temperature shows no supported trend (−0.25 °C/decade, p=0.64). Temperature alone does not explain the later openings.
+- Snow cross-check (ECCC Yellowknife A, exploratory): Dec 1 snow depth correlates with Dettah opening day (Spearman 0.54, p=0.007, n=24); November mean snow depth 0.50 (p=0.015). Oct–Dec snowfall total is not related (0.14, p=0.52). Consistent with a snow-insulation explanation (deep early snow slows ice growth), but this is a hypothesis, not a demonstrated cause.
+- Aklavik: Mar 15–Apr 15 mean daily maximum temperature warming +1.7 °C/decade (CI 0.1 to 3.3, p=0.045); not significant after allowing for many tests.
+- Across the 9 corridors, 4 show a supported change in closing day or interval but with mixed direction (Nahanni Butte and Sambaa K'e later closing, Liard crossing earlier, Déline longer interval), so there is no single regional story.
+- Pooled within-corridor anomalies: warmer Mar 15–Apr 15 goes with earlier closing (Spearman about −0.29, p_naive<0.001; ice roads −0.33). Corridors share weather, so p-values are optimistic. Oct–Dec downwelling longwave versus opening day is positive (about +0.21) and unexplained: do not headline.
+- Station checks: NASA POWER is colder than Inuvik Climate by 1.9 °C in Oct–Mar (r 0.96) and than Aklavik A by about 1.0 °C; cold bias is smaller than at Yellowknife (4.5 °C), so trends (not absolute levels) are the usable quantity.
+
+**Not obtained (be transparent in the app):** MODIS snow cover / land-surface temperature (ORNL DAAC and AppEEARS unreachable from this environment) and MERRA-2 monthly via Giovanni (needs Earthdata sign-in). The teammate with an Earthdata login can add these via AppEEARS; the pipeline accepts any new daily or seasonal CSV.

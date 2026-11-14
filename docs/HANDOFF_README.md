@@ -52,3 +52,6 @@ Not a safety or prediction tool; no usable-days claim; one grid cell is not the 
 4. Optional satellite variable (MODIS snow or SMAP) not added; no Aklavik station; Inuvik coordinates to verify.
 5. RESEARCH_EVIDENCE.md citations need checking against full texts.
 6. April-June closing-date analysis uses only the Mar 15 to Apr 15 mean temperature; no snow or precipitation analysis was run.
+
+## Extended package (latest)
+Run `python3 -I scripts/run_extended_analysis.py` to regenerate the extended outputs. See RESULTS.md "Extended analysis" for findings and caveats. For the app: show Dettah snow-depth vs opening-day as an exploratory chart, the 9-corridor panel (`corridor_panel.csv`), and clearly label supplementary corridor coordinates as approximate.

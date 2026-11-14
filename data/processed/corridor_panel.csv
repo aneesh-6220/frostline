@@ -1,0 +1,10 @@
+location_id,road_id,road_kind,mean_octdec_c_slope_per_dec,mean_octdec_c_p,fdd_octdec_slope_per_dec,fdd_octdec_p,open_day_slope_per_dec,open_day_p,close_day_slope_per_dec,close_day_p,open_to_close_days_slope_per_dec,open_to_close_days_p,n_road_seasons
+aklavik_delta,aklavik,ice_road,0.7765,0.07822,-74.49,0.08699,-0.5409,0.6894,-1.144,0.4396,1.583,0.4249,24
+deline,deline,winter_road,0.2675,0.6024,-29.3,0.503,-7.285,0.05881,3.205,0.1713,13.17,0.004616,24
+dettah_bay,dettah,ice_road,-0.2467,0.6374,14.65,0.785,10.33,0.002032,-2.5,0.09537,-15,0.001483,24
+liard_fort_simpson,liard_fort_simpson,ice_crossing,-0.02919,0.9802,9.687,0.8622,1.742,0.4402,-4.248,0.0344,-4.143,0.02179,24
+nahanni_butte,nahanni_butte,winter_road,0.01735,0.9802,16.34,0.785,-0,0.9207,11.72,0.0008633,11.48,0.005358,24
+norman_wells_fgh,norman_wells_fort_good_hope,winter_road,0.3441,0.6374,-31.1,0.6024,-0,0.8226,-0,0.9603,1.833,0.4702,24
+sambaa_ke,sambaa_ke,winter_road,-0.351,0.785,44.77,0.4419,-1.111,0.4692,6.182,0.02345,6.667,0.06909,24
+tibbitt_contwoyto,tibbitt_contwoyto,mining_road,-0.3227,0.5683,26.8,0.5683,1.181,0.4681,-1.026,0.1549,-1.833,0.4863,24
+wrigley_tulita,wrigley_tulita,winter_road,0.1899,0.7098,-19.14,0.6914,-3.875,0.008069,-0,0.9402,4.476,0.07657,24
