@@ -1,0 +1,389 @@
+{
+  "meta": {
+    "station_rows_raw": 9066,
+    "station_duplicate_dates_dropped": 0,
+    "station_unique_dates": 9066,
+    "paired_days_any": 8609
+  },
+  "H1_lag": [
+    {
+      "nasa_shift_days": -2,
+      "n": 8572,
+      "mean_bias": -2.246,
+      "rmse": 6.917,
+      "corr": 0.9363
+    },
+    {
+      "nasa_shift_days": -1,
+      "n": 8573,
+      "mean_bias": -2.245,
+      "rmse": 5.647,
+      "corr": 0.963
+    },
+    {
+      "nasa_shift_days": 0,
+      "n": 8574,
+      "mean_bias": -2.255,
+      "rmse": 4.198,
+      "corr": 0.9871
+    },
+    {
+      "nasa_shift_days": 1,
+      "n": 8573,
+      "mean_bias": -2.256,
+      "rmse": 5.353,
+      "corr": 0.9685
+    },
+    {
+      "nasa_shift_days": 2,
+      "n": 8572,
+      "mean_bias": -2.26,
+      "rmse": 6.635,
+      "corr": 0.9428
+    }
+  ],
+  "H2_definition": {
+    "nasa_T2M_minus_station_mean": {
+      "n": 8574,
+      "mean_bias": -2.255,
+      "median_bias": -1.445,
+      "sd": 3.541,
+      "rmse": 4.198,
+      "p05": -9.067,
+      "p95": 2.35
+    },
+    "nasa_mid_minus_station_mean": {
+      "n": 8574,
+      "mean_bias": -2.506,
+      "median_bias": -1.715,
+      "sd": 3.385,
+      "rmse": 4.211,
+      "p05": -9.07,
+      "p95": 1.863
+    },
+    "nasa_T2M_minus_nasa_mid": {
+      "n": 8609,
+      "mean_bias": 0.251,
+      "median_bias": 0.215,
+      "sd": 0.724,
+      "rmse": 0.767,
+      "p05": -0.795,
+      "p95": 1.4
+    },
+    "station_mean_minus_station_mid": {
+      "n": 8574,
+      "mean_bias": -0.002,
+      "median_bias": 0.0,
+      "sd": 0.035,
+      "rmse": 0.035,
+      "p05": -0.05,
+      "p95": 0.05
+    },
+    "nasa_mid_minus_station_mid": {
+      "n": 8574,
+      "mean_bias": -2.508,
+      "median_bias": -1.705,
+      "sd": 3.399,
+      "rmse": 4.224,
+      "p05": -9.115,
+      "p95": 1.88
+    }
+  },
+  "H3_tmax_tmin": {
+    "nasa_tmax_minus_station_tmax": {
+      "n": 8579,
+      "mean_bias": -3.22,
+      "median_bias": -2.53,
+      "sd": 3.299,
+      "rmse": 4.61,
+      "p05": -9.521,
+      "p95": 1.1
+    },
+    "nasa_tmin_minus_station_tmin": {
+      "n": 8582,
+      "mean_bias": -1.798,
+      "median_bias": -1.05,
+      "sd": 4.161,
+      "rmse": 4.532,
+      "p05": -9.44,
+      "p95": 4.009
+    },
+    "diurnal_range_nasa_minus_station": {
+      "n": 8574,
+      "mean_bias": -1.424,
+      "median_bias": -1.37,
+      "sd": 3.192,
+      "rmse": 3.495,
+      "p05": -6.693,
+      "p95": 3.753
+    }
+  },
+  "H5_bias_drift_per_decade": {
+    "Oct-Dec": {
+      "n": 24,
+      "slope_per_decade": 0.062,
+      "ci_low": -0.378,
+      "ci_high": 0.58
+    },
+    "Nov-Dec": {
+      "n": 24,
+      "slope_per_decade": 0.036,
+      "ci_low": -0.646,
+      "ci_high": 0.64
+    },
+    "Jan-Mar": {
+      "n": 23,
+      "slope_per_decade": -0.296,
+      "ci_low": -0.663,
+      "ci_high": 0.085
+    }
+  },
+  "H5_by_month_table": [
+    {
+      "month": 1,
+      "n": 739,
+      "mean_bias": -5.077,
+      "median_bias": -4.77,
+      "sd": 3.112,
+      "bias_tmax": -5.351,
+      "bias_tmin": -5.005,
+      "station_mean_t": -24.502
+    },
+    {
+      "month": 2,
+      "n": 671,
+      "mean_bias": -3.953,
+      "median_bias": -3.84,
+      "sd": 2.837,
+      "bias_tmax": -4.513,
+      "bias_tmin": -3.694,
+      "station_mean_t": -23.41
+    },
+    {
+      "month": 3,
+      "n": 735,
+      "mean_bias": -1.708,
+      "median_bias": -1.57,
+      "sd": 2.489,
+      "bias_tmax": -2.952,
+      "bias_tmin": -0.984,
+      "station_mean_t": -17.081
+    },
+    {
+      "month": 4,
+      "n": 712,
+      "mean_bias": -0.612,
+      "median_bias": -0.665,
+      "sd": 1.97,
+      "bias_tmax": -2.754,
+      "bias_tmin": 0.587,
+      "station_mean_t": -5.668
+    },
+    {
+      "month": 5,
+      "n": 734,
+      "mean_bias": 0.654,
+      "median_bias": 0.59,
+      "sd": 1.666,
+      "bias_tmax": -1.162,
+      "bias_tmin": 1.712,
+      "station_mean_t": 5.658
+    },
+    {
+      "month": 6,
+      "n": 709,
+      "mean_bias": 0.616,
+      "median_bias": 0.53,
+      "sd": 1.635,
+      "bias_tmax": -1.245,
+      "bias_tmin": 1.402,
+      "station_mean_t": 13.9
+    },
+    {
+      "month": 7,
+      "n": 705,
+      "mean_bias": 0.416,
+      "median_bias": 0.31,
+      "sd": 1.49,
+      "bias_tmax": -1.009,
+      "bias_tmin": 0.874,
+      "station_mean_t": 17.207
+    },
+    {
+      "month": 8,
+      "n": 694,
+      "mean_bias": 0.133,
+      "median_bias": 0.15,
+      "sd": 1.32,
+      "bias_tmax": -0.692,
+      "bias_tmin": 0.391,
+      "station_mean_t": 14.558
+    },
+    {
+      "month": 9,
+      "n": 680,
+      "mean_bias": -0.682,
+      "median_bias": -0.72,
+      "sd": 1.215,
+      "bias_tmax": -1.189,
+      "bias_tmin": -0.226,
+      "station_mean_t": 8.047
+    },
+    {
+      "month": 10,
+      "n": 743,
+      "mean_bias": -3.421,
+      "median_bias": -3.12,
+      "sd": 2.169,
+      "bias_tmax": -3.541,
+      "bias_tmin": -3.45,
+      "station_mean_t": -0.449
+    },
+    {
+      "month": 11,
+      "n": 718,
+      "mean_bias": -7.257,
+      "median_bias": -7.065,
+      "sd": 3.062,
+      "bias_tmax": -7.792,
+      "bias_tmin": -7.219,
+      "station_mean_t": -12.716
+    },
+    {
+      "month": 12,
+      "n": 734,
+      "mean_bias": -5.893,
+      "median_bias": -5.665,
+      "sd": 3.371,
+      "bias_tmax": -6.175,
+      "bias_tmin": -5.661,
+      "station_mean_t": -21.353
+    }
+  ],
+  "H4_state_dependence": {
+    "slope_bias_per_degC_of_station_temp": 0.1208,
+    "intercept": -1.779,
+    "r2": 0.3059,
+    "n": 8574
+  },
+  "H4_state_dependence_winter_only": {
+    "slope": 0.0243,
+    "intercept": -4.147,
+    "r2": 0.0063,
+    "n": 4340
+  },
+  "worst_day_sample_n": 25,
+  "effect_on_metrics": {
+    "winters_with_complete_Oct_Dec_in_both": 17,
+    "fdd_mean_nasa": 1550.9,
+    "fdd_mean_station": 1058.6,
+    "fdd_mean_diff_nasa_minus_station": 492.3,
+    "fdd_pct_overestimate": 46.5,
+    "fdd_nasa_station_pearson_r": 0.918,
+    "fdd_nasa_station_spearman_r": 0.909,
+    "fdd_slope_nasa_same_winters": {
+      "n": 17,
+      "slope_per_decade": 14.025,
+      "ci_low": -134.15,
+      "ci_high": 147.943
+    },
+    "fdd_slope_station_same_winters": {
+      "n": 17,
+      "slope_per_decade": 1.5,
+      "ci_low": -157.176,
+      "ci_high": 167.222
+    },
+    "fdd_diff_slope_nasa_minus_station": {
+      "n": 17,
+      "slope_per_decade": 12.412,
+      "ci_low": -43.186,
+      "ci_high": 85.733
+    },
+    "winters_with_complete_Jan_Mar_in_both": 19,
+    "thaw_days_mean_nasa": 0.05,
+    "thaw_days_mean_station": 0.32,
+    "thaw_days_nasa_station_spearman_r": 0.364,
+    "thaw_days_slope_nasa_same_winters": {
+      "n": 19,
+      "slope_per_decade": -0.0,
+      "ci_low": -0.0,
+      "ci_high": -0.0
+    },
+    "thaw_days_slope_station_same_winters": {
+      "n": 19,
+      "slope_per_decade": -0.0,
+      "ci_low": -0.0,
+      "ci_high": -0.0
+    }
+  },
+  "sensitivity_monthly_offset_correction": {
+    "note": "Offsets estimated from the same station record; in-sample, for sensitivity only.",
+    "monthly_offsets_degC": {
+      "1": -5.077,
+      "2": -3.953,
+      "3": -1.708,
+      "4": -0.612,
+      "5": 0.654,
+      "6": 0.616,
+      "7": 0.416,
+      "8": 0.133,
+      "9": -0.682,
+      "10": -3.421,
+      "11": -7.257,
+      "12": -5.893
+    },
+    "fdd_mean_adjusted_nasa": 1087.6,
+    "fdd_mean_station": 1058.6,
+    "fdd_slope_adjusted_nasa_same_winters": {
+      "n": 17,
+      "slope_per_decade": 5.653,
+      "ci_low": -135.34,
+      "ci_high": 137.695
+    },
+    "fdd_slope_nasa_all_complete_winters": {
+      "n": 24,
+      "slope_per_decade": 14.648,
+      "ci_low": -107.877,
+      "ci_high": 111.142
+    },
+    "fdd_slope_adjusted_nasa_all_complete_winters": {
+      "n": 24,
+      "slope_per_decade": 16.481,
+      "ci_low": -93.739,
+      "ci_high": 116.497
+    },
+    "thaw_days_mean_adjusted_nasa": 0.46,
+    "thaw_days_nonzero_winters_adjusted_nasa": 8,
+    "thaw_days_nonzero_winters_raw_nasa": 1,
+    "thaw_days_nonzero_winters_station_complete": 5,
+    "station_winters_complete_JanMar": 19
+  },
+  "overall_bias_all_days": {
+    "n": 8574,
+    "mean_bias": -2.255,
+    "median_bias": -1.445,
+    "sd": 3.541,
+    "rmse": 4.198,
+    "p05": -9.067,
+    "p95": 2.35
+  },
+  "overall_bias_Oct_Dec": {
+    "n": 2195,
+    "mean_bias": -5.503,
+    "median_bias": -5.19,
+    "sd": 3.313,
+    "rmse": 6.423,
+    "p05": -11.36,
+    "p95": -0.857
+  },
+  "overall_bias_Jan_Mar": {
+    "n": 2145,
+    "mean_bias": -3.571,
+    "median_bias": -3.29,
+    "sd": 3.16,
+    "rmse": 4.768,
+    "p05": -9.104,
+    "p95": 1.258
+  },
+  "n_days_station_missing_mean_in_window": 35
+}

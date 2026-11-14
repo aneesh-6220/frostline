@@ -20,6 +20,7 @@ import pandas as pd
 from scipy import stats
 
 K_TO_C = 273.15
+MOSTLY_TIED_FRACTION = 0.75  # trend() refuses to estimate when this share of values is identical
 
 
 def kelvin_to_celsius(k):
@@ -177,7 +178,7 @@ class TrendResult:
     mk_z: float
     mk_p: float
     lag1_autocorr_resid: float
-    status: str  # ok | too_few_points | constant_series
+    status: str  # ok | too_few_points | constant_series | mostly_tied
 
 
 def mann_kendall(y) -> tuple[float, float, float]:
@@ -224,6 +225,11 @@ def trend(years, values, min_points: int = 15, alpha: float = 0.05) -> TrendResu
     if np.all(v == v[0]):
         return TrendResult(n, 0.0, 0.0, 0.0, 0.0, float("nan"), float("nan"), float("nan"),
                            float("nan"), "constant_series")
+    # Degenerate series: when >= 75% of the values are identical (e.g. thaw-day counts that are
+    # zero in almost every winter) Theil-Sen returns slope 0 with a zero-width CI and the
+    # Mann-Kendall p-value is dominated by ties. No slope or p-value is reported.
+    if np.unique(v, return_counts=True)[1].max() / n >= MOSTLY_TIED_FRACTION:
+        return TrendResult(n, *[float("nan")] * 8, "mostly_tied")
     slope, intercept, lo, hi = stats.theilslopes(v, ys, alpha=1 - alpha)
     tau, z, p = mann_kendall(v)
     resid = v - (intercept + slope * ys)

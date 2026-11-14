@@ -1,0 +1,6 @@
+family_id,n_tests,definition,correction,role
+F1_all_extended,126,"every Theil-Sen/Mann-Kendall trend in extended_trends.csv (14 metrics x 9 corridors, 2001-2024)",Benjamini-Hochberg (q) and Holm across all tests,primary multiplicity family for the NASA-window analysis
+F2_climate,99,climate metrics only (11 per corridor x 9),Benjamini-Hochberg within family,sensitivity: does any NASA climate trend survive on its own?
+F3_road_2001_2024,27,"road-date metrics (open day, close day, open-to-close interval) x 9 corridors, 2001-2024",Benjamini-Hochberg within family,sensitivity for the NASA-aligned road window
+F4_road_record_all_routes,51,"road-date trends for EVERY NWT route with >=15 verified winters, full 1993-2024 record",Benjamini-Hochberg across routes x 3 metrics,selection-adjusted view of the Dettah result (Dettah was chosen after seeing its trend)
+F5_road_climate_associations,11,"leak-free Spearman associations (Dettah and Aklavik predictors, plus Yellowknife snow predictors)",Benjamini-Hochberg within family,association (not trend) tests

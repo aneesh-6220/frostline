@@ -1,0 +1,6 @@
+series,n,slope_per_decade,ci95_low,ci95_high,bb_ci95_low,bb_ci95_high,p_unadjusted,status
+sog_nov28_cm,23,4,-1.6667,8.6667,-0.72784,8.7783,0.19401,ok
+sog_mean_nov1_28_cm,23,2.5895,-1.068,5.7975,-0.9821,6.4305,0.2049,ok
+sog_dec1_cm,24,2.5543,-2.1429,7.1429,-1.6326,6.726,0.29597,ok
+snowfall_oct1_nov28_cm,24,-5.15,-19.6,6.1875,-18.758,8.3747,0.29736,ok
+snowfall_octdec_cm,24,-11.348,-26.588,5.5,-27.039,3.8427,0.17249,ok

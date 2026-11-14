@@ -46,6 +46,22 @@ ROAD_IDS = {
 }
 
 
+def validate_dates(o, c, y):
+    """Return (ok, reason). Opening must fall in Oct-Dec of the season start year y or Jan-May of y+1;
+    closing must fall in Jan-Jul of y+1 and after opening. The earlier rule accepted any month in year y
+    (e.g. 2023-02-12 for the 2023/24 winter), which let a 413-day 'season' through."""
+    od, cd = o.date(), c.date()
+    open_ok = (od.year == y and od.month in (10, 11, 12)) or (od.year == y + 1 and od.month in (1, 2, 3, 4, 5))
+    close_ok = cd.year == y + 1 and cd.month in (1, 2, 3, 4, 5, 6, 7)
+    if not open_ok:
+        return False, "opening date outside Oct-Dec of the season start year or Jan-May of the next year"
+    if not close_ok:
+        return False, "closing date outside Jan-Jul of the year after the season start"
+    if not cd > od:
+        return False, "closing date not after opening date"
+    return True, ""
+
+
 def clean(name):
     name = " ".join(name.split())
     name = re.sub(r"\s*\(Highway #1\)", "", name)
@@ -70,12 +86,12 @@ def main(xlsx, out):
                 o, c = r[j], r[j + 1]
                 status, od, cd, note = "", "", "", ""
                 if isinstance(o, dt.datetime) and isinstance(c, dt.datetime):
-                    ok = (o.year in (y, y + 1)) and (c.year == y + 1) and (c > o) and (o.month in (10, 11, 12, 1, 2, 3, 4))
+                    ok, why = validate_dates(o, c, y)
                     if ok:
                         status, od, cd = "verified", o.date().isoformat(), c.date().isoformat()
                     else:
                         status = "flagged_inconsistent"
-                        note = f"raw open={o.date()} close={c.date()} fails date checks; excluded"
+                        note = f"raw open={o.date()} close={c.date()} fails date checks ({why}); excluded, not corrected (suspected source typo; confirm with GNWT)"
                 elif o == ".." or c == "..":
                     status, note = "missing_not_available", "workbook marks '..' (data not available)"
                 elif o == "**" or c == "**":

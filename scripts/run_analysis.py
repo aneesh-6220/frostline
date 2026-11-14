@@ -4,7 +4,7 @@
 Usage (from repo root): python3 -I scripts/run_analysis.py
 Reads  data/processed/nasa_daily_temperature.csv, road_operations.csv, locations.csv,
        data/raw/weather_stations/eccc_yellowknife_daily_2001_2025.csv, data/raw/nasa/power_monthly_*.csv
-Writes data/processed/season_metrics.csv, trend_results.csv, regional_comparison.csv,
+Writes data/processed/season_metrics.csv, trend_results.csv, regional_comparison.csv, analysis_windows.csv,
        road_climate_correlations.csv, station_validation.csv, station_summary.csv
 """
 import datetime as dt
@@ -24,8 +24,30 @@ P = lambda *a: os.path.join(ROOT, *a)
 temps = pd.read_csv(P("data/processed/nasa_daily_temperature.csv"), parse_dates=["date"])
 roads = pd.read_csv(P("data/processed/road_operations.csv"))
 LOC_ROAD = {"dettah_bay": "dettah", "aklavik_delta": "aklavik"}
-CUTOFF = {"dettah_bay": dt.date(1, 11, 28), "aklavik_delta": dt.date(1, 12, 2)}  # month/day: last day before earliest opening
 YEARS = range(2001, 2025)
+
+
+def _md_key(d, opening):
+    """Sort key for a (month, day) in winter order. Openings run Oct..Jun (Oct-Dec first); closings Jan..Jul."""
+    return ((0 if d.month >= 10 else 1) if opening else 0, d.month, d.day)
+
+
+def leak_free_cutoffs(road_id):
+    """Leak-free window ends derived from the FULL verified road record (1993-2024), not the analysed sample.
+
+    open_end  = day before the earliest calendar date on which the road ever opened  (predictor window Oct 1 .. open_end)
+    close_end = day before the earliest calendar date on which the road ever closed   (predictor window Mar 15 .. close_end)
+    Every predictor window therefore ends strictly before the outcome date in EVERY winter, by construction.
+    """
+    rr = roads[(roads.road_id == road_id) & (roads.record_status == "verified")]
+    op = [dt.date.fromisoformat(x) for x in rr.opening_date]
+    cl = [dt.date.fromisoformat(x) for x in rr.closing_date]
+    e_open = min(op, key=lambda d: _md_key(d, True))
+    e_close = min(cl, key=lambda d: _md_key(d, False))
+    return (e_open - dt.timedelta(days=1)), (e_close - dt.timedelta(days=1)), e_open, e_close
+
+
+CUTS = {loc: leak_free_cutoffs(rid) for loc, rid in LOC_ROAD.items()}
 
 
 def window_mean(g, a, b):
@@ -44,15 +66,16 @@ rows = []
 for loc, g in temps.groupby("location_id"):
     rid = LOC_ROAD[loc]
     rr = roads[(roads.road_id == rid) & (roads.record_status == "verified")].set_index("season_start_year")
+    oe, ce = CUTS[loc][0], CUTS[loc][1]  # leak-free window ends (month/day used; year attached per winter)
     for y in YEARS:
-        c = CUTOFF[loc]
         r = dict(location_id=loc, season_start_year=y,
                  fdd_octdec=m.fdd(g, y, "early"), thaw_days_janmar=m.thaw_days(g, y),
                  longest_thaw_run_janmar=m.longest_thaw_run(g, y),
                  mean_octdec_c=m.seasonal_mean(g, y, "early"), mean_janmar_c=m.seasonal_mean(g, y, "mid"),
                  mean_full_c=m.seasonal_mean(g, y, "full"),
-                 fdd_pre_cutoff=fdd_window(g, dt.date(y, 10, 1), dt.date(y, c.month, c.day)),
-                 mean_mar15_apr15_c=window_mean(g, dt.date(y + 1, 3, 15), dt.date(y + 1, 4, 15)))
+                 fdd_pre_cutoff=fdd_window(g, dt.date(y, 10, 1), dt.date(y, oe.month, oe.day)),
+                 mean_pre_cutoff_c=window_mean(g, dt.date(y, 10, 1), dt.date(y, oe.month, oe.day)),
+                 mean_mar15_preclose_c=window_mean(g, dt.date(y + 1, 3, 15), dt.date(y + 1, ce.month, ce.day)))
         if y in rr.index:
             od, cd = dt.date.fromisoformat(rr.loc[y, "opening_date"]), dt.date.fromisoformat(rr.loc[y, "closing_date"])
             r.update(m.road_metrics(od, cd, y))
@@ -61,7 +84,7 @@ sm = pd.DataFrame(rows)
 sm.to_csv(P("data/processed/season_metrics.csv"), index=False, float_format="%.4f")
 
 METRICS = ["fdd_octdec", "thaw_days_janmar", "longest_thaw_run_janmar", "mean_octdec_c", "mean_janmar_c",
-           "mean_full_c", "fdd_pre_cutoff"]
+           "mean_full_c", "fdd_pre_cutoff"]  # pure climate trends; window leakage is only relevant to associations below
 out = []
 
 
@@ -110,16 +133,32 @@ for met in METRICS:
                      ci95_high=t.ci_high_per_decade, mk_p=t.mk_p, status=t.status))
 pd.DataFrame(comp).to_csv(P("data/processed/regional_comparison.csv"), index=False, float_format="%.5g")
 
-# exploratory road-climate correlations (Spearman)
+# exploratory road-climate associations (Spearman): ONLY leak-free predictor windows (see leak_free_cutoffs)
+import northlink_stats as ns  # noqa: E402
+
 cor = []
 for loc, g in sm.groupby("location_id"):
-    for xm, ym in [("fdd_octdec", "open_day"), ("fdd_pre_cutoff", "open_day"), ("mean_octdec_c", "open_day"),
-                   ("mean_mar15_apr15_c", "close_day")]:
+    oe, ce, e_open, e_close = CUTS[loc]
+    for xm, ym, win in [("fdd_pre_cutoff", "open_day", f"Oct 1 to {oe:%b} {oe.day}"),
+                        ("mean_pre_cutoff_c", "open_day", f"Oct 1 to {oe:%b} {oe.day}"),
+                        ("mean_mar15_preclose_c", "close_day", f"Mar 15 to {ce:%b} {ce.day}")]:
         r, p, n = m.spearman(g[xm], g[ym])
-        cor.append(dict(location_id=loc, climate_metric=xm, road_metric=ym, spearman_rho=r, p=p, n=n,
-                        note="exploratory; association only"
-                        + ("; Oct-Dec FDD includes days after some openings (retrospective)" if xm == "fdd_octdec" else "")))
-pd.DataFrame(cor).to_csv(P("data/processed/road_climate_correlations.csv"), index=False, float_format="%.5g")
+        _, lo, hi, _, L = ns.block_bootstrap_spearman(g[xm], g[ym])
+        cor.append(dict(location_id=loc, climate_metric=xm, road_metric=ym, predictor_window=win, spearman_rho=r,
+                        ci95_low=lo, ci95_high=hi, ci_method=f"moving-block bootstrap (block {L}, 2000 resamples, seed fixed)",
+                        p_unadjusted=p, n=n,
+                        note="exploratory association only; predictor window ends before the earliest opening/closing in the full 1993-2024 record"))
+cor = pd.DataFrame(cor)
+cor["q_bh_family"] = ns.bh_adjust(cor.p_unadjusted.to_numpy())
+cor.to_csv(P("data/processed/road_climate_correlations.csv"), index=False, float_format="%.5g")
+
+# windows used (documentation of the leak-free rule)
+wl = []
+for loc, (oe, ce, e_open, e_close) in CUTS.items():
+    wl.append(dict(location_id=loc, road_id=LOC_ROAD[loc], earliest_opening_md=f"{e_open:%m-%d}", pre_open_window_end_md=f"{oe:%m-%d}",
+                   earliest_closing_md=f"{e_close:%m-%d}", pre_close_window_end_md=f"{ce:%m-%d}",
+                   rule="window end = day before earliest calendar opening/closing in the full verified 1993-2024 road record"))
+pd.DataFrame(wl).to_csv(P("data/processed/analysis_windows.csv"), index=False)
 
 # station validation (Dettah / Yellowknife A)
 st = pd.read_csv(P("data/raw/weather_stations/eccc_yellowknife_daily_2001_2025.csv"), parse_dates=["date"])

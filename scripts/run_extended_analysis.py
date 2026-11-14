@@ -5,7 +5,7 @@ Usage (from repo root): python3 -I scripts/run_extended_analysis.py
 Reads  data/raw/nasa/power_daily_ext_<id>.csv, data/raw/weather_stations/eccc_stations_daily_2001_2025.csv,
        data/processed/road_operations.csv
 Writes data/processed/nasa_daily_variables.csv, extended_season_metrics.csv, extended_trends.csv,
-       corridor_panel.csv, pooled_anomaly_correlations.csv, snow_vs_opening.csv, station_validation_aklavik_inuvik.csv
+       corridor_panel.csv, yellowknife_snow_by_season.csv, station_validation_aklavik_inuvik.csv
 """
 import datetime as dt
 import glob
@@ -114,56 +114,30 @@ for loc, g in em.groupby("location_id"):
 pan = pd.DataFrame(pan)
 pan.to_csv(P("data/processed/corridor_panel.csv"), index=False, float_format="%.4g")
 
-# ---- pooled within-corridor anomaly correlations (exploratory)
-def anom(df, col):
-    return df.groupby("location_id")[col].transform(lambda s: (s - s.mean()) / s.std(ddof=0))
+# ---- pooled within-corridor correlations: REMOVED (remediation). The pooled pairs shared weather across corridors
+# (not independent, so p-values were invalid) and used predictor windows that extend past opening/closing dates.
 
-pc = []
-pairs = [("mean_octdec_c", "open_day"), ("fdd_octdec", "open_day"), ("precip_octdec_mm", "open_day"),
-         ("precip_oct_nov_mm", "open_day"), ("wind_mean_octdec_ms", "open_day"), ("lw_down_mean_octdec", "open_day"),
-         ("mean_mar15_apr15_c", "close_day"), ("tmax_mean_mar15_apr15_c", "close_day"),
-         ("lw_down_mean_mar15_apr15", "close_day"), ("sw_down_mean_mar15_apr15", "close_day")]
-for kinds, label in [(None, "all 9 corridors"), (["ice_road", "ice_crossing"], "ice roads and crossings (3)"),
-                     (["winter_road"], "land winter roads (5)")]:
-    d = em if kinds is None else em[em.road_kind.isin(kinds)]
-    for x, y in pairs:
-        s = d.dropna(subset=[x, y]).copy()
-        if len(s) < 30:
-            continue
-        s["ax"], s["ay"] = anom(s, x), anom(s, y)
-        r, p = stats.spearmanr(s.ax, s.ay)
-        pc.append(dict(group=label, climate_metric=x, road_metric=y, spearman_rho=r, p_naive=p, n_pairs=len(s),
-                       n_corridors=s.location_id.nunique(),
-                       note="pooled within-corridor anomalies; corridors share weather so pairs are not independent; p_naive is optimistic"))
-pd.DataFrame(pc).to_csv(P("data/processed/pooled_anomaly_correlations.csv"), index=False, float_format="%.4g")
-
-# ---- station snow vs opening (Yellowknife A: ids 1706 + 51058)
+# ---- station snow by season (Yellowknife A: ids 1706 + 51058). Association statistics are computed in run_remediation_analysis.py
 st = pd.read_csv(P("data/raw/weather_stations/eccc_stations_daily_2001_2025.csv"), parse_dates=["date"])
-yk = st[st.station_id.isin([1706, 51058])].sort_values("date").drop_duplicates("date", keep="last")
+yk = st[st.station_id.isin([1706, 51058])].sort_values("date").drop_duplicates("date", keep="last").set_index("date")
 sn = []
 for y in YEARS:
-    a, b = pd.Timestamp(y, 10, 1), pd.Timestamp(y, 12, 31)
-    s = yk[(yk.date >= a) & (yk.date <= b)]
-    snow_n = s.total_snow_cm.notna().sum()
-    sog = yk[(yk.date >= pd.Timestamp(y, 11, 1)) & (yk.date <= pd.Timestamp(y, 11, 30))].snow_on_ground_cm
-    dec1 = yk[yk.date == pd.Timestamp(y, 12, 1)].snow_on_ground_cm
-    sn.append(dict(season_start_year=y, snowfall_octdec_cm=s.total_snow_cm.sum() if snow_n >= 85 else np.nan,
-                   n_snow_days_reported=int(snow_n), sog_mean_nov_cm=sog.mean() if sog.notna().sum() >= 25 else np.nan,
-                   sog_dec1_cm=float(dec1.iloc[0]) if len(dec1) and pd.notna(dec1.iloc[0]) else np.nan))
+    def span(col, a, b, how, min_frac=0.9):
+        s_ = yk.loc[pd.Timestamp(a):pd.Timestamp(b), col]
+        need = (pd.Timestamp(b) - pd.Timestamp(a)).days + 1
+        if s_.notna().sum() < min_frac * need:
+            return np.nan
+        return float(s_.sum() if how == "sum" else s_.mean())
+    def day(col, d):
+        s_ = yk[col].get(pd.Timestamp(d), np.nan)
+        return float(s_) if pd.notna(s_) else np.nan
+    sn.append(dict(season_start_year=y,
+                   snowfall_octdec_cm=span("total_snow_cm", dt.date(y, 10, 1), dt.date(y, 12, 31), "sum"),
+                   snowfall_oct1_nov28_cm=span("total_snow_cm", dt.date(y, 10, 1), dt.date(y, 11, 28), "sum"),
+                   sog_mean_nov1_28_cm=span("snow_on_ground_cm", dt.date(y, 11, 1), dt.date(y, 11, 28), "mean", 0.8),
+                   sog_nov28_cm=day("snow_on_ground_cm", dt.date(y, 11, 28)),
+                   sog_dec1_cm=day("snow_on_ground_cm", dt.date(y, 12, 1))))
 sn = pd.DataFrame(sn).merge(em[em.location_id == "dettah_bay"][["season_start_year", "open_day", "precip_octdec_mm", "fdd_octdec"]], on="season_start_year")
-res = []
-for x in ["snowfall_octdec_cm", "sog_mean_nov_cm", "sog_dec1_cm", "precip_octdec_mm"]:
-    r, p, n = m.spearman(sn[x], sn["open_day"])
-    res.append(dict(climate_metric=x, road_metric="open_day (Dettah)", spearman_rho=r, p=p, n=n,
-                    source="ECCC Yellowknife A" if x != "precip_octdec_mm" else "NASA POWER PRECTOTCORR"))
-# partial: does snow explain opening beyond temperature? (rank regression of open_day on both)
-s2 = sn.dropna(subset=["snowfall_octdec_cm", "fdd_octdec", "open_day"])
-if len(s2) >= 12:
-    X = np.column_stack([stats.rankdata(s2.snowfall_octdec_cm), stats.rankdata(s2.fdd_octdec), np.ones(len(s2))])
-    beta, *_ = np.linalg.lstsq(X, stats.rankdata(s2.open_day), rcond=None)
-    res.append(dict(climate_metric="rank regression: open_day ~ snowfall + FDD", road_metric="coef snowfall / coef FDD",
-                    spearman_rho=beta[0], p=beta[1], n=len(s2), source="exploratory; ranks; first number = snowfall coef, second (in p column) = FDD coef"))
-pd.DataFrame(res).to_csv(P("data/processed/snow_vs_opening.csv"), index=False, float_format="%.4g")
 sn.to_csv(P("data/processed/yellowknife_snow_by_season.csv"), index=False, float_format="%.3f")
 
 # ---- Aklavik delta station validation (Inuvik Climate and Aklavik A)

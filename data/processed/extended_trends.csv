@@ -108,9 +108,9 @@ tibbitt_contwoyto,mining_road,rh_mean_octdec_pct,2001-2024,24,-0.063253,-0.44547
 tibbitt_contwoyto,mining_road,lw_down_mean_octdec,2001-2024,24,-3.1558,-6.5734,2.2286,0.14334,-0.088543,ok
 tibbitt_contwoyto,mining_road,sw_down_mean_mar15_apr15,2001-2024,24,2.8098,-2.1394,7.2018,0.33336,0.2042,ok
 tibbitt_contwoyto,mining_road,lw_down_mean_mar15_apr15,2001-2024,24,-1.5513,-12.227,7.3964,0.70984,-0.016143,ok
-tibbitt_contwoyto,mining_road,open_day,2001-2024,24,1.1806,-2,3.3333,0.46808,0.48968,ok
-tibbitt_contwoyto,mining_road,close_day,2001-2024,24,-1.0263,-5,-0,0.15487,0.047063,ok
-tibbitt_contwoyto,mining_road,open_to_close_days,2001-2024,24,-1.8333,-8.75,6.3636,0.48632,0.48923,ok
+tibbitt_contwoyto,mining_road,open_day,2001-2024,22,2.3529,-0,4.5455,0.034835,-0.31558,ok
+tibbitt_contwoyto,mining_road,close_day,2001-2024,22,-1,-5,-0,0.14648,0.062309,ok
+tibbitt_contwoyto,mining_road,open_to_close_days,2001-2024,22,-5,-10.909,-0,0.038946,-0.16338,ok
 wrigley_tulita,winter_road,fdd_octdec,2001-2024,24,-19.145,-120.65,77.031,0.69137,0.044077,ok
 wrigley_tulita,winter_road,mean_octdec_c,2001-2024,24,0.18993,-1.0334,1.4225,0.70984,0.055642,ok
 wrigley_tulita,winter_road,mean_janmar_c,2001-2024,24,0.6376,-0.28974,2.3819,0.17249,0.31926,ok

@@ -6,7 +6,7 @@ colville_lake,1993,,,missing_not_available,https://www.statsnwt.ca/en/node/1073,
 deline,1993,1994-01-25,1994-03-30,verified,https://www.statsnwt.ca/en/node/1073,winter_road,Délįne Winter Road,Winter Roads,
 wrigley_tulita,1994,1995-01-12,1995-03-19,verified,https://www.statsnwt.ca/en/node/1073,winter_road,Wrigley to Tulita Winter Road,Winter Roads,
 tulita_norman_wells,1994,1995-01-18,1995-03-26,verified,https://www.statsnwt.ca/en/node/1073,winter_road,Tulita to Norman Wells Winter Road,Winter Roads,
-norman_wells_fort_good_hope,1994,,,flagged_inconsistent,https://www.statsnwt.ca/en/node/1073,winter_road,Norman Wells to Fort Good Hope Winter Road,Winter Roads,raw open=1996-01-19 close=1996-03-26 fails date checks; excluded
+norman_wells_fort_good_hope,1994,,,flagged_inconsistent,https://www.statsnwt.ca/en/node/1073,winter_road,Norman Wells to Fort Good Hope Winter Road,Winter Roads,"raw open=1996-01-19 close=1996-03-26 fails date checks (opening date outside Oct-Dec of the season start year or Jan-May of the next year); excluded, not corrected (suspected source typo; confirm with GNWT)"
 colville_lake,1994,,,missing_not_available,https://www.statsnwt.ca/en/node/1073,winter_road,Colville Lake Winter Road,Winter Roads,workbook marks '..' (data not available)
 deline,1994,1995-01-20,1995-03-26,verified,https://www.statsnwt.ca/en/node/1073,winter_road,Délįne Winter Road,Winter Roads,
 wrigley_tulita,1995,1996-01-26,1996-03-20,verified,https://www.statsnwt.ca/en/node/1073,winter_road,Wrigley to Tulita Winter Road,Winter Roads,
@@ -437,7 +437,7 @@ peel_river,2005,2005-11-17,2006-05-15,verified,https://www.statsnwt.ca/en/node/1
 mackenzie_camsell_bend,2005,2005-12-19,2006-04-22,verified,https://www.statsnwt.ca/en/node/1073,ice_crossing,Mackenzie River Crossing at Camsell Bend,Ice Crossings,
 liard_fort_simpson,2006,2006-11-24,2007-04-15,verified,https://www.statsnwt.ca/en/node/1073,ice_crossing,Liard River Crossing at Fort Simpson,Ice Crossings,
 mackenzie_tsiighetchic,2006,2006-11-24,2007-05-04,verified,https://www.statsnwt.ca/en/node/1073,ice_crossing,Mackenzie River Crossing at Tsiighetchic,Ice Crossings,
-peel_river,2006,,,flagged_inconsistent,https://www.statsnwt.ca/en/node/1073,ice_crossing,Peel River Crossing,Ice Crossings,raw open=2007-11-09 close=2007-05-09 fails date checks; excluded
+peel_river,2006,,,flagged_inconsistent,https://www.statsnwt.ca/en/node/1073,ice_crossing,Peel River Crossing,Ice Crossings,"raw open=2007-11-09 close=2007-05-09 fails date checks (opening date outside Oct-Dec of the season start year or Jan-May of the next year); excluded, not corrected (suspected source typo; confirm with GNWT)"
 mackenzie_camsell_bend,2006,2006-12-22,2007-04-15,verified,https://www.statsnwt.ca/en/node/1073,ice_crossing,Mackenzie River Crossing at Camsell Bend,Ice Crossings,
 liard_fort_simpson,2007,2007-12-11,2008-04-28,verified,https://www.statsnwt.ca/en/node/1073,ice_crossing,Liard River Crossing at Fort Simpson,Ice Crossings,
 mackenzie_tsiighetchic,2007,2007-11-28,2008-05-11,verified,https://www.statsnwt.ca/en/node/1073,ice_crossing,Mackenzie River Crossing at Tsiighetchic,Ice Crossings,
@@ -541,5 +541,5 @@ tibbitt_contwoyto,2019,2020-01-31,2020-03-30,verified,https://www.statsnwt.ca/en
 tibbitt_contwoyto,2020,2021-02-08,2021-03-31,verified,https://www.statsnwt.ca/en/node/1073,mining_road,Tibbitt-Contwoyto Winter Road,Private Mining Roads,
 tibbitt_contwoyto,2021,2022-01-31,2022-03-31,verified,https://www.statsnwt.ca/en/node/1073,mining_road,Tibbitt-Contwoyto Winter Road,Private Mining Roads,
 tibbitt_contwoyto,2022,2023-02-06,2023-03-31,verified,https://www.statsnwt.ca/en/node/1073,mining_road,Tibbitt-Contwoyto Winter Road,Private Mining Roads,
-tibbitt_contwoyto,2023,2023-02-12,2024-03-31,verified,https://www.statsnwt.ca/en/node/1073,mining_road,Tibbitt-Contwoyto Winter Road,Private Mining Roads,
-tibbitt_contwoyto,2024,2024-02-04,2025-03-26,verified,https://www.statsnwt.ca/en/node/1073,mining_road,Tibbitt-Contwoyto Winter Road,Private Mining Roads,
+tibbitt_contwoyto,2023,,,flagged_inconsistent,https://www.statsnwt.ca/en/node/1073,mining_road,Tibbitt-Contwoyto Winter Road,Private Mining Roads,"raw open=2023-02-12 close=2024-03-31 fails date checks (opening date outside Oct-Dec of the season start year or Jan-May of the next year); excluded, not corrected (suspected source typo; confirm with GNWT)"
+tibbitt_contwoyto,2024,,,flagged_inconsistent,https://www.statsnwt.ca/en/node/1073,mining_road,Tibbitt-Contwoyto Winter Road,Private Mining Roads,"raw open=2024-02-04 close=2025-03-26 fails date checks (opening date outside Oct-Dec of the season start year or Jan-May of the next year); excluded, not corrected (suspected source typo; confirm with GNWT)"

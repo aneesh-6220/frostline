@@ -1,0 +1,489 @@
+{
+  "extended_126": {
+    "n_tests_with_p": 126,
+    "nominal_p_lt_0.05": 20,
+    "expected_false_positives_at_0.05": 6.3,
+    "bh_q_lt_0.05_all126": 0,
+    "bh_q_lt_0.10_all126": 3,
+    "holm_lt_0.05_all126": 0,
+    "survivors_q_lt_0.10": [
+      {
+        "location_id": "dettah_bay",
+        "metric": "open_day",
+        "p_unadjusted": 0.002,
+        "q_bh_all126": 0.0853
+      },
+      {
+        "location_id": "dettah_bay",
+        "metric": "open_to_close_days",
+        "p_unadjusted": 0.0015,
+        "q_bh_all126": 0.0853
+      },
+      {
+        "location_id": "nahanni_butte",
+        "metric": "close_day",
+        "p_unadjusted": 0.0009,
+        "q_bh_all126": 0.0853
+      }
+    ],
+    "climate_family": {
+      "n": 99,
+      "nominal": 9,
+      "bh_q_lt_0.05": 0,
+      "bh_q_lt_0.10": 0
+    },
+    "road_family": {
+      "n": 27,
+      "nominal": 11,
+      "bh_q_lt_0.05": 6,
+      "bh_q_lt_0.10": 11
+    },
+    "autocorr_flagged": 16
+  },
+  "road_record_all_routes": {
+    "n_routes": 17,
+    "n_tests_with_p": 51,
+    "nominal_p_lt_0.05": 28,
+    "bh_q_lt_0.05": 26,
+    "bh_q_lt_0.10": 29,
+    "holm_lt_0.05": 10,
+    "dettah": [
+      {
+        "metric": "open_day",
+        "n_seasons": 32,
+        "slope_per_decade": 9.0,
+        "ci95_low": 3.5714,
+        "ci95_high": 12.3529,
+        "bb_ci95_low": 5.2155,
+        "bb_ci95_high": 12.5536,
+        "p_unadjusted": 0.0003,
+        "q_bh_all_routes": 0.0021,
+        "holm_all_routes": 0.0144,
+        "rank_by_p_within_metric": 3.0
+      },
+      {
+        "metric": "close_day",
+        "n_seasons": 32,
+        "slope_per_decade": -1.4286,
+        "ci95_low": -4.0,
+        "ci95_high": -0.0,
+        "bb_ci95_low": -3.3333,
+        "bb_ci95_high": 0.1228,
+        "p_unadjusted": 0.1249,
+        "q_bh_all_routes": 0.1991,
+        "holm_all_routes": 1.0,
+        "rank_by_p_within_metric": 8.0
+      },
+      {
+        "metric": "open_to_close_days",
+        "n_seasons": 32,
+        "slope_per_decade": -10.2381,
+        "ci95_low": -15.8333,
+        "ci95_high": -5.2941,
+        "bb_ci95_low": -15.6589,
+        "bb_ci95_high": -5.0117,
+        "p_unadjusted": 0.0007,
+        "q_bh_all_routes": 0.0035,
+        "holm_all_routes": 0.029,
+        "rank_by_p_within_metric": 5.0
+      }
+    ],
+    "aklavik": [
+      {
+        "metric": "open_day",
+        "n_seasons": 32,
+        "slope_per_decade": -6.6667,
+        "ci95_low": -14.1667,
+        "ci95_high": -0.0,
+        "p_unadjusted": 0.0237,
+        "q_bh_all_routes": 0.0483
+      },
+      {
+        "metric": "close_day",
+        "n_seasons": 32,
+        "slope_per_decade": 0.7846,
+        "ci95_low": -1.25,
+        "ci95_high": 3.3333,
+        "p_unadjusted": 0.484,
+        "q_bh_all_routes": 0.561
+      },
+      {
+        "metric": "open_to_close_days",
+        "n_seasons": 32,
+        "slope_per_decade": 8.2971,
+        "ci95_low": 1.6667,
+        "ci95_high": 15.0,
+        "p_unadjusted": 0.0066,
+        "q_bh_all_routes": 0.0199
+      }
+    ],
+    "survivors_q_lt_0.10": [
+      {
+        "road_id": "aklavik",
+        "metric": "open_day",
+        "slope_per_decade": -6.6667,
+        "p_unadjusted": 0.0237,
+        "q_bh_all_routes": 0.0483
+      },
+      {
+        "road_id": "aklavik",
+        "metric": "open_to_close_days",
+        "slope_per_decade": 8.2971,
+        "p_unadjusted": 0.0066,
+        "q_bh_all_routes": 0.0199
+      },
+      {
+        "road_id": "colville_lake",
+        "metric": "open_to_close_days",
+        "slope_per_decade": 10.0,
+        "p_unadjusted": 0.0331,
+        "q_bh_all_routes": 0.0626
+      },
+      {
+        "road_id": "deline",
+        "metric": "open_day",
+        "slope_per_decade": -6.4752,
+        "p_unadjusted": 0.0049,
+        "q_bh_all_routes": 0.0165
+      },
+      {
+        "road_id": "deline",
+        "metric": "close_day",
+        "slope_per_decade": 5.0,
+        "p_unadjusted": 0.0052,
+        "q_bh_all_routes": 0.0165
+      },
+      {
+        "road_id": "deline",
+        "metric": "open_to_close_days",
+        "slope_per_decade": 13.0789,
+        "p_unadjusted": 0.0001,
+        "q_bh_all_routes": 0.0009
+      },
+      {
+        "road_id": "dettah",
+        "metric": "open_day",
+        "slope_per_decade": 9.0,
+        "p_unadjusted": 0.0003,
+        "q_bh_all_routes": 0.0021
+      },
+      {
+        "road_id": "dettah",
+        "metric": "open_to_close_days",
+        "slope_per_decade": -10.2381,
+        "p_unadjusted": 0.0007,
+        "q_bh_all_routes": 0.0035
+      },
+      {
+        "road_id": "liard_fort_simpson",
+        "metric": "open_to_close_days",
+        "slope_per_decade": -3.4699,
+        "p_unadjusted": 0.0421,
+        "q_bh_all_routes": 0.0767
+      },
+      {
+        "road_id": "mackenzie_tsiighetchic",
+        "metric": "open_day",
+        "slope_per_decade": 4.2206,
+        "p_unadjusted": 0.0042,
+        "q_bh_all_routes": 0.0153
+      },
+      {
+        "road_id": "nahanni_butte",
+        "metric": "close_day",
+        "slope_per_decade": 9.3304,
+        "p_unadjusted": 0.0001,
+        "q_bh_all_routes": 0.0012
+      },
+      {
+        "road_id": "nahanni_butte",
+        "metric": "open_to_close_days",
+        "slope_per_decade": 9.392,
+        "p_unadjusted": 0.0015,
+        "q_bh_all_routes": 0.0066
+      },
+      {
+        "road_id": "norman_wells_fort_good_hope",
+        "metric": "open_day",
+        "slope_per_decade": -5.8333,
+        "p_unadjusted": 0.0117,
+        "q_bh_all_routes": 0.0298
+      },
+      {
+        "road_id": "norman_wells_fort_good_hope",
+        "metric": "close_day",
+        "slope_per_decade": 4.1667,
+        "p_unadjusted": 0.0223,
+        "q_bh_all_routes": 0.0474
+      },
+      {
+        "road_id": "norman_wells_fort_good_hope",
+        "metric": "open_to_close_days",
+        "slope_per_decade": 10.8333,
+        "p_unadjusted": 0.0026,
+        "q_bh_all_routes": 0.0101
+      },
+      {
+        "road_id": "sambaa_ke",
+        "metric": "open_day",
+        "slope_per_decade": -4.0,
+        "p_unadjusted": 0.0145,
+        "q_bh_all_routes": 0.0337
+      },
+      {
+        "road_id": "sambaa_ke",
+        "metric": "close_day",
+        "slope_per_decade": 6.7424,
+        "p_unadjusted": 0.0003,
+        "q_bh_all_routes": 0.0021
+      },
+      {
+        "road_id": "sambaa_ke",
+        "metric": "open_to_close_days",
+        "slope_per_decade": 12.2876,
+        "p_unadjusted": 0.0002,
+        "q_bh_all_routes": 0.0013
+      },
+      {
+        "road_id": "tibbitt_contwoyto",
+        "metric": "open_day",
+        "slope_per_decade": 2.3529,
+        "p_unadjusted": 0.0085,
+        "q_bh_all_routes": 0.0227
+      },
+      {
+        "road_id": "tibbitt_contwoyto",
+        "metric": "close_day",
+        "slope_per_decade": -2.0,
+        "p_unadjusted": 0.0071,
+        "q_bh_all_routes": 0.0202
+      },
+      {
+        "road_id": "tibbitt_contwoyto",
+        "metric": "open_to_close_days",
+        "slope_per_decade": -6.6667,
+        "p_unadjusted": 0.0014,
+        "q_bh_all_routes": 0.0064
+      },
+      {
+        "road_id": "tulita_norman_wells",
+        "metric": "open_day",
+        "slope_per_decade": -7.8416,
+        "p_unadjusted": 0.0,
+        "q_bh_all_routes": 0.0009
+      },
+      {
+        "road_id": "tulita_norman_wells",
+        "metric": "close_day",
+        "slope_per_decade": 3.8675,
+        "p_unadjusted": 0.025,
+        "q_bh_all_routes": 0.049
+      },
+      {
+        "road_id": "tulita_norman_wells",
+        "metric": "open_to_close_days",
+        "slope_per_decade": 13.9643,
+        "p_unadjusted": 0.0004,
+        "q_bh_all_routes": 0.0023
+      },
+      {
+        "road_id": "wekweeti",
+        "metric": "open_day",
+        "slope_per_decade": 12.5,
+        "p_unadjusted": 0.0132,
+        "q_bh_all_routes": 0.032
+      },
+      {
+        "road_id": "wekweeti",
+        "metric": "open_to_close_days",
+        "slope_per_decade": -13.75,
+        "p_unadjusted": 0.0533,
+        "q_bh_all_routes": 0.0938
+      },
+      {
+        "road_id": "wrigley_tulita",
+        "metric": "open_day",
+        "slope_per_decade": -10.0,
+        "p_unadjusted": 0.0,
+        "q_bh_all_routes": 0.0003
+      },
+      {
+        "road_id": "wrigley_tulita",
+        "metric": "close_day",
+        "slope_per_decade": 3.5099,
+        "p_unadjusted": 0.0198,
+        "q_bh_all_routes": 0.0438
+      },
+      {
+        "road_id": "wrigley_tulita",
+        "metric": "open_to_close_days",
+        "slope_per_decade": 15.0,
+        "p_unadjusted": 0.0001,
+        "q_bh_all_routes": 0.0012
+      }
+    ]
+  },
+  "leakage": {
+    "dettah_oct_dec_vs_opening_leaky_winters": 16,
+    "dettah_mar15_apr15_vs_closing_leaky_winters": 11,
+    "aklavik_oct_dec_vs_opening_leaky_winters": 21,
+    "aklavik_mar15_apr15_vs_closing_leaky_winters": 0,
+    "dettah_dec1_sog_vs_opening_leaky_winters": 0
+  },
+  "snow": {
+    "associations": [
+      {
+        "predictor": "sog_nov28_cm",
+        "n": 23,
+        "spearman_rho": 0.6443,
+        "ci95_low": 0.3938,
+        "ci95_high": 0.8502,
+        "p_unadjusted": 0.0009,
+        "q_bh_family": 0.0045,
+        "bonferroni_5": 0.0045,
+        "leak_free_vs_full_1993_2024_record": true,
+        "leak_free_in_2001_2024_sample": true
+      },
+      {
+        "predictor": "sog_mean_nov1_28_cm",
+        "n": 23,
+        "spearman_rho": 0.4426,
+        "ci95_low": 0.058,
+        "ci95_high": 0.7304,
+        "p_unadjusted": 0.0344,
+        "q_bh_family": 0.0574,
+        "bonferroni_5": 0.1722,
+        "leak_free_vs_full_1993_2024_record": true,
+        "leak_free_in_2001_2024_sample": true
+      },
+      {
+        "predictor": "snowfall_oct1_nov28_cm",
+        "n": 24,
+        "spearman_rho": 0.214,
+        "ci95_low": -0.2079,
+        "ci95_high": 0.6322,
+        "p_unadjusted": 0.3152,
+        "q_bh_family": 0.394,
+        "bonferroni_5": 1.0,
+        "leak_free_vs_full_1993_2024_record": true,
+        "leak_free_in_2001_2024_sample": true
+      },
+      {
+        "predictor": "sog_dec1_cm",
+        "n": 24,
+        "spearman_rho": 0.5369,
+        "ci95_low": 0.1928,
+        "ci95_high": 0.7971,
+        "p_unadjusted": 0.0068,
+        "q_bh_family": 0.0171,
+        "bonferroni_5": 0.0341,
+        "leak_free_vs_full_1993_2024_record": false,
+        "leak_free_in_2001_2024_sample": true
+      },
+      {
+        "predictor": "snowfall_octdec_cm",
+        "n": 24,
+        "spearman_rho": 0.1103,
+        "ci95_low": -0.4134,
+        "ci95_high": 0.6404,
+        "p_unadjusted": 0.608,
+        "q_bh_family": 0.608,
+        "bonferroni_5": 1.0,
+        "leak_free_vs_full_1993_2024_record": false,
+        "leak_free_in_2001_2024_sample": false
+      }
+    ],
+    "trends": [
+      {
+        "series": "sog_nov28_cm",
+        "n": 23,
+        "slope_per_decade": 4.0,
+        "ci95_low": -1.6667,
+        "ci95_high": 8.6667,
+        "bb_ci95_low": -0.7278,
+        "bb_ci95_high": 8.7783,
+        "p_unadjusted": 0.194,
+        "status": "ok"
+      },
+      {
+        "series": "sog_mean_nov1_28_cm",
+        "n": 23,
+        "slope_per_decade": 2.5895,
+        "ci95_low": -1.068,
+        "ci95_high": 5.7975,
+        "bb_ci95_low": -0.9821,
+        "bb_ci95_high": 6.4305,
+        "p_unadjusted": 0.2049,
+        "status": "ok"
+      },
+      {
+        "series": "sog_dec1_cm",
+        "n": 24,
+        "slope_per_decade": 2.5543,
+        "ci95_low": -2.1429,
+        "ci95_high": 7.1429,
+        "bb_ci95_low": -1.6326,
+        "bb_ci95_high": 6.726,
+        "p_unadjusted": 0.296,
+        "status": "ok"
+      },
+      {
+        "series": "snowfall_oct1_nov28_cm",
+        "n": 24,
+        "slope_per_decade": -5.15,
+        "ci95_low": -19.6,
+        "ci95_high": 6.1875,
+        "bb_ci95_low": -18.7579,
+        "bb_ci95_high": 8.3747,
+        "p_unadjusted": 0.2974,
+        "status": "ok"
+      },
+      {
+        "series": "snowfall_octdec_cm",
+        "n": 24,
+        "slope_per_decade": -11.3485,
+        "ci95_low": -26.5882,
+        "ci95_high": 5.5,
+        "bb_ci95_low": -27.0394,
+        "bb_ci95_high": 3.8427,
+        "p_unadjusted": 0.1725,
+        "status": "ok"
+      }
+    ]
+  },
+  "headline_dettah_lag1": [
+    {
+      "metric": "open_day",
+      "theil_sen_per_decade": 10.333,
+      "ts_ci95_low": 3.333,
+      "ts_ci95_high": 17.222,
+      "mk_p_unadjusted": 0.002,
+      "bb_ci95_low": 5.579,
+      "bb_ci95_high": 15.352,
+      "lag1_resid": -0.054,
+      "lag1_flag": false
+    },
+    {
+      "metric": "close_day",
+      "theil_sen_per_decade": -2.5,
+      "ts_ci95_low": -7.143,
+      "ts_ci95_high": 0.769,
+      "mk_p_unadjusted": 0.095,
+      "bb_ci95_low": -5.969,
+      "bb_ci95_high": 0.576,
+      "lag1_resid": -0.107,
+      "lag1_flag": false
+    },
+    {
+      "metric": "open_to_close_days",
+      "theil_sen_per_decade": -15.0,
+      "ts_ci95_low": -23.571,
+      "ts_ci95_high": -6.0,
+      "mk_p_unadjusted": 0.001,
+      "bb_ci95_low": -21.938,
+      "bb_ci95_high": -8.384,
+      "lag1_resid": 0.1,
+      "lag1_flag": false
+    }
+  ]
+}

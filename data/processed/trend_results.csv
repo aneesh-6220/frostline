@@ -31,13 +31,13 @@ dettah_bay,fdd_octdec,main (2001-2024),24,14.648,-107.88,111.14,0.043478,0.27285
 dettah_bay,fdd_octdec,drop first 5 winters,19,-45.54,-214.44,81.46,-0.1345,-0.76968,0.44149,0.11445,ok
 dettah_bay,fdd_octdec,drop last 5 winters,19,100.09,-65.6,240.19,0.22807,1.3295,0.1837,-0.19279,ok
 dettah_bay,fdd_octdec,OLS slope (comparison only),24,8.9171,-86.447,104.28,,,0.85626,,ols
-dettah_bay,thaw_days_janmar,main (2001-2024),24,-0,-0,-0,0.025362,0.43339,0.66473,-0.04529,ok
-dettah_bay,thaw_days_janmar,drop first 5 winters,19,-0,-0,-0,0.011696,0.091287,0.92726,-0.05848,ok
-dettah_bay,thaw_days_janmar,drop last 5 winters,19,-0,-0,-0,0.070175,1.0042,0.3153,-0.05848,ok
+dettah_bay,thaw_days_janmar,main (2001-2024),24,,,,,,,,mostly_tied
+dettah_bay,thaw_days_janmar,drop first 5 winters,19,,,,,,,,mostly_tied
+dettah_bay,thaw_days_janmar,drop last 5 winters,19,,,,,,,,mostly_tied
 dettah_bay,thaw_days_janmar,OLS slope (comparison only),24,0.030435,-0.089523,0.15039,,,0.62393,,ols
-dettah_bay,longest_thaw_run_janmar,main (2001-2024),24,-0,-0,-0,0.025362,0.43339,0.66473,-0.04529,ok
-dettah_bay,longest_thaw_run_janmar,drop first 5 winters,19,-0,-0,-0,0.011696,0.091287,0.92726,-0.05848,ok
-dettah_bay,longest_thaw_run_janmar,drop last 5 winters,19,-0,-0,-0,0.070175,1.0042,0.3153,-0.05848,ok
+dettah_bay,longest_thaw_run_janmar,main (2001-2024),24,,,,,,,,mostly_tied
+dettah_bay,longest_thaw_run_janmar,drop first 5 winters,19,,,,,,,,mostly_tied
+dettah_bay,longest_thaw_run_janmar,drop last 5 winters,19,,,,,,,,mostly_tied
 dettah_bay,longest_thaw_run_janmar,OLS slope (comparison only),24,0.030435,-0.089523,0.15039,,,0.62393,,ols
 dettah_bay,mean_octdec_c,main (2001-2024),24,-0.24667,-1.26,1.2283,-0.072464,-0.47128,0.63744,-0.099338,ok
 dettah_bay,mean_octdec_c,drop first 5 winters,19,0.51617,-0.84891,2.0549,0.087719,0.4898,0.62428,0.12301,ok
