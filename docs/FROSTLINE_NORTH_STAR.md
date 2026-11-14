@@ -1,215 +1,299 @@
 # FROSTLINE
-## Product North Star, Scientific Contract & Autonomous Build Mission
+## The Scientific Investigation Platform for a Changing North
+
+**Product North Star · Engineering Mandate · Scientific Contract · Global-Award Submission Plan**
 
 **Team:** Strongest Soldiers  
 **Competition:** NASA Space Apps Challenge 2026 - Halifax  
 **Challenge:** Be An Earth System Trend Detective!  
-**Target:** One complete, deployed, globally competitive submission  
 **Local judging:** November 15, 2026, 3:00 PM Atlantic  
-**NASA submission deadline:** November 15, 2026, 11:59 PM local time
+**NASA submission:** November 15, 2026, 11:59 PM Atlantic
+
+**Implementation owner:** Claude Fable 5.2, highest available extended coding effort appropriate for the task.
 
 ---
 
-# 1. Your mission
+# I. THE MISSION
 
-You are the principal engineer, technical product lead, scientific visualization architect, UX designer, test engineer and release owner for **Frostline**.
+You are responsible for building **Frostline into an outstanding, functioning, scientifically rigorous Earth-system investigation platform**.
 
-**Build the complete product now.**
+Work as the principal product engineer, scientific visualization architect, user-experience designer, integration engineer, and release engineer.
 
-Do not build a disposable hackathon demonstration followed by a separate application. The judged demonstration must be a guided experience inside the same fully functioning product.
+Your objective is to create one complete product with:
 
-You have broad autonomy over implementation, architecture, components, layouts, testing and routine technical decisions.
+1. A compelling guided investigation for local judges.
+2. A genuinely reusable research workflow for real users.
+3. Meaningful integration of NASA Earth science data.
+4. Correct and reproducible statistical analysis.
+5. An innovative system for evaluating evidence quality.
+6. Scientifically grounded connections to northern seasonal transportation.
+7. A polished public application and complete NASA submission package.
 
-Your objective is not maximum feature count. It is the best possible combination of:
+**Do not build a disposable demo followed by another application. The demo must be a guided path through the actual finished product.**
 
-- Exceptional usability and presentation.
-- Meaningful use of NASA Earth science data.
-- Strong scientific validity.
-- Clear, novel application to a consequential human problem.
-- A genuinely functioning, reproducible system.
-- Reliable deployment and complete competition submission materials.
+Execute the implementation. Do not stop after writing a plan.
 
-Do the implementation rather than responding with a plan.
+Build the most ambitious scientifically defensible product possible without compromising the working release, data integrity, or submission deadline.
 
-A Global Award is not guaranteed. The engineering objective is to meet the strongest defensible standard against the actual judging criteria.
+The priority is not the number of features implemented. It is the amount of reliable, meaningful user value delivered.
 
-# 2. Repository and scientific authority
+---
 
-**Private GitHub repository:**
+# II. THE STRATEGIC VISION
+
+## Frostline's core identity
+
+**FROSTLINE**
+
+*Trace the evidence behind changing winters.*
+
+**Product statement:**
+
+Frostline transforms NASA Earth-system data into accessible scientific investigations, helping people discover how northern environmental conditions are changing, assess the strength of the evidence, and explore relationships with documented seasonal transportation operations.
+
+## The real problem
+
+Environmental change is not difficult to discuss. It is difficult to investigate rigorously.
+
+Someone interested in how winter conditions have changed near a northern community may need to:
+
+- Discover relevant NASA climate datasets.
+- Determine which environmental indicators are meaningful.
+- Download and clean historical measurements.
+- Understand temporal and spatial resolution.
+- Calculate seasonal metrics.
+- Fit trends and evaluate uncertainty.
+- Compare different places fairly.
+- Locate government transportation records.
+- Align environmental and operational timescales.
+- Determine what conclusions are and are not justified.
+- Document and communicate the findings.
+
+That is a fragmented and technically demanding workflow.
+
+**Frostline compresses this workflow into a guided, reproducible investigation.**
+
+## What users should obtain
+
+A user should be able to answer:
+
+**What environmental change can be detected here?**
+
+**How much has the variable changed over time?**
+
+**How statistically convincing is the trend?**
+
+**Does the pattern differ somewhere else?**
+
+**Do available transportation records show related changes?**
+
+**How trustworthy are the underlying measurements?**
+
+**What evidence is still missing?**
+
+The final output is a source-backed, reproducible **Frostline Evidence Brief** that the user can understand, download, share, and investigate further.
+
+## Product boundaries
+
+Frostline is a scientific investigation and research-communication tool.
+
+It is not:
+
+- An ice-thickness measurement system.
+- A real-time road safety monitor.
+- A route recommendation service.
+- A road-opening prediction engine.
+- A validated operational decision-support system.
+- Proof that climate change caused a particular road-opening trend.
+
+Do not overclaim the product's capability to make it appear more commercially significant.
+
+---
+
+# III. SCIENTIFIC FOUNDATION AND REPOSITORY AUTHORITY
+
+## Repository
+
+Private GitHub repository:
 
 https://github.com/aneesh-6220/nasa-space-apps-2026
 
-**Authoritative starting branch:** `fable-ready`
+Authoritative starting branch:
 
-**Expected base commit:**
+`fable-ready`
+
+Expected base commit:
 
 `17829f8447fb3b9bcb5c369800ca1ce9d5ddfafc`
 
-Verify that this exact commit exists and that the current remote branch is compatible with it. Inspect the working tree before changing anything.
+Verify the actual remote commit and working tree.
 
-Create a dedicated implementation branch, preferably:
+Create a separate `frostline-implementation` branch. Preserve all other team activity.
 
-`frostline-implementation`
-
-Preserve teammate work. Do not force-push, alter raw downloads, change repository visibility or overwrite unreviewed scientific artifacts.
-
-Read and obey:
+## Read before editing
 
 1. `docs/FABLE_52_START_HERE.md`
 2. `docs/FABLE_HANDOFF_FINAL.md`
-3. `docs/APP_IMPLEMENTATION_CONTRACT.md`
-4. `docs/APP_DATA_SCHEMA.md`
-5. `docs/SCIENTIFIC_METHODS.md`
+3. `docs/SCIENTIFIC_METHODS.md`
+4. `docs/APP_IMPLEMENTATION_CONTRACT.md`
+5. `docs/APP_DATA_SCHEMA.md`
 6. `docs/APPROVED_FINDINGS.md`
 7. `docs/RESULTS.md`
 8. `docs/CHALLENGE_ELIGIBILITY.md`
 9. `docs/DATA_SOURCES.md`
-10. `docs/GEOGRAPHIC_SCOPE.md`
-11. `submission/SUBMISSION_DRAFT.md`
+10. `docs/DATA_QUALITY.md`
+11. `docs/GEOGRAPHIC_SCOPE.md`
+12. `submission/SUBMISSION_DRAFT.md`
 
-Inspect all referenced datasets, existing application code, processing scripts and tests.
+Also inspect every referenced application dataset, code module, processing script, and test.
 
-**Authority order:**
+The scientific specification and generated outputs are authoritative. This north star controls product design and execution, but does not authorize inventing or changing scientific findings.
 
-- Verified raw data and approved scientific methods determine analytical truth.
-- Generated authoritative results determine displayed numeric findings.
-- The application contract determines valid interactions and input/output schemas.
-- This document determines product direction, presentation, architecture priorities and completion standards.
+## Existing foundation
 
-Never resolve a scientific inconsistency by inventing data or changing the methodology to get a more compelling result.
+The handoff reportedly includes:
 
-The preparation branch reportedly passes:
+- NASA POWER daily temperature records.
+- MERRA-2 data provenance.
+- Dettah and Aklavik study locations.
+- NWT winter-road operating records.
+- Environment Canada station observations.
+- Seasonal environmental indicators.
+- Historical road-operation trend estimates.
+- Statistical uncertainty and multiple-testing corrections.
+- A reproducible scientific pipeline.
+- Twenty application data files under `UI/data_real/`.
+- A reference scientific data layer.
+- Ninety-five passing automated tests.
+
+Verify the actual state instead of assuming every claim is correct.
+
+Establish the baseline:
 
 ```bash
 python3 -I -m unittest discover -s tests
 python3 -I scripts/regenerate_all.py --check
 ```
 
-Expected baseline: 95 passing tests and deterministic regeneration.
+Maintain a green scientific suite throughout the build.
 
-Verify that baseline independently.
+Do not manually edit source observations, approved generated data, or authoritative numerical results.
 
-Implement the remaining application-level acceptance criteria identified in the engineering contract, particularly AC-2, AC-6, AC-7, AC-9 through AC-12 and AC-14.
+---
 
-# 3. What Frostline actually is
+# IV. THE COMPETITIVE OBJECTIVE
 
-**Product positioning**
+Design Frostline to excel against all five NASA judging criteria.
 
-Frostline is a guided Earth-system trend investigation platform that helps people understand how environmental conditions are changing across northern Canada and what the evidence suggests about seasonal transportation.
+## 1. IMPACT - Solve a meaningful information problem
 
-**Headline**
+Demonstrate how Frostline reduces the barriers to understanding northern climate trends and their possible transportation implications.
 
-FROSTLINE
+Use the NWT operating records and published research as genuine evidence of real-world relevance.
 
-**Tagline**
+The application should have a concrete user outcome: an evidence-backed investigation that previously required several specialized services and manual analysis steps.
 
-Trace the evidence behind changing winters.
+Present realistic future uses in climate education, research, and preliminary adaptation studies.
 
-**Primary promise**
+Never fabricate stakeholder validation, deployment, savings, avoided disruptions, or operational adoption.
 
-Explore NASA climate data, detect historical environmental trends, compare northern locations, and investigate their relationship to documented winter-road operations.
+## 2. CREATIVITY - Create a novel investigation workflow
 
-## The problem
+The innovation is not merely plotting temperature or computing Theil–Sen slopes.
 
-Seasonal winter roads and frozen-water crossings are important parts of northern transportation infrastructure.
+It is the integration of:
 
-Changes in weather and climate may affect the environmental conditions on which seasonal routes depend. However, atmospheric temperatures, local ice conditions, maintenance, construction practices and recorded opening dates are not interchangeable measurements.
+- Human-centered scientific questions.
+- Geographical exploration.
+- Relevant environmental-variable discovery.
+- Historical trend analysis.
+- Comparison across regions.
+- Transportation records.
+- Evidence-quality diagnostics.
+- Data-source disagreement.
+- Research limitations.
+- Exportable, reproducible findings.
 
-Environmental data are distributed among scientific services. Transportation records are maintained separately. Statistical uncertainty and geographical limitations can make both difficult to interpret.
+Create a product experience that is more coherent than separately opening a NASA data portal, statistical notebook, mapping interface and government spreadsheet.
 
-Frostline brings these sources together into a guided investigative workflow.
+## 3. VALIDITY - Make the science trustworthy
 
-## The real user
+Every numerical claim must trace to a real dataset and documented method.
 
-Design primarily for:
+Show scientific uncertainty where it matters.
 
-**A science-curious non-specialist:** Someone who wants to understand whether a northern environmental condition is changing.
+Preserve statistical safeguards, correct temporal definitions, source provenance, independent validation and exploratory-analysis limitations.
 
-**A student or educator:** Someone learning how scientific time series, trends and uncertainty work.
+No fake confidence, invented predictions or unsupported causal claims.
 
-**An exploratory researcher or adaptation planner:** Someone who wants an accessible, documented starting point for investigating historical environmental and operational relationships.
+## 4. RELEVANCE - Directly solve NASA's selected challenge
 
-Do not imply that Frostline has been adopted, endorsed or validated by northern communities, road operators or government agencies.
+The user must be able to select an Earth-system variable, select an approved geography, examine a meaningful historical time series, quantify its trend and assess statistical significance.
 
-Do not market it as an operational planning authority.
+The application should also enable geographic comparisons and explanation of variable choice.
 
-## What existing tools already do
+Winter-road outcomes are the real-world application, not the substitute for environmental investigation.
 
-NASA Giovanni can generate environmental time series.
+## 5. PRESENTATION - Make the project memorable
 
-KNMI Climate Explorer provides established climate analysis capabilities.
+Judges must understand Frostline quickly and experience genuine interaction.
 
-ClimateData.ca already publishes meaningful research connecting freezing accumulation, historical/projected climate conditions and winter-road implications.
+Design a polished guided journey that tells a coherent story without oversimplifying its evidence.
 
-Frostline must not claim these methods are new.
+The interface must stand on its own when opened without a presenter.
 
-**Our differentiated contribution is the workflow:**
+### Potential global-award alignment
 
-*Ask a human question → inspect NASA data → test the trend → compare locations → connect with documented road observations → examine an evidence audit → export a reproducible investigation.*
+Aim to demonstrate qualities associated with:
 
-Make this workflow genuinely simpler and more informative than navigating separate datasets and research reports.
+- Best Use of Science.
+- Best Use of Data.
+- Best Use of Technology.
+- Galactic Impact.
+- Local Impact.
+- Best Use of Storytelling.
 
-# 4. Design for all five NASA judging criteria
+These are historical award-category reference points, not a promise that the categories or selection process are unchanged in 2026.
 
-NASA evaluates Impact, Creativity, Validity, Relevance and Presentation. Treat these as product requirements, not merely pitch language.
+Do not build separate features merely to target award labels.
 
-## Impact
+---
 
-Show why northern seasonal transportation is consequential using documented government and scientific context.
+# V. PRODUCT ARCHITECTURE: ONE CONNECTED INVESTIGATION
 
-Connect the application to realistic uses: historical understanding, climate education, preliminary research and long-term adaptation discussions.
+Frostline must feel like one product rather than disconnected pages.
 
-Do not claim road-closure predictions or quantified benefits that have not been demonstrated.
+Structure the experience around three levels:
 
-## Creativity
+## Level A - Guided Discovery
 
-Make Frostline more than a static dashboard.
+For newcomers and judges.
 
-Its distinctive features should be:
+Begin with an understandable question, show the appropriate data, explain the results, and connect them to meaningful context.
 
-- A question-driven scientific investigation.
-- Interactive geography linked to real data.
-- A clear separation between environmental trends and operational outcomes.
-- An Evidence Audit that makes uncertainty understandable.
-- A shareable or downloadable evidence summary.
+## Level B - Research Explorer
 
-These are product-level innovations, not claims of original climate science.
+For students and scientific users.
 
-## Validity
+Allow approved location, variable, period, and regional-comparison choices with scientifically correct recomputation or corresponding verified results.
 
-Every chart and statistic must come from approved datasets and documented methods.
+## Level C - Evidence Workspace
 
-Show relevant uncertainty and source limitations.
+For users who need a reusable research output.
 
-Preserve reproducibility, multiple-testing safeguards and explicit limits on causal interpretation.
+Show exact metadata, methodology, validation, assumptions, limitations, and exports.
 
-## Relevance
+All three levels must share the same real data and analysis engine.
 
-The main screen must clearly demonstrate the NASA challenge:
+Do not create a separate mockup for Guided Discovery.
 
-- Select an Earth-system variable.
-- See its historical behavior.
-- Determine trend direction and magnitude.
-- Evaluate significance.
-- Compare geographic differences.
+---
 
-Road records provide context, but do not replace the required NASA environmental investigation.
+# VI. COMPLETE FEATURE SPECIFICATION
 
-## Presentation
+## Feature 1 - Frostline Observatory
 
-The interface must communicate the value in seconds, work smoothly during a live demonstration and require minimal specialist knowledge.
-
-Use progressive disclosure. The first screen must be simple; deeper evidence must be accessible on demand.
-
-Do not assume judges will read the entire documentation.
-
-# 5. The complete user experience
-
-Build one coherent, responsive application with these integrated capabilities.
-
-## A. Welcome and Guided Investigation
-
-The first screen must immediately communicate the environmental problem and invite users to start exploring.
+Create an exceptional home screen.
 
 Hero:
 
@@ -217,652 +301,933 @@ Hero:
 
 Supporting text:
 
-*Use NASA Earth science data to investigate historical winter conditions and the evidence behind seasonal transportation changes.*
+*Follow NASA Earth science data from measurement to discovery, and investigate what the evidence reveals about seasonal transportation.*
 
 Primary action:
 
-**Start Investigation**
+**Begin an Investigation**
 
-Provide three plain-language questions:
+Secondary action:
 
-1. **Are winters getting warmer?**
-2. **Is freezing accumulation changing?**
-3. **Are above-freezing days becoming more frequent?**
+**Explore the Data**
 
-Selecting a question should open the relevant real dataset and analysis, not a static explanation.
+Show a concise representation of Frostline's process:
 
-Use a preselected real example so the first meaningful visualization is immediately available.
+**Location → Environmental Evidence → Trend → Comparison → Road History → Evidence Brief**
 
-## B. Interactive Geographic Explorer
+Use real data-derived summary indicators where available.
 
-Include an attractive, scientifically accurate location map using the approved repository coordinates.
+Never invent a large headline number solely for visual impact.
 
-Initial approved investigation locations:
+The first screen must work without login or configuration.
 
-- `dettah_bay`
-- `aklavik_delta`
+### Acceptance
 
-Use the documented human-readable labels.
-
-Prefer Streamlit/PyDeck or another well-supported integration consistent with the implementation.
-
-Required interactions:
-
-- Select a location by clicking its marker.
-- Update the relevant climate chart and evidence.
-- Synchronize the map with the conventional location selector.
-- Show a short, accurate description of the location and nearby transportation infrastructure.
-- Distinguish sampling points from actual road geometries.
-
-Do not require Google Maps credentials or billing.
-
-Do not invent route lines, spatial heatmaps, ice thickness or climate-risk surfaces.
-
-The entire investigation must remain usable if map tiles fail.
-
-## C. Earth-System Trend Detective - core functionality
-
-Allow users to choose from all scientifically approved environmental indicators.
-
-Initially:
-
-- Seasonal mean two-metre air temperature.
-- October–December freezing degree-days.
-- January–March above-freezing-day frequency.
-- Any additional verified NASA variables approved through the existing scientific pipeline.
-
-For each selection, present:
-
-**Observed history**
-
-An interactive historical time-series chart showing actual data points or seasonal values.
-
-**Trend estimate**
-
-A clearly differentiated fitted trend line using the approved estimator.
-
-**Magnitude**
-
-A value per decade, with appropriate scientific units.
-
-**Uncertainty**
-
-A justified confidence interval and clear significance or inconclusive status.
-
-**Context**
-
-Location, time period, dataset name, sample size and source.
-
-**Interpretation**
-
-Two or three sentences describing what the findings support, without exaggeration.
-
-All displayed numerical statistics must come from authoritative generated outputs or validated scientific functions.
-
-If the historical period changes, recalculate with approved functions or restrict the selector to approved precomputed periods.
-
-Never reuse an incompatible confidence interval or multiplicity-adjusted q-value.
-
-An inconclusive trend must be described as unresolved, not as proof of no change.
-
-If a statistical estimator is undefined or unsuitable, display an informative unavailable state rather than zero or an invented result.
-
-## D. Compare Northern Locations
-
-Allow two approved locations to be compared on the same indicator and matched years.
-
-Display:
-
-- Two aligned historical series.
-- Comparable units and scales.
-- Trend magnitude for each.
-- Appropriate uncertainties.
-- A plain-language description of differences.
-- Geographic and observational limitations.
-
-Only claim a statistically established difference between trends if the approved methods actually support that comparison.
-
-A significant result in one location and a nonsignificant result in another does not establish that the trends differ.
-
-If formal difference testing is unavailable, label the comparison descriptive.
-
-## E. Winter-Road Evidence
-
-Show verified historical operating records separately from NASA climate measurements.
-
-Include:
-
-- Historical opening dates.
-- Historical closing dates where valid.
-- First-opening-to-final-closing calendar intervals where supported.
-- Approved operational trend estimates.
-- Exploratory environmental relationships only where the evidence permits.
-
-Make the distinction visually explicit:
-
-**Environmental measurements** versus **Recorded road operations**.
-
-The existing data report a historically later-opening Dettah ice road trend. Treat this as an exploratory finding and load exact results from authoritative files.
-
-Do not claim atmospheric warming caused the trend.
-
-Dettah has an alternative year-round road route. Do not describe its ice crossing as its only transportation connection.
-
-Aklavik has a different geography and seasonal-access context. Use only the verified road identity.
-
-Opening-to-closing calendar intervals do not necessarily equal total usable road days.
-
-Do not generate predictions about ice safety, road opening dates, truck routes or future accessibility.
-
-## F. The Frostline Evidence Audit - signature capability
-
-Each investigation must include an elegant, accessible evidence panel.
-
-Organize it into:
-
-**1. What we measured**
-
-Exact variable, units, period and location.
-
-**2. What changed**
-
-Observed values, estimated trend and uncertainty.
-
-**3. How confident are we?**
-
-Statistical method, sample size, significance status, multiple-testing qualification and relevant assumptions.
-
-**4. Where did the data come from?**
-
-NASA collection, product version, source service, coordinates and original attribution.
-
-**5. What did we check?**
-
-Relevant ground-station validation, missingness and reproducibility tests.
-
-**6. What can we conclude?**
-
-A precise explanation of supported and unsupported interpretations.
-
-Use readable scientific language without sacrificing accuracy.
-
-Create an exportable evidence report or CSV download when practical, based on actual selected data and corresponding statistics.
-
-Never generate numerical reports using an unverified AI narrative or fabricated values.
-
-The Evidence Audit should be the application's distinctive feature-not an unreadable disclaimer.
-
-# 6. Scientific integrity contract
-
-These requirements override visual design choices.
-
-## Source limitations
-
-NASA POWER historical temperature data are principally derived from MERRA-2 reanalysis, representing spatial grid-cell estimates rather than precise measurements at road surfaces.
-
-The existing audit reports a substantial negative temperature bias against nearby Environment Canada station observations.
-
-Do not remove, conceal or correct that discrepancy through an arbitrary offset.
-
-Clearly indicate that absolute FDD values are model-derived estimates and may differ from actual local atmospheric or ground conditions.
-
-A high correlation between datasets does not establish agreement in absolute values or historical slopes.
-
-## Statistical validity
-
-Preserve the existing approved Theil–Sen, Mann–Kendall, uncertainty, multiplicity and leakage safeguards.
-
-Do not create new statistical methods merely to make the dashboard more interactive.
-
-Distinguish exploratory analysis from confirmatory inference.
-
-Do not imply that statistical significance proves causality.
-
-Do not present a lack of significance as proof that an environmental effect is absent.
-
-Do not present invalid pooled significance calculations.
-
-Do not treat a retrospectively chosen case as preregistered.
-
-## Scientific nonclaims
-
-Frostline must NEVER claim to:
-
-- Measure safe ice thickness.
-- Determine whether a winter road is safe.
-- Predict when specific routes will open.
-- Recommend trucking or travel decisions.
-- Prove that a detected road-opening trend was caused by climate change.
-- Establish community adoption or government endorsement.
-- Provide verified findings for locations not in approved data.
-
-These restrictions must be reflected in UI content and regression tests.
-
-## Synthetic data
-
-Remove or isolate legacy synthetic production code.
-
-The old James Bay 380°C-day benchmark must not appear in the NWT investigation.
-
-Production views must never silently fall back to synthetic data.
-
-Retain synthetic fixtures only in clearly isolated tests.
-
-# 7. NASA-resource eligibility
-
-This is a mandatory competition gate.
-
-The official challenge Resources include NASA Giovanni and AppEEARS.
-
-The current repository uses NASA POWER daily temperature data. POWER itself is not explicitly listed in the official Resources provided by the team.
-
-**Qualifying resource use remains unconfirmed.**
-
-Cason is separately responsible for obtaining or verifying a genuine NASA data extraction through an officially listed resource.
-
-The preferred additional series is:
-
-NASA Giovanni → MERRA-2 monthly two-metre air temperature → approved northern location → documented historical time series.
-
-The verified monthly MERRA-2 collection is `M2TMNXSLV`, variable `T2M`.
-
-If a real Giovanni export becomes available:
-
-1. Use the existing strict ingest pathway.
-2. Validate its product, units, coordinates and dates.
-3. Obtain scientific sign-off.
-4. Integrate it meaningfully into the temperature-trend investigator.
-5. Document exactly how this source contributes to the project.
-
-Do not use monthly means to calculate daily freezing-degree-day totals or daily thaw counts.
-
-If no qualifying export is available, do not invent one or claim eligibility.
-
-Complete the application independently while clearly reporting the eligibility blocker.
-
-The captain must verify the qualifying-source requirement before final submission.
-
-# 8. Engineering architecture
-
-Use the existing verified codebase as the foundation.
-
-**Preferred application stack**
-
-- Python
-- Streamlit
-- Plotly
-- pandas / NumPy / SciPy
-- Existing validated scientific analysis modules
-- PyDeck for geographic interaction, if reliable
-
-Do not migrate to Next.js or build unnecessary backend services unless the actual repository provides a compelling architectural reason.
-
-Retain the existing scientific pipeline and data contracts.
-
-The repository reportedly contains 20 approved application data files under `UI/data_real/`, along with per-winter outputs and `scripts/northlink_recompute.py`.
-
-Verify exact paths and schemas.
-
-Separate:
-
-- Immutable raw sources.
-- Reproducible data processing.
-- Validated derived statistics.
-- Application data access.
-- Presentation components.
-- Tests.
-
-Use caching for deterministic analysis outputs and dataset loading.
-
-The demo must work without live NASA API calls.
-
-External basemap tiles may be used, but a failed mapping service must not break scientific exploration.
-
-Avoid unnecessary databases, authentication, telemetry services or background job infrastructure.
-
-The final application must be maintainable and understandable, not merely impressive-looking code.
-
-# 9. Visual direction
-
-Build an unusually polished scientific dashboard.
-
-**Design language**
-
-A contemporary northern-observatory aesthetic: midnight navy, glacier cyan, cool gray, white space and restrained warning accents.
-
-Use polished typography, concise copy, meaningful negative space, consistent component spacing and beautiful data visualizations.
-
-Visual priorities:
-
-1. Scientific charts are central, not decorative.
-2. The map helps users choose meaningful locations.
-3. Important observations can be understood at a glance.
-4. Statistics remain legible at laptop presentation size.
-5. Detailed methodology is available through progressive disclosure.
-6. Layout and labels remain accessible on mobile.
-
-Use deliberate color coding, adequate contrast and color-blind-conscious chart palettes.
-
-No unnecessary animations, generic stock-science decoration or misleading satellite-style imagery.
-
-Do not let aesthetics delay functional integration.
-
-# 10. Built-in judging experience
-
-Create a **Guided Demo** mode inside the production app.
-
-This must use the same real data and analytical functions as ordinary exploration.
-
-It is not a fake demo, separate build or scripted mock result.
-
-The flow should be:
-
-**Scene 1 - The question**
-
-Present the real northern transportation context in one concise explanation.
-
-**Scene 2 - The location**
-
-Show the mapped case study and select a relevant location.
-
-**Scene 3 - The NASA investigation**
-
-Select an approved environmental variable and display real historical data.
-
-**Scene 4 - The result**
-
-Show trend magnitude, uncertainty and interpretation.
-
-**Scene 5 - The real-world evidence**
-
-Show documented winter-road operating histories and clarify what is-and is not-established by the environmental data.
-
-**Scene 6 - The Evidence Audit**
-
-Demonstrate the scientific provenance and reproducibility that distinguish Frostline.
-
-The entire journey must be navigable reliably during a short live presentation.
-
-Provide a visible **Exit Guided Demo / Explore Freely** action.
-
-Avoid any manual setup, authentication, freeform coordinate entry or live data download.
-
-Build a short presenter script based exclusively on functioning features and approved results.
-
-# 11. Real-world usefulness and future extensibility
-
-Treat this as a meaningful scientific prototype, not a purported operational product.
-
-Its credible immediate uses are:
-
-- Climate education.
-- Exploratory assessment of historical northern winter conditions.
-- Understanding differences between locations.
-- Communicating statistical uncertainty.
-- Identifying questions requiring more research.
-- Bringing environmental and transportation observations into one view.
-
-The design should be extensible to additional verified NASA variables, regions and transport records.
-
-However, do not add unsupported arbitrary locations simply to make the application seem global.
-
-A credible future roadmap may include:
-
-- Additional northern corridors.
-- Verified snow and freeze/thaw satellite indicators.
-- Comparisons with additional ground observations.
-- Expert and community feedback.
-- More rigorous spatial and operational validation.
-
-These are future opportunities, not implemented features.
-
-Do not claim community collaboration, adoption, validated decision support or current prediction capability without evidence.
-
-# 12. Implementation order - one release, internal checkpoints
-
-There is ONE final product, not two separate releases.
-
-Work autonomously through these internal checkpoints.
-
-### Checkpoint A - Scientific baseline
-
-Confirm repository state and existing 95-test suite.
-
-Inspect actual datasets, contracts and legacy app.
-
-### Checkpoint B - Working real-data product
-
-Remove synthetic production paths.
-
-Make one complete NASA environmental investigation work from selection to chart to validated interpretation.
-
-### Checkpoint C - Complete scientific workflow
-
-Implement all approved metrics, locations, trends, uncertainty, comparisons and road records.
-
-### Checkpoint D - Distinctive product experience
-
-Build the geographic explorer, Evidence Audit and Guided Demo.
-
-### Checkpoint E - Visual and functional polish
-
-Improve navigation, responsive layout, scientific communication and error handling.
-
-### Checkpoint F - Release validation
-
-Run the full scientific and application tests.
-
-Launch and interact with the actual app. Fix defects.
-
-### Checkpoint G - Deployment and submission package
-
-Deploy the product, verify public accessibility and prepare the submission materials.
-
-Commit stable checkpoints, keeping the application runnable.
-
-Do not return a plan in place of implementation.
-
-If optional enhancements threaten release reliability, omit them cleanly.
-
-# 13. Test and acceptance contract
-
-Preserve all existing scientific tests.
-
-Add application-level tests establishing that:
-
-- All production science outputs use approved real data.
-- No synthetic values are displayed.
-- No obsolete James Bay metric remains.
-- Every metric selector loads the correct observations and units.
-- Location and map selection update all relevant content.
-- Trend estimates match approved results.
-- Period changes cannot display incompatible fixed-window statistics.
-- Confidence intervals and corrected significance values are presented honestly.
-- Undefined or mostly tied data produce correct unavailable states.
-- Geographic comparisons use consistent years.
-- Road records are matched to the correct seasons and routes.
-- Causal and safety overclaims are absent.
-- The Evidence Audit shows appropriate provenance and validation limitations.
-- The app works without live API responses.
-- Main navigation and the Guided Demo complete successfully.
-
-Run the documented scientific test suite and deterministic regeneration check.
-
-Also launch the application and perform real integration or headless-browser tests where supported.
-
-Do not declare deployment successful without actually confirming the hosted app is accessible.
-
-Do not declare tests passing without executing them.
-
-# 14. Global and local submission requirements
-
-Prepare a complete submission package.
-
-**Required deliverables:**
-
-- Fully working Frostline application.
-- Publicly accessible application link.
-- Publicly accessible project information or code artifact with appropriate licensing, subject to captain approval.
-- A short official demonstration: either a video of no more than 30 seconds or a presentation of no more than seven slides.
-- Local judging presentation outline.
-- Scientific documentation.
-- Data and software attributions.
-- AI-use disclosure.
-- Honest description of actual capabilities and limitations.
-- Instructions to reproduce the application and analytical results.
-- Verified screenshots for use if the live demo fails.
-- Exact implementation branch and commit SHA.
-
-All project links must be tested without authentication in a private browsing session.
-
-Because the development repository is private, do not assume reviewers can access it.
-
-The captain must authorize any change of repository visibility. If required, prepare a sanitized, properly licensed public release without exposing secrets.
-
-Follow NASA's submission and intellectual-property requirements.
-
-For any submitted video or images, avoid identifiable minors' faces, voices or personal information, consistent with the event's legal restrictions.
-
-The official NASA project page must be completed before the November 15, 11:59 PM local deadline.
-
-**Do not assume that post-deadline improvements count toward judging.**
-
-# 15. Submission narrative
-
-Prepare clear, grounded copy explaining:
-
-**Problem**
-
-Northern seasonal transportation depends on environmental conditions whose historical changes can be difficult to investigate and interpret.
-
-**Solution**
-
-Frostline turns NASA Earth-system data and relevant transportation records into a guided, interactive scientific investigation.
-
-**How it works**
-
-Users select a northern location and environmental indicator, examine historical observations, evaluate statistical trends, compare regions and access a transparent Evidence Audit.
-
-**What we found**
-
-Use only independently validated findings from the final repository. Distinguish NASA environmental trends from NWT operational trends.
-
-**Why it matters**
-
-It makes relevant Earth science more understandable and helps people examine questions relevant to northern adaptation.
-
-**What makes it different**
-
-A single guided workflow connecting environmental investigation, real-world evidence, statistical uncertainty and reproducibility.
-
-**Limitations**
-
-Not a real-time safety tool, ice-thickness measurement system or causal proof of climate-driven road delays.
-
-Create a concise project description suitable for NASA submission, an accurate technical summary and speaker notes for a local judging presentation.
-
-Do not claim Frostline is the world's first climate detective or that its scientific methods are unprecedented.
-
-# 16. Execution autonomy and collaboration
-
-You own the Frostline application implementation.
-
-Cason owns additional data acquisition and source eligibility.
-
-Yao owns independent scientific sign-off.
-
-Louie supports interface testing and design feedback.
-
-Ethan owns the final pitch and submission narrative.
-
-The captain owns integration and release approval.
-
-Make ordinary engineering decisions autonomously.
-
-Do not repeatedly ask for approval on styling, component structure, code organization or test implementation.
-
-Debug dependency problems, import issues, runtime failures and failing tests as part of the assignment.
-
-If a step requires credentials, hosting account authentication, irreversible repository changes or a decision outside your authority, document the exact human action and continue independent work.
-
-Use subagents only when they provide genuine parallel value, with separate file ownership and clear integration responsibility.
-
-Do not create competing scientific code paths.
-
-Keep the captain informed through concise milestone reports.
-
-# 17. The final standard
-
-The work is complete only when all of the following are demonstrated:
-
-**Functional:** The app starts, navigates and works with real approved data.
-
-**Scientific:** Charts and statistics agree with validated analysis, and important limitations are visible.
-
-**Relevant:** A user can investigate NASA environmental variables and their historical trends.
-
-**Distinctive:** The guided experience and Evidence Audit deliver value beyond simply displaying charts.
-
-**Compelling:** A judge can understand and experience the product with minimal explanation.
-
-**Reliable:** The app has passed automated tests and an end-to-end interaction check.
-
-**Accessible:** Reviewers can open the public application and submission assets.
-
-**Reproducible:** Original sources, processing methods and displayed results can be traced.
-
-**Compliant:** Attribution, AI disclosure, licensing and challenge-specific NASA data requirements have been addressed or explicitly escalated for human resolution.
-
-**Delivered:** Final code, tests, setup instructions, deployment, screenshots, submission copy and branch/commit are reported accurately.
-
-At the end, report:
-
-1. Exact implementation branch and commit.
-2. Complete feature inventory: working, partial or unavailable.
-3. Tests actually run and results.
-4. App startup and deployment status.
-5. Verified public link, if available.
-6. Scientific sign-off and NASA eligibility status.
-7. Remaining blockers with exact owners and actions.
-8. What the captain should do next.
-
-**The release goal is a complete scientific investigation experience that combines compelling communication with real analytical integrity.**
-
-Build Frostline now. Do not stop at planning, mockups or unverified claims of completion.
+A new user understands the basic purpose in 10 seconds and reaches a real graph within one interaction.
 
 ---
 
-# Authoritative research and competition references
+## Feature 2 - Interactive Northern Atlas
 
-**NASA 2026 challenge:**  
-https://www.spaceappschallenge.org/2026/challenges/be-an-earth-system-trend-detective/
+Build an interactive geographic explorer using verified coordinates.
 
-**NASA Space Apps 2026 dates and submission:**  
+Primary case studies:
+
+- Dettah.
+- Aklavik.
+
+Additional preloaded locations may be exposed only after validation of their actual datasets and metadata.
+
+Required capabilities:
+
+- View northern Canadian study locations on a clear map.
+- Select a location through a map marker or searchable selector.
+- See geographic and transportation context.
+- Display the underlying climate sampling point and source grid-cell information when available.
+- Change every downstream chart and evidence panel when the location changes.
+- Open the location's full investigation.
+
+Preferred implementation: Streamlit with PyDeck or a dependable equivalent.
+
+Do not require Google Maps credentials or cloud billing.
+
+Map tiles are optional to the app's functionality; location selectors must continue working if tiles fail.
+
+Only draw actual road geometries if sourced and verified. Never fabricate route lines or claim an atmospheric grid cell represents every road segment.
+
+### Acceptance
+
+A selected map point and every associated chart, metric, source and label always correspond to the same verified location.
+
+---
+
+## Feature 3 - Intelligent Question-to-Variable Discovery
+
+NASA's challenge explicitly emphasizes helping users find variables that can reveal change.
+
+Implement a transparent, scientifically controlled variable-discovery interface.
+
+For example:
+
+**What would you like to investigate?**
+
+- Are early winters becoming warmer?
+- Is freezing accumulation changing?
+- Are midwinter thaw conditions changing?
+- Do patterns differ between northern locations?
+- How do environmental observations compare with road-opening records?
+
+The selection should recommend appropriate scientifically supported metrics, with a brief explanation of why each metric is relevant.
+
+Initially support:
+
+- Mean seasonal two-metre air temperature.
+- Early-season freezing degree-days.
+- Midwinter above-freezing-day counts.
+- Approved monthly MERRA-2 temperature trends, when a verified qualifying extraction exists.
+- Additional variables only if actual data and validated methodology support them.
+
+Do not make the suggestions using an unconstrained language model.
+
+Prefer a transparent, deterministic recommendation system backed by a documented variable catalogue.
+
+Each variable must have:
+- Identifier.
+- Units.
+- Scientific definition.
+- Data source.
+- Spatial resolution.
+- Temporal resolution.
+- Valid period.
+- Supported location list.
+- Data-quality conditions.
+- Available trend methods.
+- Interpretation limitations.
+
+### Acceptance
+
+Every recommended metric is actually available and scientifically appropriate for the selected geography and question.
+
+---
+
+## Feature 4 - Advanced Trend Detective
+
+This is the scientific center of Frostline.
+
+For every approved environmental metric and location, display:
+
+- Actual historical observations.
+- Correctly labeled time-series chart.
+- The selected historical period.
+- Estimated direction of change.
+- Magnitude per decade.
+- Appropriate confidence interval.
+- Supported significance assessment.
+- Sample size.
+- Data completeness.
+- NASA source and product lineage.
+- Plain-language scientific interpretation.
+
+Use polished interactive Plotly charts with tooltips, correctly labeled units and clearly distinguished observation versus fitted trend.
+
+Users should be able to inspect individual seasons and see the underlying recorded values.
+
+### Trend integrity
+
+Use the existing approved trend-analysis code.
+
+Respect:
+
+- Seasonal definitions.
+- Missing-data exclusions.
+- Treatment of ties.
+- Autocorrelation limitations.
+- Confidence-interval construction.
+- Multiple-testing corrections.
+- Retrospective selection bias.
+- Statistical tests that may be undefined for some indicators.
+
+When historical periods change, use the validated recomputation path or explicitly restrict inference to approved precomputed windows.
+
+Do not display an old adjusted q-value for a new exploratory window.
+
+Do not mistake an inconclusive trend for a finding of no change.
+
+### Visual communication
+
+Replace oversimplified binary "significant/not significant" storytelling with more informative states:
+
+- Supported historical trend.
+- Trend not statistically resolved.
+- Exploratory comparison.
+- Insufficient data.
+- Inference unavailable.
+
+Explain why the status applies.
+
+### Acceptance
+
+Each displayed statistical result is numerically traceable to the authoritative scientific pipeline, and uncertainty cannot be lost when changing the selected investigation.
+
+---
+
+## Feature 5 - Regional Trend Comparison
+
+Allow scientifically meaningful environmental comparisons between approved locations.
+
+Required:
+
+- Same environmental indicator.
+- Same units.
+- Overlapping, matched historical years.
+- Separate trend estimates.
+- Confidence intervals.
+- A clear explanation of the observed geographic differences.
+- Formal difference-of-trends inference only when approved.
+
+Provide both aligned time-series charts and a concise comparison summary.
+
+Never infer that two slopes differ merely because one p-value is below 0.05 and the other is not.
+
+If formal comparison inference is unavailable, describe the comparison as descriptive.
+
+The UI must clearly distinguish differences in underlying geography, route type and sampling resolution.
+
+### Acceptance
+
+Every comparison uses common years and communicates accurately whether differences are established or merely observed.
+
+---
+
+## Feature 6 - Corridor Investigation
+
+This is the main real-world utility layer.
+
+For each supported corridor, create a unified case-study view combining:
+
+1. Verified geographical context.
+2. Road type and community connection.
+3. Relevant environmental indicators.
+4. Historical environmental trends.
+5. Actual government road-opening and closing records.
+6. Exploratory environmental/operational associations.
+7. Source disagreements and limitations.
+8. A coherent evidence conclusion.
+
+### Dettah
+
+The historical ice-road opening record has a reported later-opening trend, but the source selection was exploratory and the atmospheric evidence does not establish its cause.
+
+Dettah has an alternative year-round road connection.
+
+Do not portray the ice crossing as its only road access.
+
+### Aklavik
+
+Aklavik's seasonal ice-road situation provides an important distinct transportation context.
+
+Confirm the exact approved road identity and geographic scope against repository documentation and authoritative sources.
+
+Do not treat it as statistically interchangeable with Dettah.
+
+### Important operational distinctions
+
+- First opening to final closing is not automatically total usable days.
+- Temporary closures may not be captured.
+- Operational decisions may involve construction, ice surveys, maintenance, snowfall and other non-temperature influences.
+- Local ice safety cannot be inferred from gridded air temperature.
+
+### Acceptance
+
+A user can complete a meaningful corridor-specific investigation without making unsupported causal or safety inferences.
+
+---
+
+## Feature 7 - Environmental and Operational Timeline
+
+Create an optional synchronized timeline that shows historical environmental metrics and road-operation outcomes in parallel.
+
+The purpose is to make temporal relationships understandable.
+
+For example:
+
+- Early-season freezing accumulation.
+- Recorded opening dates.
+- Seasonal temperature history.
+- Recorded closing dates.
+
+Use separate, clear axes and units.
+
+Allow season selection and hover-based inspection.
+
+Indicate the periods during which environmental information was actually available relative to the recorded road event.
+
+Do not imply that a retrospective association is a predictive relationship.
+
+Do not generate artificial alignment to make the data appear more correlated.
+
+### Acceptance
+
+Every timeline observation can be traced to its correct season, record, source and date convention.
+
+---
+
+## Feature 8 - Frostline Evidence Engine
+
+This is the signature product feature and should receive exceptional design and engineering attention.
+
+For each investigation, automatically assemble a structured evidence assessment.
+
+The engine must distinguish:
+
+**A. Observations**
+
+What was actually measured or estimated by a dataset.
+
+**B. Derived indicators**
+
+What was calculated from those observations.
+
+**C. Statistical inference**
+
+Which trends or associations were estimated and with what uncertainty.
+
+**D. External corroboration**
+
+Whether independent measurements support or contradict the result.
+
+**E. Limitations**
+
+What the evidence cannot establish.
+
+**F. Unanswered questions**
+
+What additional evidence would strengthen the investigation.
+
+### Evidence quality dimensions
+
+Assess these separately and transparently:
+
+- Temporal completeness.
+- Source provenance.
+- Spatial representativeness.
+- Ground-observation agreement where available.
+- Statistical precision.
+- Whether the analysis is exploratory.
+- Temporal alignment of environmental and operational variables.
+
+Do not generate a simplistic "87% scientifically reliable" score or an arbitrary road-safety index.
+
+Use clear evidence states with explicit, source-derived reasons.
+
+### Example of useful scientific communication
+
+"The historical road-opening record supports a later-opening trend. The available modeled atmospheric freezing metric does not establish a corresponding long-term change. Ground-station observations also disagree materially with the modeled absolute freezing accumulation. Additional local ice and operational records would help investigate the relationship."
+
+This example illustrates the required restraint. Actual wording must reflect approved, calculated results.
+
+### Acceptance
+
+A user understands not only what the trend estimate is, but also whether the data are suitable for answering their original question.
+
+---
+
+## Feature 9 - Source Disagreement and Sensitivity Explorer
+
+Frostline must not conceal the substantial existing NASA-versus-station temperature discrepancy.
+
+Create a visual comparison that shows:
+
+- NASA-derived values.
+- Matched station observations where available.
+- Historical overlap.
+- Bias and error summaries.
+- Differences in derived freezing accumulation.
+- Applicable trend comparison.
+- Important limitations of spatial and temporal correspondence.
+
+Use approved validation datasets.
+
+Distinguish a gridded reanalysis product from a station measurement.
+
+Do not automatically bias-correct NASA data unless a validated correction method is explicitly approved.
+
+If additional sensitivity analyses already exist in the repository, expose them through a carefully explained advanced panel.
+
+Never imply that high year-to-year correlation proves accurate absolute values or trend equivalence.
+
+### Acceptance
+
+The scientific data-quality caveat is understandable and discoverable, while the main workflow remains readable.
+
+---
+
+## Feature 10 - Reproducible Frostline Evidence Brief
+
+Every completed investigation should produce a professional, downloadable research artifact.
+
+It should contain:
+
+- Investigation title and question.
+- Location and coordinates.
+- Environmental variable and definition.
+- Historical coverage.
+- Data source and product version.
+- Graph or data summary.
+- Trend rate and uncertainty.
+- Relevant significance assessment.
+- Data-quality findings.
+- Applicable road-operation evidence.
+- Scientific interpretation.
+- Known limitations.
+- Unanswered questions.
+- Source references.
+- Analysis-method identifier.
+- Date generated.
+- Relevant dataset and code version identifiers.
+
+Prefer a well-designed HTML report, with PDF export if reliable. Also offer underlying CSV download.
+
+The report must be assembled deterministically from real analysis objects and approved interpretation templates.
+
+Do not send raw observations to an unverified generative API to fabricate narrative conclusions.
+
+Provide a reproducibility path back to the source records and methods.
+
+### Acceptance
+
+A new user can complete an investigation and leave with a coherent, accurately labeled evidence report that can be inspected independently of Frostline.
+
+---
+
+## Feature 11 - Guided Judge Demo
+
+Build a fully integrated Guided Demo inside Frostline.
+
+It uses the same production data and components as the research interface.
+
+Structure it as a concise six-stage experience:
+
+1. **The problem:** Why changing winter conditions matter.
+2. **The geography:** Select a real northern case study.
+3. **The NASA data:** Show a historical environmental variable.
+4. **The scientific finding:** Explain trend and uncertainty.
+5. **The transportation evidence:** Show actual operating records without claiming causation.
+6. **The Evidence Brief:** Export the investigation and show transparency.
+
+Make it visually polished, reliable and navigable in a short local presentation.
+
+Include a graceful transition into full interactive exploration.
+
+Do not require live data downloads, user accounts or external credentials during the demo.
+
+Provide a demo script based exclusively on implemented features and verified results.
+
+### Acceptance
+
+A presenter can complete the guided workflow without encountering a broken page, missing chart or confusing statistical state.
+
+---
+
+## Feature 12 - Research Mode and Extensibility
+
+The product should be designed to expand beyond two manually prepared cases.
+
+Create a clean location-and-variable registry so additional datasets can be incorporated without rewriting the frontend.
+
+If safely implementable, support an advanced research mode for additional locations with NASA POWER data acquisition.
+
+Such a mode must include:
+
+- Clearly separated experimental status.
+- Explicit sampling coordinates.
+- Data-source provenance.
+- Validated units and missingness.
+- Rate limiting and caching.
+- Appropriate historical window requirements.
+- No unsupported linkage to historical road records.
+- No safety conclusions.
+- Statistical outputs only after appropriate validation.
+
+The primary demo must work entirely from committed, approved data.
+
+Do not advertise unlimited arbitrary-location support unless it genuinely works and has been tested.
+
+Additional regional atlas locations should only appear after their data have passed the scientific quality gates.
+
+### Acceptance
+
+The architecture can accommodate another verified northern location without requiring a new statistical implementation or a rewritten product interface.
+
+---
+
+# VII. NASA DATA ELIGIBILITY - A HARD RELEASE GATE
+
+Official challenge resources provided by the team include NASA Giovanni, Hydrology Time Series and AppEEARS.
+
+The existing NASA POWER datasets are legitimate NASA-derived climate data, but POWER is not explicitly named in the supplied Resources list.
+
+The preferred eligibility resolution is a real NASA Giovanni extraction from MERRA-2.
+
+Suggested collection:
+
+`M2TMNXSLV`
+
+Variable:
+
+`T2M`
+
+Temporal resolution:
+
+Monthly.
+
+Use the extracted temperature data meaningfully in Frostline's scientific investigation.
+
+Possible application:
+
+- Long-term monthly or seasonal temperature trends.
+- Regional MERRA-2 climate comparison.
+- Independent access-route cross-check of temperature statistics, with correct recognition that POWER and Giovanni may share MERRA-2 inputs.
+
+Never call these two extractions independent environmental observations when their underlying source is shared.
+
+Never derive daily FDD totals or daily thaw counts from monthly temperature means.
+
+Implement and test the repository's strict Giovanni ingestion adapter.
+
+If Cason provides an authentic extraction, validate and integrate it.
+
+If it is not yet available, complete all other implementation work and report the eligibility blocker to the captain.
+
+Do not manufacture files or imply a source has been integrated when it has not.
+
+Before release, the team must verify and document meaningful use of an eligible NASA resource.
+
+---
+
+# VIII. DATA AND STATISTICAL NON-NEGOTIABLES
+
+The following constraints apply to every feature.
+
+## 1. Scientific measurements
+
+Keep observed, modeled and derived values distinct.
+
+Use appropriate units and exact source metadata.
+
+Do not represent NASA grid-cell means as direct measurements on a road surface.
+
+## 2. Statistical analysis
+
+Preserve approved estimators, confidence intervals, significance methods and multiple-testing safeguards.
+
+No uncontrolled hypothesis searches disguised as confirmatory discoveries.
+
+## 3. Exploratory period selection
+
+Changing the window changes the statistical question.
+
+Use validated recomputation or display descriptive results with appropriate caveats.
+
+Do not reuse fixed-family adjusted q-values in incompatible new analyses.
+
+## 4. Comparison validity
+
+Match years and scientific definitions.
+
+Only claim statistically established geographic differences when a proper comparison test supports them.
+
+## 5. Causality
+
+Correlation, regression and coincident trends do not establish causation.
+
+Do not make specific operational predictions using variables measured after the outcome occurred.
+
+## 6. Model limitations
+
+Disclose the substantial NASA temperature bias relative to the available station reference.
+
+The cause of that discrepancy is unresolved.
+
+## 7. Data reliability
+
+No missing measurements treated as zero.
+
+No fabricated interpolation.
+
+No synthetic production values.
+
+No unsupported geographic routes or heatmaps.
+
+No use of the obsolete James Bay freezing threshold as a general NWT benchmark.
+
+## 8. Human review
+
+The scientific pipeline's test suite and AI-generated research do not substitute for Yao's independent review of public claims.
+
+Do not mark statistical conclusions as human-approved unless the approval actually occurred.
+
+---
+
+# IX. DESIGN AND TECHNICAL EXECUTION
+
+## Preferred engineering stack
+
+Build from the existing repository.
+
+Prefer:
+
+- Python.
+- Streamlit.
+- Plotly.
+- pandas, NumPy, SciPy.
+- Existing validated statistical modules.
+- PyDeck for map interaction.
+- Existing unittest infrastructure.
+- Streamlit AppTest and browser testing where supported.
+
+Do not rewrite the entire application in a different framework without a concrete, verified benefit.
+
+## Architecture principles
+
+- Immutable source data.
+- Reproducible scientific processing.
+- Versioned derived data.
+- Typed or validated application data contracts.
+- Separate presentation components.
+- Deterministic scientific interpretation.
+- No required live NASA API call for the default investigation.
+- Minimal external dependencies.
+- Fast startup.
+- Reliable caching.
+- Graceful handling of optional-resource failures.
+
+## Product UX
+
+Use a sophisticated northern-observatory visual identity.
+
+Suggested palette:
+
+- Deep navy and slate.
+- Glacier cyan.
+- Cool neutrals.
+- Restrained amber for caveats.
+
+Scientific graphs must remain more visually prominent than decorative material.
+
+Use accessible color choices, meaningful typography, responsive layout and clear interactive affordances.
+
+Avoid excessive animation or styling that reduces speed or clarity.
+
+## Naming
+
+Public product:
+
+**Frostline**
+
+Team:
+
+**Strongest Soldiers**
+
+Replace outdated public-facing NorthLink and Asterfen branding without breaking internal data paths or provenance.
+
+## Security and accessibility
+
+- No hardcoded credentials.
+- No exposure of Earthdata authentication tokens.
+- No accounts required for public access.
+- No sensitive or identifying user records.
+- Readable charts and accessible controls.
+- Clear external-resource attribution.
+- Safe link handling and input validation.
+- Rate limiting for any optional live data acquisition.
+
+---
+
+# X. IMPLEMENTATION STRATEGY
+
+Build one final application through internal checkpoints.
+
+## Checkpoint 1 - Establish the baseline
+
+Verify the actual repository state, inputs, scientific methods and tests.
+
+Inspect the legacy UI and identify all synthetic or obsolete paths.
+
+## Checkpoint 2 - Complete the scientific core
+
+Connect real data to the primary climate investigation.
+
+Ensure the main metric selection, charts, trends, uncertainty and evidence outputs work.
+
+## Checkpoint 3 - Complete the core research workflow
+
+Implement the Northern Atlas, variable discovery, regional comparison and corridor investigation.
+
+## Checkpoint 4 - Deliver the distinctive features
+
+Implement the Evidence Engine, source-disagreement view, evidence export and guided judge demo.
+
+## Checkpoint 5 - Expand where justified
+
+Integrate authenticated Giovanni data and any additional scientifically approved locations or variables.
+
+Only build advanced exploratory acquisition after the core product is stable.
+
+## Checkpoint 6 - Product polish and full verification
+
+Test actual interactions, scientific accuracy, visual coherence, responsiveness and error handling.
+
+## Checkpoint 7 - Public release and submission
+
+Deploy, verify public access, create fallback materials and assemble final submission assets.
+
+Throughout execution:
+
+- Keep the app runnable.
+- Commit stable milestones.
+- Repair failures rather than stopping.
+- Report genuine external blockers promptly.
+- Avoid overlapping teammate file ownership.
+- Do not stop at a plan, screenshots or an untested mockup.
+
+---
+
+# XI. RELEASE ACCEPTANCE TESTS
+
+A release is not complete until the following have been demonstrated.
+
+## Science
+
+- All existing scientific regression tests pass.
+- Data regeneration is deterministic.
+- Numerical outputs match approved results.
+- Missingness and invalid states are handled correctly.
+- Statistical and source caveats appear where needed.
+- No fabricated scientific values are displayed.
+
+## Functionality
+
+- Guided investigation works from beginning to end.
+- Location selection updates all relevant content.
+- Environmental-variable selection works.
+- Trend charts display verified observations.
+- Historical-period changes preserve inference correctness.
+- Geographic comparisons use matching periods.
+- Road operations are correctly aligned.
+- Evidence Audit displays real metadata.
+- Evidence Brief exports accurate numbers and references.
+- No synthetic or obsolete production charts appear.
+
+## User experience
+
+- App is understandable without a presenter.
+- Default investigation loads quickly.
+- Charts are readable.
+- Navigation is intuitive.
+- Mobile and laptop layouts are usable.
+- A failed map tile request cannot disable the data explorer.
+- Error messages are informative.
+- No dead controls or placeholder buttons.
+
+## Testing
+
+- Existing 95-test scientific baseline preserved or improved.
+- Remaining contract acceptance tests implemented.
+- App-level integration tests added.
+- Actual running application smoke-tested.
+- Guided-demo flow exercised.
+- Generated evidence exports checked against source values.
+- Headless/browser testing performed where available.
+- Failures documented honestly.
+
+## Deployment
+
+- Public application URL works without login.
+- Important external links work.
+- App does not depend on live NASA API availability.
+- Private source repository remains protected unless captain authorizes publication.
+- Public source or project artifact complies with NASA requirements.
+- Demo fallback is prepared.
+- Submission links verified in a private browsing window.
+
+---
+
+# XII. THE COMPLETE NASA SUBMISSION PACKAGE
+
+Produce the materials needed to explain and evaluate Frostline independently.
+
+## Project description
+
+A concise problem, solution, novelty, technical method, impact and limitations statement.
+
+## Technical documentation
+
+System architecture, data sources, variable catalogue, scientific methodology and reproducibility.
+
+## Demonstration
+
+Prepare material suitable for either a video of no more than 30 seconds or a presentation of no more than seven slides, subject to the final official 2026 submission guide.
+
+Use only genuine working screens and approved findings.
+
+## Local judging
+
+Prepare a short interactive presentation:
+
+- What is the problem?
+- Why does the problem matter?
+- Why NASA Earth science data?
+- What does Frostline do?
+- What can judges actually try?
+- What did the evidence show?
+- What remains uncertain?
+- Why is this useful?
+
+Include a fallback recording or screenshots.
+
+## References
+
+Cite every incorporated NASA dataset, external data source, scientific paper, software library and third-party asset as required.
+
+## AI-use disclosure
+
+Document actual AI-assisted implementation, research, code generation, writing and media creation.
+
+Do not falsely claim that all work was performed manually.
+
+## Safety and intellectual property
+
+Avoid misleading NASA endorsement and unauthorized NASA branding.
+
+Do not expose secrets.
+
+Obtain appropriate rights and permissions for any external imagery, music or other content.
+
+Follow the applicable rules for any submitted identifiable minors.
+
+## Submission timing
+
+Local presentation takes place on November 15 at 3 PM Atlantic.
+
+The NASA project page must be submitted by November 15 at 11:59 PM local time.
+
+Do not rely on post-deadline improvements to qualify the submitted project.
+
+---
+
+# XIII. TEAM OWNERSHIP
+
+**Shaurya + Fable**
+
+Own the complete application implementation, integration tests, deployment engineering and software handoff.
+
+**Cason**
+
+Owns qualifying NASA resource acquisition, dataset provenance and remaining road-record validation.
+
+**Yao**
+
+Owns independent scientific interpretation review and sign-off.
+
+**Louie**
+
+Owns UI feedback, end-to-end user testing and presentation support.
+
+**Ethan**
+
+Owns human-impact research, source-backed storytelling, slides and submission narrative.
+
+**Captain**
+
+Owns scope decisions, branch integration, deployment access, release approval and NASA submission completion.
+
+Do not overwrite work owned by other agents or teammates.
+
+---
+
+# XIV. REQUIRED FINAL ENGINEERING REPORT
+
+After implementation, deliver:
+
+1. Exact branch and commit SHA.
+2. Complete implemented-feature inventory.
+3. Working public app URL, if deployed.
+4. Scientific test results.
+5. Application integration-test results.
+6. Known defects and blocked features.
+7. NASA eligibility status.
+8. Scientific review status.
+9. Verified screenshots or demo material.
+10. Setup and reproduction commands.
+11. Submission material locations.
+12. Exact remaining human actions.
+
+Distinguish completed, tested, partially implemented and unavailable functionality.
+
+Do not claim deployment or validation without evidence.
+
+---
+
+# XV. THE ULTIMATE DEFINITION OF DONE
+
+A new user can open Frostline and:
+
+1. Select a real northern location.
+2. Choose a relevant NASA Earth-system variable.
+3. View genuine historical measurements.
+4. Understand how that variable changed and how uncertain the trend is.
+5. Compare conditions across documented regions.
+6. Explore appropriate real transportation evidence.
+7. Identify limitations and unresolved explanations.
+8. Export a complete, source-backed Evidence Brief.
+9. Reproduce the scientific result.
+10. Leave with a clearer, scientifically defensible understanding of a meaningful environmental question.
+
+A local judge can experience this in a polished guided demonstration.
+
+A global evaluator can inspect the data, methods, application, limitations and citations without depending on the presentation.
+
+**The final result must be a useful scientific product, not an elaborate prototype that only looks convincing.**
+
+Build Frostline to this standard.
+
+Begin by inspecting the repository and executing the established scientific tests, then implement the complete application and verify it end to end.
+
+---
+
+# XVI. AUTHORITATIVE RESEARCH AND DATA REFERENCES
+
+**NASA challenge**  
+https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/
+
+**NASA Space Apps 2026**  
 https://www.spaceappschallenge.org/2026/
 
-**NASA Space Apps legal terms:**  
-https://www.spaceappschallenge.org/legal/
+**Official challenge resources supplied by the team**  
+https://giovanni.gsfc.nasa.gov/  
+https://appeears.earthdatacloud.nasa.gov/
 
-**NASA Space Apps official organizer discussions:**  
-https://github.com/nasa/spaceapps/discussions
-
-**NASA POWER daily API:**  
+**NASA POWER daily API**  
 https://power.larc.nasa.gov/docs/services/api/temporal/daily/
 
-**NASA POWER meteorological provenance:**  
+**NASA POWER meteorological provenance**  
 https://power.larc.nasa.gov/docs/methodology/data/sources_meteorology/
 
-**NASA Giovanni:**  
-https://giovanni.gsfc.nasa.gov/
-
-**NASA MERRA-2 monthly collection:**  
+**NASA MERRA-2 monthly collection**  
 https://data.nasa.gov/dataset/merra-2-tavgm-2d-slv-nx-2dmonthly-meantime-averagedsingle-levelassimilationsingle-level-di-892ac
 
-**Northwest Territories transportation network:**  
+**NWT government road operating dates**  
+https://www.statsnwt.ca/en/node/1073
+
+**NWT road infrastructure and route definitions**  
 https://www.inf.gov.nt.ca/en/transportation
 
-**ClimateData.ca existing winter-road research:**  
+**Existing winter-road climate research**  
 https://climatedata.ca/winter-ice-roads-in-northern-ontario/
 
-**Streamlit Community Cloud deployment:**  
-https://docs.streamlit.io/deploy/streamlit-community-cloud
+**NASA Space Apps legal requirements**  
+https://www.spaceappschallenge.org/legal/
+
+**NASA project submission and resource information**  
+https://www.spaceappschallenge.org/resources/
