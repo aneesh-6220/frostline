@@ -1,6 +1,6 @@
 # Validation cases
 
-Run: `python3 -I -m unittest discover -s tests -v` from the repository root. Current result: **29 tests, all passing** (run 2026-11-14), including 3 tests on the real NASA file.
+Run: `python3 -I -m unittest discover -s tests -v` from the repository root. The current pass count is recorded in `docs/FABLE_HANDOFF_FINAL.md` from the run at delivery; the acceptance tests in `tests/test_scientific_acceptance.py` are described at the end of this file.
 
 | # | Required check | Test | Expected |
 |---|---|---|---|
@@ -21,11 +21,13 @@ Run: `python3 -I -m unittest discover -s tests -v` from the repository root. Cur
 Dettah 2024/25 (NWT workbook): opened 2024-12-21, closed 2025-04-08. Hand count: Dec 21 to Dec 31 = 10 days, plus Jan 31, Feb 28, Mar 31, plus 8 days to Apr 8 = 10 + 31 + 28 + 31 + 8 = 108 days. The workbook "Days" value is 108. Test: `test_dettah_2024_hand_check`. Open day relative to Oct 1 = 31 + 30 + 20 = 81.
 
 ## Cross-check of the trend code against independent code
-For Dettah (n = 32): our Theil-Sen slope for opening day is +9.00 days per decade, 95% CI 3.57 to 12.35, Mann-Kendall p = 0.0003; scipy's `kendalltau` gives p = 0.0003. Open-to-close interval: -10.24 days per decade (CI -15.83 to -5.29), p = 0.0007 for both. Closing day: -1.43 per decade (CI -4.00 to 0.00), p = 0.125 (not significant). Aklavik opening day: -6.67 per decade (CI -14.17 to 0.00), p = 0.024; interval +8.30 per decade (CI 1.67 to 15.00), p = 0.007.
-(Earlier spreadsheet values used scipy's `kendalltau` p-value, which differs from the tie-corrected Mann-Kendall p by up to about 0.004. Use the tie-corrected value everywhere from now on.)
+For Dettah (n = 32, road record 1993-2024) our Theil-Sen slope for opening day is +9.00 days per decade, 95% CI 3.57 to 12.35. The Mann-Kendall p-value uses the tie-corrected variance (the earlier spreadsheet values used scipy's `kendalltau` p, which differs by up to about 0.004). Current values for every trend are in `docs/RESULTS.md`; they are regenerated, not typed.
 
 ## Real-data checks (done)
 - Hand-checked FDD: Dettah Oct 1-10 2001 daily T2M = 4.85, 4.75, -1.13, -1.78, 0.5, 3.31, 4.45, 1.08, 1.4, 1.57; only -1.13 and -1.78 are below zero, so FDD = 1.13 + 1.78 = 2.91 C-days (`tests/test_real_data.py`).
 - All 24 winters at both locations have 92 + 90/91 records and no duplicates (same test file; also `season_audit.csv`).
 - Monthly POWER file equals the mean of the daily file (max difference 0.005 C, 138 months).
-- Station comparison done: see docs/RESULTS.md section 5 (NASA about 4.5 C colder than the station in Oct-Mar; correlation 0.96).
+- Station comparison: `docs/RESULTS.md` section 1 and `docs/TEMPERATURE_BIAS_DIAGNOSIS.md` (seasonal cold bias, monthly means -3.4 to -7.3 C in Oct-Dec).
+
+## Acceptance and regression tests (`tests/test_scientific_acceptance.py`)
+Raw data checksums stay fixed; `validate_dates` rejects the Tibbitt 2023 and 2024 rows; Benjamini-Hochberg and Holm known values; the `mostly_tied` guard; leakage-free windows end before the outcome in every winter; the 126-test family reproduces (126 tests, 0 at q < 0.05); no pooled tests exist; `docs/RESULTS.md` equals the generator output; prohibited phrases are absent from docs and UI data; legacy synthetic UI data is flagged and `UI/data_real` is not synthetic and contains no 380 C-day metric.

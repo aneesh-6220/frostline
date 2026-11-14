@@ -1,6 +1,6 @@
-climate_metric,road_metric,spearman_rho,p,n,source
-snowfall_octdec_cm,open_day (Dettah),0.1411,0.5208,23,ECCC Yellowknife A
-sog_mean_nov_cm,open_day (Dettah),0.4994,0.01526,23,ECCC Yellowknife A
-sog_dec1_cm,open_day (Dettah),0.5369,0.006826,24,ECCC Yellowknife A
-precip_octdec_mm,open_day (Dettah),-0.3325,0.1124,24,NASA POWER PRECTOTCORR
-rank regression: open_day ~ snowfall + FDD,coef snowfall / coef FDD,0.1212,-0.1147,23,"exploratory; ranks; first number = snowfall coef, second (in p column) = FDD coef"
+predictor,predictor_window,outcome,n,spearman_rho,ci95_low,ci95_high,ci_method,p_unadjusted,leak_free_vs_full_1993_2024_record,leak_free_in_2001_2024_sample,source,q_bh_family,bonferroni_5
+sog_nov28_cm,"Nov 28 (last day before earliest-ever Dettah opening, Nov 29)",Dettah open_day,23,0.64431,0.39381,0.85025,moving-block bootstrap (block 3),0.00090574,True,True,"ECCC Yellowknife A (ids 1706, 51058)",0.0045287,0.0045287
+sog_mean_nov1_28_cm,Nov 1 to Nov 28 mean,Dettah open_day,23,0.44258,0.05803,0.73038,moving-block bootstrap (block 3),0.034449,True,True,"ECCC Yellowknife A (ids 1706, 51058)",0.057416,0.17225
+snowfall_oct1_nov28_cm,Oct 1 to Nov 28 total snowfall,Dettah open_day,24,0.21404,-0.20793,0.63218,moving-block bootstrap (block 3),0.31524,True,True,"ECCC Yellowknife A (ids 1706, 51058)",0.39405,1
+sog_dec1_cm,"Dec 1 (after the earliest-ever opening, Nov 29, but before every opening in 2001-2024; earliest Dec 6)",Dettah open_day,24,0.53692,0.19284,0.79708,moving-block bootstrap (block 3),0.0068258,False,True,"ECCC Yellowknife A (ids 1706, 51058)",0.017064,0.034129
+snowfall_octdec_cm,Oct 1 to Dec 31 total snowfall (extends past every opening in some winters),Dettah open_day,24,0.11026,-0.41337,0.64043,moving-block bootstrap (block 3),0.60801,False,False,"ECCC Yellowknife A (ids 1706, 51058)",0.60801,1

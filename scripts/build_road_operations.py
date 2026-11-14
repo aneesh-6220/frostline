@@ -5,10 +5,9 @@ Usage: python3 -I scripts/build_road_operations.py <workbook.xlsx> <out.csv>
 
 Rules (see docs/DATA_QUALITY.md):
   * A date field is filled ONLY when both the open and close cells are real
-    dates, the open date falls in season_start_year (Oct-Dec) or the next
-    calendar year (Jan-Jun), the close date is after the open date, and the
-    close date falls within season_start_year+1 (or the same year for a
-    season that closes in Dec, which does not occur in this workbook).
+    dates, the open date falls in Oct-Dec of season_start_year or Jan-May of the next
+    calendar year, the close date is after the open date, and the close date
+    falls in Jan-Jul of season_start_year+1 (see validate_dates).
   * '..'  -> record_status = missing_not_available   (no dates)
   * '**'  -> record_status = not_applicable_note      (no dates; see note)
   * real dates that fail the checks -> record_status = flagged_inconsistent (no dates)

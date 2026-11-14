@@ -1,0 +1,52 @@
+road_id,road_name,road_type,metric,n_seasons,first_year,last_year,slope_per_decade,ci95_low,ci95_high,bb_ci95_low,bb_ci95_high,p_unadjusted,lag1,status,q_bh_all_routes,holm_all_routes,rank_by_p_within_metric,ci_excludes_zero_blockboot
+aklavik,Aklavik Ice Road,ice_road,open_day,32,1993,2024,-6.6667,-14.167,-0,-11.731,-0.53419,0.023671,0.033312,ok,0.048288,0.63911,10,True
+aklavik,Aklavik Ice Road,ice_road,close_day,32,1993,2024,0.78462,-1.25,3.3333,-1.4001,2.771,0.48396,-0.090532,ok,0.56095,1,15,False
+aklavik,Aklavik Ice Road,ice_road,open_to_close_days,32,1993,2024,8.2971,1.6667,15,2.4978,14.326,0.0066216,0.036614,ok,0.019865,0.23176,9,True
+colville_lake,Colville Lake Winter Road,winter_road,open_day,25,2000,2024,-5.5051,-13.333,1.4286,-10.896,0.15437,0.18942,0.14522,ok,0.26834,1,13,False
+colville_lake,Colville Lake Winter Road,winter_road,close_day,25,2000,2024,1.2132,-2.3077,6.3636,-1.4417,3.9046,0.42559,-0.1391,ok,0.5294,1,13,False
+colville_lake,Colville Lake Winter Road,winter_road,open_to_close_days,25,2000,2024,10,-0,20.833,3.008,17.5,0.033143,0.19215,ok,0.062604,0.82858,10,True
+deline,Délįne Winter Road,winter_road,open_day,32,1993,2024,-6.4752,-11.875,-2.1429,-10,-3.3687,0.0049142,-0.075181,ok,0.016531,0.18183,5,True
+deline,Délįne Winter Road,winter_road,close_day,32,1993,2024,5,1.4286,8.6957,2.1054,7.7179,0.0051861,-0.098684,ok,0.016531,0.1867,3,True
+deline,Délįne Winter Road,winter_road,open_to_close_days,32,1993,2024,13.079,7.7778,17.619,8.9614,17.399,5.2643e-05,-0.074622,ok,0.00089493,0.0025795,1,True
+dettah,Dettah Ice Road,ice_road,open_day,32,1993,2024,9,3.5714,12.353,5.2155,12.554,0.00032652,0.16991,ok,0.0020816,0.014367,3,True
+dettah,Dettah Ice Road,ice_road,close_day,32,1993,2024,-1.4286,-4,-0,-3.3333,0.12279,0.12493,-0.1955,ok,0.19911,1,8,False
+dettah,Dettah Ice Road,ice_road,open_to_close_days,32,1993,2024,-10.238,-15.833,-5.2941,-15.659,-5.0117,0.00069105,0.27627,ok,0.0035243,0.029024,5,True
+gameti,Gamètì Winter Road,winter_road,open_day,32,1993,2024,2.7619,-2.3077,6.9231,-1.3481,6.8799,0.30627,-0.15856,ok,0.41105,1,14,False
+gameti,Gamètì Winter Road,winter_road,close_day,32,1993,2024,1.4286,-1.3793,6,-2.1833,5.1422,0.37144,0.42506,ok,0.47358,1,12,False
+gameti,Gamètì Winter Road,winter_road,open_to_close_days,32,1993,2024,1.1513,-3.3333,6.25,-2.4774,4.8023,0.59174,-0.20415,ok,0.67064,1,16,False
+liard_fort_simpson,Liard River Crossing at Fort Simpson,ice_crossing,open_day,32,1993,2024,2.3905,-0.43478,5.4167,0.23918,4.3525,0.10763,-0.17064,ok,0.17706,1,11,True
+liard_fort_simpson,Liard River Crossing at Fort Simpson,ice_crossing,close_day,32,1993,2024,-1.381,-3.4483,1,-3.452,0.48444,0.23464,0.12603,ok,0.32342,1,10,False
+liard_fort_simpson,Liard River Crossing at Fort Simpson,ice_crossing,open_to_close_days,32,1993,2024,-3.4699,-6.6667,-0,-5.638,-1.437,0.042094,0.0072891,ok,0.076672,1,11,True
+mackenzie_camsell_bend,Mackenzie River Crossing at Camsell Bend,ice_crossing,open_day,32,1993,2024,0.70197,-2.3077,3.6842,-1.5882,3.6251,0.64888,-0.093803,ok,0.71941,1,15,False
+mackenzie_camsell_bend,Mackenzie River Crossing at Camsell Bend,ice_crossing,close_day,32,1993,2024,-1.225,-3.5,1.5385,-2.6389,0.30747,0.44472,-0.17971,ok,0.54001,1,14,False
+mackenzie_camsell_bend,Mackenzie River Crossing at Camsell Bend,ice_crossing,open_to_close_days,32,1993,2024,-1.1325,-6.087,3.3333,-5.0842,2.7775,0.46441,-0.082158,ok,0.55081,1,15,False
+mackenzie_tsiighetchic,Mackenzie River Crossing at Tsiighetchic,ice_crossing,open_day,32,1993,2024,4.2206,1.25,6.5217,1.805,6.9851,0.0041929,0.20341,ok,0.015274,0.15933,4,True
+mackenzie_tsiighetchic,Mackenzie River Crossing at Tsiighetchic,ice_crossing,close_day,32,1993,2024,-0,-2,2.8571,-1.491,1.5792,0.75698,-0.15603,ok,0.79586,1,16,False
+mackenzie_tsiighetchic,Mackenzie River Crossing at Tsiighetchic,ice_crossing,open_to_close_days,32,1993,2024,-3.0217,-6.6667,0.90909,-5.959,-0.2017,0.13509,-0.046175,ok,0.20877,1,14,True
+nahanni_butte,Nahanni Butte Winter Road,winter_road,open_day,32,1993,2024,-0,-3.0769,3.3333,-2.3077,2.3303,0.83257,0.13827,ok,0.84922,1,17,False
+nahanni_butte,Nahanni Butte Winter Road,winter_road,close_day,32,1993,2024,9.3304,5,13.333,4.7905,13.433,0.0001176,0.33566,ok,0.0011995,0.0055273,1,True
+nahanni_butte,Nahanni Butte Winter Road,winter_road,open_to_close_days,32,1993,2024,9.392,4.1176,15,3.1242,15.908,0.0015465,0.4772,ok,0.0065725,0.061859,7,True
+norman_wells_fort_good_hope,Norman Wells to Fort Good Hope Winter Road,winter_road,open_day,31,1993,2024,-5.8333,-9.6296,-1.1111,-10,-0.78424,0.011668,0.35971,ok,0.029753,0.37337,7,True
+norman_wells_fort_good_hope,Norman Wells to Fort Good Hope Winter Road,winter_road,close_day,31,1993,2024,4.1667,0.45455,8.5714,0.1,8.4923,0.022325,0.2593,ok,0.047441,0.6251,6,True
+norman_wells_fort_good_hope,Norman Wells to Fort Good Hope Winter Road,winter_road,open_to_close_days,31,1993,2024,10.833,3.3333,17.778,2.8568,18.487,0.0025755,0.53195,ok,0.010104,0.10045,8,True
+peel_river,Peel River Crossing,ice_crossing,open_day,31,1993,2024,2.8571,-1.1111,7.619,-2.0426,7.8571,0.14766,0.28373,ok,0.22149,1,12,False
+peel_river,Peel River Crossing,ice_crossing,close_day,31,1993,2024,1.9355,-0.625,4.4,0.21464,3.7693,0.15675,-0.031557,ok,0.2284,1,9,True
+peel_river,Peel River Crossing,ice_crossing,open_to_close_days,31,1993,2024,-0.4,-6.087,6,-6.3013,5.3616,0.9052,0.1252,ok,0.9052,1,17,False
+sambaa_ke,Sambaa K'e Winter Road,winter_road,open_day,32,1993,2024,-4,-10,-0.52632,-7.3258,-0.46943,0.014536,-0.053814,ok,0.033697,0.43608,9,True
+sambaa_ke,Sambaa K'e Winter Road,winter_road,close_day,32,1993,2024,6.7424,2.8571,10,3.3095,9.7452,0.00029982,0.40652,ok,0.0020816,0.013492,2,True
+sambaa_ke,Sambaa K'e Winter Road,winter_road,open_to_close_days,32,1993,2024,12.288,6.6667,18,6.2946,17.545,0.00015325,0.16252,ok,0.0013026,0.0070495,3,True
+tibbitt_contwoyto,Tibbitt-Contwoyto Winter Road,mining_road,open_day,30,1993,2022,2.3529,-0,4.4444,1.5588,3.1681,0.0084594,-0.35204,ok,0.022707,0.27916,6,True
+tibbitt_contwoyto,Tibbitt-Contwoyto Winter Road,mining_road,close_day,30,1993,2022,-2,-5,-0.35714,-3.7148,0,0.0071256,0.2786,ok,0.020189,0.24227,4,False
+tibbitt_contwoyto,Tibbitt-Contwoyto Winter Road,mining_road,open_to_close_days,30,1993,2022,-6.6667,-9.1667,-2.8571,-8.6676,-4.4818,0.0013816,-0.070815,ok,0.0064056,0.056645,6,True
+tulita_norman_wells,Tulita to Norman Wells Winter Road,winter_road,open_day,32,1993,2024,-7.8416,-11.429,-4,-11.285,-3.9188,4.8316e-05,0.22477,ok,0.00089493,0.0024158,2,True
+tulita_norman_wells,Tulita to Norman Wells Winter Road,winter_road,close_day,32,1993,2024,3.8675,0.66667,7.8571,0.086792,7.6342,0.024968,0.098611,ok,0.048975,0.64916,7,True
+tulita_norman_wells,Tulita to Norman Wells Winter Road,winter_road,open_to_close_days,32,1993,2024,13.964,7.5,20,7.3426,20.152,0.00040013,0.40513,ok,0.0022674,0.017205,4,True
+wekweeti,Wekweètì Winter Road,winter_road,open_day,15,2010,2024,12.5,-0,23.333,6.25,17.5,0.013172,-0.23443,ok,0.031988,0.40832,8,True
+wekweeti,Wekweètì Winter Road,winter_road,close_day,15,2010,2024,1.25,-6,8,-3.3754,5,0.76465,-0.085903,ok,0.79586,1,17,False
+wekweeti,Wekweètì Winter Road,winter_road,open_to_close_days,15,2010,2024,-13.75,-23.333,-0,-20,-7.6923,0.053314,-0.23555,ok,0.093759,1,12,True
+whati,Whatì Winter Road,winter_road,open_day,28,1993,2020,0.54094,-4,5,-3.1614,4.6611,0.72127,-0.06187,ok,0.78266,1,16,False
+whati,Whatì Winter Road,winter_road,close_day,28,1993,2020,1.9524,-2.2222,7,-2.7863,6.5237,0.36255,0.41123,ok,0.47358,1,11,False
+whati,Whatì Winter Road,winter_road,open_to_close_days,28,1993,2020,5,-0.45455,10,1.2244,8.8879,0.06584,-0.1381,ok,0.11193,1,13,True
+wrigley_tulita,Wrigley to Tulita Winter Road,winter_road,open_day,32,1993,2024,-10,-18.462,-4.4444,-17.574,-2.3523,5.5951e-06,0.5065,ok,0.00028535,0.00028535,1,True
+wrigley_tulita,Wrigley to Tulita Winter Road,winter_road,close_day,32,1993,2024,3.5099,-0,6.6667,-0.79745,7.5548,0.019751,0.57924,ok,0.043796,0.57279,5,False
+wrigley_tulita,Wrigley to Tulita Winter Road,winter_road,open_to_close_days,32,1993,2024,15,6.1905,25,4.0804,25.493,0.00010192,0.56665,ok,0.0011995,0.0048924,2,True

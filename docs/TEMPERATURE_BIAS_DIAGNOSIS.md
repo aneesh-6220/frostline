@@ -14,6 +14,8 @@ Compared series: POWER daily `T2M` at the Dettah/Yellowknife grid cell (62.43 N,
 | H5 era / drift | station 1706 vs 51058 eras; slope of winter-mean bias | No drift detected. Nov bias is -7.37 (2001-12) vs -7.15 (2013-25). Theil-Sen drift per decade: Oct-Dec +0.06 (95% CI -0.38 to 0.58), Jan-Mar -0.30 (-0.66 to 0.09). |
 | H6 unit or sign error | | Rejected by H1 to H5: not a constant offset, not a sign flip, seasonal. |
 | H7 duplicated or padded station rows | de-duplicated by date | No duplicate dates among IDs 1706 and 51058. |
+| H8 elevation mismatch | POWER cell-average elevation (204.71 m, from the POWER file header) vs station elevation (205.7 m, ECCC record) | Rejected as a cause. The difference is about 1 m, which at a lapse rate of order 6.5 C per km is about 0.01 C, far below a 3 to 7 C bias. Surface-height handling inside the reanalysis is not testable here. |
+| H9 sub-day time offset (POWER "LST" vs ECCC local standard day) | not testable with daily means | Not tested. Lags of +-1 and +-2 days (H1) are worse than lag 0; a shift of a few hours cannot produce a seasonal bias that is zero in summer. |
 
 ### The bias is strongly seasonal
 
