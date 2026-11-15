@@ -15,14 +15,14 @@ def render(ds):
     ui.page_header("Frostline Evidence Engine", "How far can this evidence be trusted?",
                    f"{var.label} · {loc.name} · winters {fmt.period(inv.first, inv.last)}. A trend estimate is only as good as the data behind it. "
                    "The engine separates what was observed, what was derived and what was inferred, and judges seven aspects of evidence quality one by one.")
-    ui.html(f"<div class='fl-finding {ui.STATE_TONE[f.state]}'><div style='display:flex;justify-content:space-between;gap:.6rem;flex-wrap:wrap;align-items:center'>"
-            f"<span class='fl-eyebrow' style='margin:0'>Assessment for the current investigation</span>{ui.chip(f.state_label, ui.STATE_TONE[f.state])}</div>"
-            f"<p style='font-size:1.05rem'>{ui.esc(rep.headline)}</p><p class='dim'>{ui.esc(rep.suitability)}</p></div>")
+    ui.result_panel("Assessment for the current investigation", ui.chip(f.state_label, ui.STATE_TONE[f.state]), paragraphs=[rep.headline], dim=[rep.suitability],
+                    tone=ui.STATE_TONE[f.state], lead=True)
 
+    st.write("")
     tabs = st.tabs(["Evidence quality", "Evidence layers", "Source disagreement", "Multiple testing"])
     with tabs[0]:
-        ui.html("<div class='fl-sub' style='margin-bottom:.7rem'>Seven dimensions, each with a plain state and the specific reasons for it, read from the data. "
-                "There is deliberately no overall score: one number would hide which part of the evidence is weak.</div>")
+        ui.html("<p class='fl-sub' style='margin-bottom:var(--s4)'>Seven dimensions, each with a plain state and the specific reasons for it, read from the data. "
+                "There is deliberately no overall score: one number would hide which part of the evidence is weak.</p>")
         ui.dimension_cards(rep)
     with tabs[1]:
         c = st.columns(2, gap="large")
@@ -37,33 +37,35 @@ def render(ds):
         _multiple_testing(ds)
 
     st.write("")
-    if st.button("Export this investigation as an Evidence Brief", type="primary", icon=":material/description:", key="ev_brief"):
+    if st.button("Export this investigation as an Evidence Brief", type="primary", key="ev_brief"):
         ui.goto("brief")
 
 
 def _disagreement(ds):
     b = ds.facts["bias"]
     s = an.station_fdd(ds)
-    ui.html("<div class='fl-eyebrow'>Source disagreement explorer · NASA reanalysis against a ground station</div>"
-            "<div class='fl-sub'>NASA POWER temperature is a MERRA-2 reanalysis value for a grid cell roughly 55 km north to south and 25 to 32 km east to west. Yellowknife A is a single weather station inside that cell, "
-            "about 6 km from the Dettah sampling point. They are different kinds of measurement, and they disagree.</div>")
-    c = st.columns(4)
-    c[0].markdown(ui.stat_card("Oct to Dec", fmt.num(b["overall_oct_dec"], 2, True), "°C", "Mean NASA minus station, early winter", "bias_by_month.csv"), unsafe_allow_html=True)
-    c[1].markdown(ui.stat_card("Jan to Mar", fmt.num(b["overall_jan_mar"], 2, True), "°C", "Mean NASA minus station, midwinter", "canonical_facts.json"), unsafe_allow_html=True)
-    c[2].markdown(ui.stat_card("Freezing degree-days", fmt.num(s.pct_over, 1, True), "%", f"NASA {fmt.num(s.nasa_mean, 0)} against station {fmt.num(s.station_mean, 0)} °C-days on {s.n_complete} matched winters", "station_fdd_by_season.csv"), unsafe_allow_html=True)
-    c[3].markdown(ui.stat_card("Year-to-year correlation", fmt.num(s.pearson_r, 2), "r", "NASA tracks the station's ups and downs while disagreeing on the level", "station_fdd_by_season.csv"), unsafe_allow_html=True)
+    ui.html(ui.kicker("Source disagreement explorer · NASA reanalysis against a ground station") +
+            "<p class='fl-sub' style='margin-bottom:var(--s4)'>NASA POWER temperature is a MERRA-2 reanalysis value for a grid cell roughly 55 km north to south and 25 to 32 km east to west. Yellowknife A is a single weather station inside that cell, "
+            "about 6 km from the Dettah sampling point. They are different kinds of measurement, and they disagree.</p>")
+    ui.metrics([
+        ("Oct to Dec", fmt.num(b["overall_oct_dec"], 2, True), "°C", "Mean NASA minus station, early winter", "bias_by_month.csv"),
+        ("Jan to Mar", fmt.num(b["overall_jan_mar"], 2, True), "°C", "Mean NASA minus station, midwinter", "canonical_facts.json"),
+        ("Freezing degree-days", fmt.num(s.pct_over, 1, True), "%", f"NASA {fmt.num(s.nasa_mean, 0)} against station {fmt.num(s.station_mean, 0)} °C-days on {s.n_complete} matched winters", "station_fdd_by_season.csv"),
+        ("Year-to-year correlation", fmt.num(s.pearson_r, 2), "r", "NASA tracks the station's ups and downs while disagreeing on the level", "station_fdd_by_season.csv")])
     ui.bias_caveat(ds)
     c = st.columns(2, gap="large")
     with c[0]:
-        ui.html("<div class='fl-eyebrow' style='margin-top:.6rem'>Seasonal difference</div>")
-        ui.plot(charts.bias_month_chart(ds), key="ev_bias")
-        ui.html(f"<div class='fl-src' style='margin-top:-.5rem'>{fmt.count(b['paired_days'])} paired days, 2001 to 2025; {fmt.num(b['overall_all_days'], 2, True)} °C over all days. "
+        ui.section("Seasonal difference")
+        with st.container(key="fl_frame_ev_bias"):
+            ui.plot(charts.bias_month_chart(ds), key="ev_bias")
+        ui.html(f"<div class='fl-src'>{fmt.count(b['paired_days'])} paired days, 2001 to 2025; {fmt.num(b['overall_all_days'], 2, True)} °C over all days. "
                 "The difference is largest in the freeze-up months and close to zero in summer, so it is not a constant offset.</div>")
     with c[1]:
-        ui.html("<div class='fl-eyebrow' style='margin-top:.6rem'>Freezing accumulation, winter by winter</div>")
-        ui.plot(charts.station_fdd_chart(ds), key="ev_fdd")
-        ui.html(f"<div class='fl-src' style='margin-top:-.5rem'>{s.n_complete} of {len(s.years_all)} winters have a complete Oct to Dec station record; incomplete station winters are left as gaps, not filled.</div>")
-    ui.html("<div class='fl-eyebrow' style='margin-top:.8rem'>Trend sensitivity on the matched winters</div>")
+        ui.section("Freezing accumulation, winter by winter")
+        with st.container(key="fl_frame_ev_fdd"):
+            ui.plot(charts.station_fdd_chart(ds), key="ev_fdd")
+        ui.html(f"<div class='fl-src'>{s.n_complete} of {len(s.years_all)} winters have a complete Oct to Dec station record; incomplete station winters are left as gaps, not filled.</div>")
+    ui.section("Trend sensitivity on the matched winters")
     st.dataframe(pd.DataFrame([{"Series": f.location_id, "Slope (°C-days per decade)": fmt.num(f.slope, 1, True), "95% interval (Theil-Sen)": fmt.interval(f.ci_low, f.ci_high, 0),
                                 "p (unadjusted)": fmt.pval(f.p), "n": f.n, "Period": fmt.period(f.first, f.last)} for f in (s.nasa, s.station, s.diff)]), hide_index=True)
     ui.note("Neither trend is distinguishable from zero, and the trend of the difference is not distinguishable from zero either. That does not make the two series equivalent: "
@@ -71,13 +73,13 @@ def _disagreement(ds):
     c = st.columns(2, gap="large")
     with c[0]:
         st2 = ds["station_summary_aklavik_inuvik"]
-        ui.html("<div class='fl-eyebrow'>Aklavik and Inuvik stations</div>")
+        ui.section("Aklavik and Inuvik stations")
         st.dataframe(pd.DataFrame({"Station": st2.station, "Paired days": st2.n_days, "Difference, all days (°C)": [fmt.num(v, 2, True) for v in st2.bias_all_c],
                                    "Difference, Oct to Mar (°C)": [fmt.num(v, 2, True) for v in st2.bias_octmar_c], "Mean absolute difference, Oct to Mar (°C)": [fmt.num(v, 2) for v in st2.mae_octmar_c]}), hide_index=True)
         ui.html("<div class='fl-src'>NASA minus station for the Aklavik cell. The stations sit at the two ends of the road, not at the sampling point.</div>")
     with c[1]:
         t = ds.facts["thaw"]["dettah_bay"]
-        ui.html("<div class='fl-eyebrow'>What this means for the investigation</div>")
+        ui.section("What this means for the investigation")
         ui.html("<div class='fl-layer'><ul>"
                 "<li>Use NASA series for year-to-year variation and for trends read with their intervals.</li>"
                 "<li>Do not read absolute NASA temperature, freezing degree-days or thaw counts as local conditions.</li>"
@@ -89,16 +91,18 @@ def _disagreement(ds):
 
 def _multiple_testing(ds):
     e = ds.facts["extended_126"]
-    ui.html("<div class='fl-eyebrow'>Multiple testing · why small p-values are not all findings</div>"
-            f"<div class='fl-sub'>The extended analysis runs {e['n']} trend tests (14 measures at 9 corridors, winters 2001/02 to 2024/25). When many tests are run, some small p-values appear by chance alone.</div>")
-    c = st.columns(4)
-    c[0].markdown(ui.stat_card("Tests run", str(e["n"]), "trend tests", "14 measures at 9 corridors", "multiple_testing_126.csv"), unsafe_allow_html=True)
-    c[1].markdown(ui.stat_card("Nominal", str(e["nominal"]), "with p below 0.05", f"About {e['expected_by_chance']} would be expected by chance if nothing were changing", "multiple_testing_126.csv"), unsafe_allow_html=True)
-    c[2].markdown(ui.stat_card("After correction", str(e["bh_lt_05"]), "with q below 0.05", f"Benjamini-Hochberg across all {e['n']}; Holm also leaves {e['holm_lt_05']}", "multiple_testing_126.csv"), unsafe_allow_html=True)
-    c[3].markdown(ui.stat_card("NASA climate tests", str(e["climate_family_bh_lt_05"]), "of 99 survive", "No NASA climate trend survives correction at any corridor", "hypothesis_families.csv"), unsafe_allow_html=True)
-    ui.plot(charts.multiple_testing_chart(ds), key="ev_mt")
-    ui.html("<div class='fl-src' style='margin-top:-.5rem'>Each point is one test. A test is supported only if it falls on or below the amber line. Points between the amber line and the dotted line "
+    ui.html(ui.kicker("Multiple testing · why small p-values are not all findings") +
+            f"<p class='fl-sub' style='margin-bottom:var(--s4)'>The extended analysis runs {e['n']} trend tests (14 measures at 9 corridors, winters 2001/02 to 2024/25). When many tests are run, some small p-values appear by chance alone.</p>")
+    ui.metrics([
+        ("Tests run", str(e["n"]), "trend tests", "14 measures at 9 corridors", "multiple_testing_126.csv"),
+        ("Nominal", str(e["nominal"]), "with p below 0.05", f"About {e['expected_by_chance']} would be expected by chance if nothing were changing", "multiple_testing_126.csv"),
+        ("After correction", str(e["bh_lt_05"]), "with q below 0.05", f"Benjamini-Hochberg across all {e['n']}; Holm also leaves {e['holm_lt_05']}", "multiple_testing_126.csv"),
+        ("NASA climate tests", str(e["climate_family_bh_lt_05"]), "of 99 survive", "No NASA climate trend survives correction at any corridor", "hypothesis_families.csv")])
+    with st.container(key="fl_frame_ev_mt"):
+        ui.plot(charts.multiple_testing_chart(ds), key="ev_mt")
+    ui.html("<div class='fl-src'>Each point is one test. A test is supported only if it falls on or below the amber line. Points between the amber line and the dotted line "
             "look significant on their own and are not, once the number of tests is taken into account.</div>")
+    ui.section("Declared test families")
     fam = ds["hypothesis_families"]
     st.dataframe(pd.DataFrame({"Family": fam.family_id, "Tests": fam.n_tests, "Definition": fam.definition, "Correction": fam.correction, "Role": fam.role}), hide_index=True)
     t = ds["multiple_testing_126"]

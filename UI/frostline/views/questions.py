@@ -32,12 +32,16 @@ def render(ds):
                    "The mapping is a fixed, documented catalogue, not a language model.")
     qids = list(QUESTIONS)
     default = inv.question_id if inv.question_id in QUESTIONS else qids[0]
-    qid = st.radio("Question", qids, index=qids.index(default), format_func=lambda k: QUESTIONS[k].text, key="q_pick", label_visibility="collapsed")
+    c = st.columns([1.6, 1], gap="large", vertical_alignment="top")
+    with c[0], st.container(key="fl_qpick"):
+        qid = st.radio("Question", qids, index=qids.index(default), format_func=lambda k: QUESTIONS[k].text, key="q_pick", label_visibility="collapsed")
     q = QUESTIONS[qid]
     prim = primary_locations(locs)
-    loc_id = st.segmented_control("Location", [l.id for l in prim], default=inv.location_id, format_func=lambda i: locs[i].short, key="q_loc", required=True)
+    with c[1]:
+        loc_id = st.segmented_control("Location", [l.id for l in prim], default=inv.location_id, format_func=lambda i: locs[i].short, key="q_loc", required=True)
     loc = locs[loc_id or inv.location_id]
-    ui.html(f"<div class='fl-eyebrow' style='margin-top:1rem'>Recommended for: {ui.esc(q.text)}</div><div class='fl-sub' style='margin-bottom:.6rem'>{ui.esc(q.blurb)}</div>")
+    ui.section(f"Recommended for: {q.text}")
+    ui.html(f"<p class='fl-sub' style='margin:0 0 var(--s4)'>{ui.esc(q.blurb)}</p>")
     available = {v.id for v in variables_for(loc)}
     recs = [VARIABLES[v] for v in q.variables if v in available]
     cols = st.columns(len(recs))
@@ -46,13 +50,13 @@ def render(ds):
             lo, hi = an.available_range(ds, loc.id, v.id)
             f = an.trend(ds, loc.id, v.id, lo, hi)
             src = SOURCES[v.source_id]
-            ui.html(f"<div class='fl-card'><div class='k'>{'Road record' if v.kind == 'road' else 'NASA variable'} · {ui.esc(v.unit)}</div><h4>{ui.esc(v.label)}</h4>"
-                    f"<p>{ui.esc(q.reasons.get(v.id, v.why))}</p><p style='margin-top:.5rem'>{ui.esc(v.why)}</p>"
+            ui.html(f"<div class='fl-card fl-rec'><div class='k'>{'Road record' if v.kind == 'road' else 'NASA variable'} · {ui.esc(v.unit)}</div><h4>{ui.esc(v.label)}</h4>"
+                    f"<p class='fit'>{ui.esc(q.reasons.get(v.id, v.why))}</p><p>{ui.esc(v.why)}</p>"
                     f"<div class='fl-src'>{ui.esc(src.name)} · winters {fmt.period(lo, hi)} · n = {f.n} · {ui.esc(f.state_label.lower())}</div></div>")
             if st.button(f"Investigate {v.phrase}", key=f"q_go_{qid}_{v.id}", type="primary" if v is recs[0] else "secondary", width="stretch",
                          on_click=_choose, args=(ds, qid, v.id, loc.id)):
                 ui.goto(q.next_view)
-    ui.html(f"<div class='fl-src' style='margin-top:.6rem'>Each recommendation opens {ui.esc(q.next_label.lower().replace('open ', ''))} with this question, location and variable selected.</div>")
+    ui.html(f"<div class='fl-src'>Each recommendation opens {ui.esc(q.next_label.lower().replace('open ', ''))} with this question, location and variable selected.</div>")
     if qid == "thaw":
         ui.note("Above-freezing midwinter days are almost absent from the NASA series at both locations, so their trend cannot be estimated. Frostline reports that plainly "
                 "and offers the midwinter mean temperature as the analysable alternative.")

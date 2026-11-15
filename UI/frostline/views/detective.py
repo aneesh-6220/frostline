@@ -29,13 +29,16 @@ def render(ds):
     q = QUESTIONS.get(inv.question_id) if inv.question_id else None
     ui.page_header("Trend Detective" + (f" · {q.text}" if q else ""), f"{var.label}", f"{loc.name}. {var.definition}")
 
-    left, right = st.columns([1.75, 1], gap="large")
+    left, right = st.columns([1.7, 1], gap="large")
     with left:
-        ui.plot(charts.trend_chart(ds, f), key="detective_chart")
-        kind = "Recorded values from the government record" if var.kind == "road" else "NASA estimates for a grid cell, not station observations"
-        ui.html(f"<div class='fl-src' style='margin-top:-.5rem'>Points: {kind}, one per winter. White line: Theil-Sen estimate for the selected period. "
-                "Grey band: 95% interval of the slope. Hollow points lie outside the selected period. Hover a point to inspect that winter.</div>")
-        ui.html(f"<div class='fl-note' style='margin-top:.9rem'><b style='color:#E8EEF7'>In plain language.</b> {ui.esc(an.plain_language(ds, f))} {ui.esc(f.sentence)}</div>")
+        with st.container(key="fl_frame_detective"):
+            ui.html(f"<div class='fl-panel-head'><div><div class='fl-label'>{ui.esc(loc.short)} · winters {fmt.period(inv.first, inv.last)}</div>"
+                    f"<div class='fl-panel-title'>{ui.esc(var.short)} ({ui.esc(var.unit)})</div></div></div>")
+            ui.plot(charts.trend_chart(ds, f), key="detective_chart")
+            kind = "Recorded values from the government record" if var.kind == "road" else "NASA estimates for a grid cell, not station observations"
+            ui.caption(f"Points: {kind}, one per winter. White line: Theil-Sen estimate for the selected period. "
+                       "Grey band: 95% interval of the slope. Hollow points lie outside the selected period. Hover a point to inspect that winter.", top=True)
+        ui.plain_language(ds, f)
     with right:
         ui.finding_card(ds, f)
 
@@ -47,10 +50,11 @@ def render(ds):
         ui.note(f"NASA records an above-freezing midwinter day in {t['winters_with_any_thaw']} of {t['n']} winters here ({t['total_thaw_days']} such days in total). "
                 "The reanalysis runs cold and under-detects thaw relative to the station, so zero NASA thaw days does not mean no thaw.")
 
+    st.write("")
     t1, t2, t3, t4 = st.tabs(["Inspect the winters", "Why this variable", "Robustness", "Method and provenance"])
     with t1:
         st.dataframe(season_table(ds, f), hide_index=True, height=320)
-        ui.html("<div class='fl-src'>An empty value means no usable record for that winter. Missing values are never replaced with zero or interpolated.</div>")
+        ui.caption("An empty value means no usable record for that winter. Missing values are never replaced with zero or interpolated.")
     with t2:
         src = SOURCES[var.source_id]
         ui.html(ui.kv_table([("What it measures", var.definition), ("Why it is relevant", var.why), ("Units", var.unit),
@@ -66,13 +70,13 @@ def render(ds):
                                 "95% interval (block bootstrap)": [fmt.interval(a, b, 1) for a, b in zip(sv.bb_ci95_low, sv.bb_ci95_high)],
                                 "p (unadjusted)": [fmt.pval(p) for p in sv.mk_p_unadjusted], "Lag-1": [fmt.num(v, 2, True) for v in sv.lag1_resid]})
             st.dataframe(tbl, hide_index=True)
-            ui.html("<div class='fl-src'>Stored robustness variants (headline_trend_sensitivity.csv): different windows and dropping early or late winters. "
-                    "They show how far the estimate depends on particular years. All are exploratory.</div>")
+            ui.caption("Stored robustness variants (headline_trend_sensitivity.csv): different windows and dropping early or late winters. "
+                       "They show how far the estimate depends on particular years. All are exploratory.")
         else:
             rows = charts.corridor_rows(ds, inv.variable_id) if var.fixed_windows else []
             if rows:
-                ui.html("<div class='fl-sub'>The same variable at all nine corridors with NASA data, winters 2001/02 to 2024/25. This places the selected location in context; "
-                        "supplementary corridors use approximate sampling points.</div>")
+                ui.html("<p class='fl-sub'>The same variable at all nine corridors with NASA data, winters 2001/02 to 2024/25. This places the selected location in context; "
+                        "supplementary corridors use approximate sampling points.</p>")
                 ui.plot(charts.forest_chart(rows, var.unit_per_decade, var.slope_decimals), key="detective_forest")
             else:
                 ui.note("No stored robustness variants exist for this variable.")
@@ -87,13 +91,13 @@ def render(ds):
             ("This result", (f"Precomputed in {f.stored_source} and cross-checked against a live recomputation" if f.cross_checked else "Recomputed for this window from the per-winter values with the approved period_trend function")),
             ("Series file", an.get_series(ds, inv.location_id, inv.variable_id).source_file), ("App data digest", ds.digest)]))
 
-    st.write("")
+    ui.section("Continue the investigation")
     c = st.columns(4)
-    if c[0].button("Compare with another region", icon=":material/compare_arrows:", width="stretch", key="det_compare"):
+    if c[0].button("Compare with another region", width="stretch", key="det_compare"):
         ui.goto("compare")
-    if c[1].button("Investigate the corridor", icon=":material/route:", width="stretch", key="det_corridor"):
+    if c[1].button("Investigate the corridor", width="stretch", key="det_corridor"):
         ui.goto("corridor")
-    if c[2].button("Audit the evidence", icon=":material/fact_check:", width="stretch", key="det_evidence"):
+    if c[2].button("Audit the evidence", width="stretch", key="det_evidence"):
         ui.goto("evidence")
-    if c[3].button("Export the Evidence Brief", icon=":material/description:", type="primary", width="stretch", key="det_brief"):
+    if c[3].button("Export the Evidence Brief", type="primary", width="stretch", key="det_brief"):
         ui.goto("brief")

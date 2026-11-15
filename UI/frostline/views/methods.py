@@ -15,10 +15,10 @@ def giovanni_panel(ds) -> bool:
     if not ds.giovanni:
         return False
     tr, chk = ds.giovanni["giovanni_monthly_t2m_trends.csv"], ds.giovanni["giovanni_vs_power_check.csv"]
-    ui.html("<div class='fl-eyebrow'>MERRA-2 monthly temperature through NASA Giovanni</div>"
-            "<div class='fl-sub'>Monthly mean 2 m air temperature (collection M2TMNXSLV, variable T2M) extracted through Giovanni for the same grid cells. "
+    ui.section("MERRA-2 monthly temperature through NASA Giovanni")
+    ui.html("<p class='fl-sub' style='margin-bottom:var(--s4)'>Monthly mean 2 m air temperature (collection M2TMNXSLV, variable T2M) extracted through Giovanni for the same grid cells. "
             "POWER and Giovanni share the MERRA-2 source, so this is a consistency check on access routes, not an independent observation. "
-            "Monthly means are used for seasonal mean-temperature trends only, never for freezing degree-days or thaw counts.</div>")
+            "Monthly means are used for seasonal mean-temperature trends only, never for freezing degree-days or thaw counts.</p>")
     st.dataframe(pd.DataFrame({"Location": tr.location_id, "Seasonal mean": tr.metric.map({"octdec_mean_c": "Oct to Dec", "janmar_mean_c": "Jan to Mar"}).fillna(tr.metric), "n": tr.n,
                                "Slope (°C per decade)": [fmt.num(v, 2, True) for v in tr.slope_per_decade], "95% interval": [fmt.interval(a, b, 2) for a, b in zip(tr.ci95_low, tr.ci95_high)],
                                "p (unadjusted)": [fmt.pval(p) for p in tr.mk_p], "Status": tr.status}), hide_index=True)
@@ -65,17 +65,17 @@ def render(ds):
         for src in SOURCES.values():
             ui.html(f"<div class='fl-layer'><b>{ui.esc(src.name)}</b><div class='q'>{ui.esc(src.kind)} · {ui.esc(src.resolution)}</div><ul><li>{ui.esc(src.citation)}</li><li>{ui.esc(src.note)}</li>"
                     f"<li><a href='{src.url}' target='_blank' rel='noopener noreferrer'>{ui.esc(src.url)}</a></li></ul></div>")
-        ui.html(f"<div class='fl-note'><b style='color:#E8EEF7'>POWER acknowledgement.</b> {ui.esc(POWER_ACK)}</div>")
+        ui.note(POWER_ACK, "POWER acknowledgement")
         with st.expander("Context literature"):
             ui.html("<div class='fl-layer'><ul>" + "".join(f"<li>{ui.esc(x)}</li>" for x in LITERATURE) + "</ul></div>")
             ui.html("<div class='fl-src'>Used for context and for what Frostline does not claim. Frostline does not replicate these studies and does not apply the James Bay freezing threshold reported in them.</div>")
         with st.expander("Software"):
-            ui.html("<div class='fl-sub'>" + ui.esc(", ".join(SOFTWARE)) + ".</div>")
+            ui.html("<p class='fl-sub'>" + ui.esc(", ".join(SOFTWARE)) + ".</p>")
         with st.expander("File hashes (sha256)"):
             st.dataframe(pd.DataFrame({"File": list(ds.file_hashes), "sha256": list(ds.file_hashes.values())}), hide_index=True)
 
     with tabs[2]:
-        ui.html("<div class='fl-eyebrow'>NASA data use and the listed-resource requirement</div>")
+        ui.section("NASA data use and the listed-resource requirement")
         if giovanni_panel(ds):
             ui.note("A Giovanni extraction is present in the app data and is shown above. Whether it satisfies the Global Award resource requirement is for the team and organizers to confirm.")
         else:
@@ -91,7 +91,7 @@ def render(ds):
         ui.html("<div class='fl-src'>Details and the manual extraction steps: docs/CHALLENGE_ELIGIBILITY.md.</div>")
 
     with tabs[3]:
-        ui.html("<div class='fl-eyebrow'>How AI was used</div>")
+        ui.section("How AI was used")
         ui.html("<div class='fl-layer'><ul>"
                 "<li>The data pipeline, the statistical scripts, the documentation and this application were written with substantial AI assistance (Claude by Anthropic, including Claude Code), directed and reviewed by the team.</li>"
                 "<li>AI output is not treated as evidence. Every number on screen is produced by scripts from public data and checked by automated tests; none is written by a language model.</li>"
@@ -101,28 +101,30 @@ def render(ds):
                 "</ul></div>")
 
     with tabs[4]:
-        ui.html("<div class='fl-eyebrow'>What Frostline does not do</div><div class='fl-layer'><ul>"
+        ui.section("What Frostline does not do")
+        ui.html("<div class='fl-layer'><ul>"
                 "<li>It does not measure ice thickness, assess road safety, recommend routes or predict opening dates.</li>"
                 "<li>It does not show what produced any change in road dates. Associations are labelled as associations.</li>"
                 "<li>It does not present NASA grid-cell values as local observations, and it applies no bias correction.</li>"
                 "<li>It does not offer an arbitrary custom location: no data exist for one.</li></ul></div>")
-        ui.html("<div class='fl-eyebrow'>Known limitations</div><div class='fl-layer'><ul>"
+        ui.section("Known limitations")
+        ui.html("<div class='fl-layer'><ul>"
                 "<li>24 winters of NASA data and 32 winters of road records are short records; natural variability can resemble a trend.</li>"
                 "<li>One reanalysis grid cell is not the whole road, and the cold-season bias against the station has no established cause.</li>"
                 "<li>The Aklavik alignment, segment and grid-cell representativeness are unverified.</li>"
                 "<li>Four road-record rows fail date checks and are excluded, not corrected. Temporary closures are not recorded.</li>"
                 "<li>The NASA record was not extended before winter 2001/02. Results are reproducible from cached sources; a live re-download was not compared.</li>"
                 "<li>Dettah was selected after its trend had been seen; no hypothesis was registered in advance.</li></ul></div>")
-        ui.html("<div class='fl-eyebrow'>Review status</div>")
+        ui.section("Review status")
         ui.html(ui.kv_table([("Statistical sign-off", "Pending. No independent reviewer has signed off on the methods"),
                              ("NASA listed-resource requirement", "Not demonstrated" if not ds.giovanni else "Giovanni extraction ingested; confirmation pending"),
                              ("Stakeholder validation", "None. No community adoption, interviews or endorsements are claimed"),
                              ("Automated checks", "Scientific and application test suites; deterministic regeneration of every derived file")]))
 
     with tabs[5]:
-        ui.html("<div class='fl-eyebrow'>Research architecture</div>"
-                "<div class='fl-sub'>Locations, variables and questions are entries in registries; findings and evidence reports are typed objects. A new verified location or variable "
-                "is added through the data pipeline and a registry entry, and then every view, the Evidence Engine and the Evidence Brief work for it without new statistical code.</div>")
+        ui.section("Research architecture")
+        ui.html("<p class='fl-sub' style='margin-bottom:var(--s4)'>Locations, variables and questions are entries in registries; findings and evidence reports are typed objects. A new verified location or variable "
+                "is added through the data pipeline and a registry entry, and then every view, the Evidence Engine and the Evidence Brief work for it without new statistical code.</p>")
         locs = an.locations(ds)
         st.dataframe(pd.DataFrame([{"Location": l.name, "Identifier": l.id, "Role": l.role, "Road record": l.road_id, "On the map": "yes" if l.mapped else "no (approximate point)"} for l in locs.values()]), hide_index=True)
         ui.html(ui.kv_table([
@@ -131,4 +133,4 @@ def render(ds):
             ("Quality gates", "Complete daily coverage, documented provenance, validated units and at least 15 winters before any trend is shown"),
             ("Live NASA downloads", "Not offered. The app makes no network request for data, so results cannot change under a presenter and remain reproducible"),
             ("Guide", "docs/EXTENDING_FROSTLINE.md")]))
-        ui.html(f"<div class='fl-src'>Frostline {APP_VERSION} · code {ui.esc(code_version())} · app data digest {ds.digest}</div>")
+        ui.html(f"<div class='fl-src'>Frostline {APP_VERSION} · code <code>{ui.esc(code_version())}</code> · app data digest <code>{ds.digest}</code></div>")

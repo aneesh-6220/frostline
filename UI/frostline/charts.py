@@ -15,47 +15,61 @@ from . import analysis as an
 from . import fmt
 from .registry import ROAD_KIND_LABEL, VARIABLES
 
-# surfaces and ink
-BG = "#0B1220"
-SURFACE = "#111B2E"
-INK = "#E8EEF7"
-INK_2 = "#A9B8CE"
-INK_3 = "#71829B"
-GRID = "rgba(169,184,206,0.13)"
-AXIS = "rgba(169,184,206,0.35)"
-# categorical slots (fixed order; the entity keeps its colour everywhere)
-C_PRIMARY = "#3987E5"     # slot 1: Dettah / NASA
-C_SECOND = "#D95926"      # slot 2: Aklavik / station
-C_THIRD = "#199E70"       # slot 3
-TREND = "#F3F6FB"
-BAND = "rgba(169,184,206,0.16)"
-NEUTRAL = "#7C8BA1"
-WARN = "#FAB219"
-COLD, WARM = "#3987E5", "#E66767"
+# surfaces and ink (the same tokens as ui.CSS and .streamlit/config.toml)
+BG = "#0B0E13"
+SURFACE = "#12161D"
+INK = "#E7ECF2"
+INK_2 = "#A3AEBD"
+INK_3 = "#7D8898"
+GRID = "rgba(163,174,189,0.09)"
+AXIS = "rgba(163,174,189,0.28)"
+# categorical slots (fixed order; the entity keeps its colour everywhere).
+# Checked against the dark surface: contrast >= 5.9:1 for each; pair separation >= 23 dE (OKLab x100) under
+# deuteranopia, protanopia and tritanopia simulation.
+C_PRIMARY = "#4C9BE8"     # slot 1: Dettah / NASA
+C_SECOND = "#E0773F"      # slot 2: Aklavik / station
+C_THIRD = "#4CC38A"       # slot 3
+TREND = "#E7ECF2"
+BAND = "rgba(163,174,189,0.14)"
+NEUTRAL = "#7D8898"
+WARN = "#E5B454"
+COLD, WARM = "#4C9BE8", "#E0776A"
+HOVER_BG, HOVER_LINE = "#1B212B", "#2E3644"
 
 LOCATION_COLOR = {"dettah_bay": C_PRIMARY, "aklavik_delta": C_SECOND}
-FONT = "Inter, 'Segoe UI', system-ui, -apple-system, sans-serif"
+FONT = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
 CONFIG = {"displaylogo": False, "modeBarButtonsToRemove": ["lasso2d", "select2d", "autoScale2d", "zoomIn2d", "zoomOut2d"], "responsive": True}
+
+
+def _rgba(hex_color: str, alpha: float) -> str:
+    h = hex_color.lstrip("#")
+    return f"rgba({int(h[0:2], 16)},{int(h[2:4], 16)},{int(h[4:6], 16)},{alpha})"
 
 
 def _layout(fig: go.Figure, height: int = 420, title: str | None = None, legend: bool = True) -> go.Figure:
     fig.update_layout(
         height=height, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family=FONT, size=13, color=INK_2), margin=dict(l=64, r=28, t=56 if title else 28, b=52),
-        title=dict(text=title, font=dict(size=15, color=INK), x=0, xanchor="left", y=0.98) if title else None,
-        showlegend=legend, legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=INK_2, size=12), bgcolor="rgba(0,0,0,0)"),
-        hoverlabel=dict(bgcolor="#17233B", bordercolor="#2B3B59", font=dict(family=FONT, size=13, color=INK)), hovermode="closest",
+        font=dict(family=FONT, size=12, color=INK_2), margin=dict(l=60, r=16, t=(64 if title else 40) if legend else (44 if title else 16), b=48),
+        title=dict(text=title, font=dict(size=14, color=INK), x=0, xanchor="left", y=0.98) if title else None,
+        showlegend=legend, legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="left", x=0, font=dict(color=INK_2, size=12), bgcolor="rgba(0,0,0,0)",
+                                       itemwidth=30, traceorder="normal"),
+        hoverlabel=dict(bgcolor=HOVER_BG, bordercolor=HOVER_LINE, font=dict(family=FONT, size=12.5, color=INK), align="left"), hovermode="closest",
+        modebar=dict(bgcolor="rgba(0,0,0,0)", color=INK_3, activecolor=INK),
     )
-    fig.update_xaxes(showgrid=False, linecolor=AXIS, tickcolor=AXIS, ticks="outside", ticklen=4, tickfont=dict(color=INK_2), title_font=dict(color=INK_2, size=12), zeroline=False)
-    fig.update_yaxes(gridcolor=GRID, linecolor="rgba(0,0,0,0)", tickfont=dict(color=INK_2), title_font=dict(color=INK_2, size=12), zeroline=False)
+    fig.update_xaxes(showgrid=False, linecolor=AXIS, tickcolor=AXIS, ticks="outside", ticklen=4, tickfont=dict(color=INK_3, size=11.5), title_font=dict(color=INK_3, size=11.5),
+                     zeroline=False, title_standoff=10)
+    fig.update_yaxes(gridcolor=GRID, linecolor="rgba(0,0,0,0)", tickfont=dict(color=INK_3, size=11.5), title_font=dict(color=INK_3, size=11.5), zeroline=False, title_standoff=8)
     return fig
 
 
 def _winter_ticks(years, step: int | None = None) -> dict:
+    """Winter labels (2001/02) on a year axis. Plotly chooses the tick spacing from the rendered width, so a phone gets
+    fewer labels than a desktop and labels never collide; labelalias turns each year tick into its winter label."""
     years = sorted(int(y) for y in years)
-    step = step or (4 if len(years) > 20 else 2 if len(years) > 10 else 1)
-    vals = [y for y in years if (y - years[0]) % step == 0]
-    return dict(tickmode="array", tickvals=vals, ticktext=[fmt.winter(y) for y in vals], tickangle=0)
+    span = range(years[0] - 1, years[-1] + 2) if years else range(0)
+    return dict(tickmode="auto", nticks=(len(years) // step + 1) if step else 7, tickformat="d", tick0=years[0] if years else 0,
+                labelalias={str(y): fmt.winter(y) for y in span}, tickangle=0,
+                range=[years[0] - 0.7, years[-1] + 0.7] if years else None)   # no tick label for a winter outside the record
 
 
 def _value_hover(var, name: str) -> str:
@@ -75,7 +89,7 @@ def _custom(var, years, values):
 def _add_series(fig, var, years, values, color, name, row=None, col=None, showlegend=True):
     kw = dict(row=row, col=col) if row else {}
     fig.add_trace(go.Scatter(x=list(years), y=list(values), mode="lines+markers", name=name, showlegend=showlegend, connectgaps=False,
-                             line=dict(color=color, width=1.2), marker=dict(color=color, size=8, line=dict(color=BG, width=2)),
+                             line=dict(color=_rgba(color, 0.55), width=1.25), marker=dict(color=color, size=8, line=dict(color=BG, width=2)),
                              customdata=_custom(var, years, values), hovertemplate=_value_hover(var, name)), **kw)
 
 
@@ -90,7 +104,7 @@ def _add_trend(fig, finding, years, color=TREND, name="Theil-Sen trend", band=Tr
         fig.add_trace(go.Scatter(x=bx + bx[::-1], y=hi + lo[::-1], fill="toself", fillcolor=BAND, line=dict(width=0), hoverinfo="skip",
                                  name="95% interval of the slope", showlegend=showlegend), **kw)
     fig.add_trace(go.Scatter(x=xs, y=an.fitted_line(finding, xs), mode="lines", name=name, showlegend=showlegend,
-                             line=dict(color=color, width=2.5), hoverinfo="skip"), **kw)
+                             line=dict(color=color, width=2), hoverinfo="skip"), **kw)
 
 
 def trend_chart(ds, finding, height: int = 430) -> go.Figure:
@@ -109,7 +123,7 @@ def trend_chart(ds, finding, height: int = 430) -> go.Figure:
     _add_trend(fig, finding, [y for y, _ in inside])
     _add_series(fig, var, [y for y, _ in inside], [v for _, v in inside], color, obs_name)
     _layout(fig, height)
-    fig.update_xaxes(title_text="Winter (Oct 1 of the first year to Mar 31 of the next)", **_winter_ticks(s.years))
+    fig.update_xaxes(title_text="Winter (Oct 1 to Mar 31 of the next year)", **_winter_ticks(s.years))
     fig.update_yaxes(title_text=f"{var.short} ({var.unit})")
     if var.id in ("open_day", "close_day"):
         _date_ticks(fig, [v for v in s.values if fmt.is_num(v)])
@@ -138,9 +152,9 @@ def comparison_chart(ds, cmp: an.Comparison, height: int = 430) -> go.Figure:
         _add_series(fig, var, years, vals, color, name)
         if f.estimated:
             xs = [min(years), max(years)]
-            fig.add_trace(go.Scatter(x=xs, y=an.fitted_line(f, xs), mode="lines", line=dict(color=color, width=2.5, dash="dash"), name=f"{name} trend", hoverinfo="skip"))
+            fig.add_trace(go.Scatter(x=xs, y=an.fitted_line(f, xs), mode="lines", line=dict(color=color, width=2, dash="dash"), name=f"{name} trend", hoverinfo="skip"))
         if years:
-            fig.add_annotation(x=years[-1], y=vals[-1], text=name, showarrow=False, xanchor="left", xshift=10, font=dict(color=INK, size=12))
+            fig.add_annotation(x=years[-1], y=vals[-1], text=name, showarrow=False, xanchor="left", xshift=10, font=dict(color=INK_2, size=11.5))
     _layout(fig, height)
     fig.update_layout(margin=dict(r=84))
     fig.update_xaxes(title_text="Winter (matched in both series)", **_winter_ticks(cmp.common_years or [cmp.first, cmp.last]))
@@ -186,7 +200,7 @@ def forest_chart(rows: list, unit: str, decimals: int = 1, height: int | None = 
     fig.add_vline(x=0, line=dict(color=AXIS, width=1, dash="dot"))
     _layout(fig, height or max(260, 34 * len(rows) + 110))
     fig.update_layout(margin=dict(l=200))
-    fig.update_yaxes(categoryorder="array", categoryarray=[r["label"] for r in rows], showgrid=False, tickfont=dict(color=INK, size=12))
+    fig.update_yaxes(categoryorder="array", categoryarray=[r["label"] for r in rows], showgrid=False, tickfont=dict(color=INK_2, size=12))
     fig.update_xaxes(title_text=f"Theil-Sen slope ({unit}); the dotted line marks {zero_label}", showgrid=True, gridcolor=GRID)
     return fig
 
@@ -204,20 +218,21 @@ def timeline_chart(ds, location_id: str, env_variable_id: str = "fdd_octdec", hi
     years = [int(y) for y in ok.season_start_year]
     custom = [[fmt.winter(y), fmt.iso_to_label(o), fmt.iso_to_label(c), int(n)] for y, o, c, n in zip(years, ok.opening_date, ok.closing_date, ok.open_to_close_days)]
     fig.add_trace(go.Bar(x=years, y=list(ok.open_to_close_days), base=list(ok.open_day), name="Recorded operating window", showlegend=False, width=0.62,
-                         marker=dict(color="rgba(57,135,229,0.55)", line=dict(color=C_PRIMARY, width=1), cornerradius=3), customdata=custom,
+                         marker=dict(color=_rgba(LOCATION_COLOR.get(location_id, C_PRIMARY), 0.5), line=dict(color=LOCATION_COLOR.get(location_id, C_PRIMARY), width=1), cornerradius=3), customdata=custom,
                          hovertemplate="<b>Winter %{customdata[0]}</b><br>Opened %{customdata[1]}<br>Closed %{customdata[2]}<br>Interval %{customdata[3]} days (not usable days)<extra></extra>"),
                   row=2, col=1)
     fig.add_trace(go.Scatter(x=years, y=list(ok.open_day), mode="markers", name="Opening date", showlegend=False, hoverinfo="skip",
-                             marker=dict(color=INK, size=7, symbol="line-ew", line=dict(color=INK, width=2))), row=2, col=1)
+                             marker=dict(color=INK, size=8, symbol="line-ew", line=dict(color=INK, width=2))), row=2, col=1)
     fig.add_hline(y=91.5, line=dict(color=WARN, width=1.2, dash="dot"), row=2, col=1)
     if highlight is not None:
         for r in (1, 2):
-            fig.add_vrect(x0=highlight - 0.5, x1=highlight + 0.5, fillcolor="rgba(250,178,25,0.10)", line=dict(color=WARN, width=1), row=r, col=1)
+            fig.add_vrect(x0=highlight - 0.5, x1=highlight + 0.5, fillcolor=_rgba(INK, 0.06), line=dict(color=_rgba(INK, 0.35), width=1), row=r, col=1)
     _layout(fig, height, legend=False)
-    fig.update_annotations(font=dict(color=INK, size=13))
+    fig.update_annotations(font=dict(color=INK_2, size=12), xanchor="left", x=0)
     all_years = sorted(set(years) | set(env.years))
-    fig.update_xaxes(range=[min(all_years) - 0.7, max(all_years) + 0.7], **_winter_ticks(all_years, step=6))
-    fig.update_xaxes(title_text="Winter. Dotted line: Dec 31, the end of the Oct to Dec environmental window", row=2, col=1)
+    fig.update_xaxes(**_winter_ticks(all_years, step=6))
+    fig.update_xaxes(title_text="Winter<br>Dotted line: Dec 31, the end of the Oct to Dec window", row=2, col=1)
+    fig.update_layout(margin=dict(b=68))
     fig.update_yaxes(title_text=var.unit, row=1, col=1)
     vals = list(ok.open_day) + list(ok.close_day)
     _date_ticks(fig, vals, row=2, col=1)
@@ -234,7 +249,7 @@ def bias_month_chart(ds, height: int = 340) -> go.Figure:
     fig = go.Figure(go.Bar(
         x=[names[m - 1] for m in b.month], y=list(b.mean_bias), width=0.62,
         marker=dict(color=[COLD if v < 0 else WARM for v in b.mean_bias], cornerradius=4),
-        text=[fmt.num(v, 1, True) for v in b.mean_bias], textposition="outside", textfont=dict(color=INK_2, size=11), cliponaxis=False,
+        text=[fmt.num(v, 1, True) for v in b.mean_bias], textposition="outside", textfont=dict(color=INK_3, size=11), cliponaxis=False,
         customdata=[[int(n), fmt.num(sd, 1)] for n, sd in zip(b.n, b.sd)],
         hovertemplate="<b>%{x}</b><br>NASA minus station: %{y:+.2f} °C<br>%{customdata[0]} paired days, daily spread (SD) %{customdata[1]} °C<extra></extra>"))
     fig.add_hline(y=0, line=dict(color=AXIS, width=1))
@@ -251,13 +266,14 @@ def station_fdd_chart(ds, height: int = 380) -> go.Figure:
     fig = go.Figure()
     _add_series(fig, var, s.years_all, s.nasa_all, C_PRIMARY, "NASA POWER (reanalysis, grid cell)")
     _add_series(fig, var, s.years_all, s.station_all, C_SECOND, "ECCC Yellowknife A (station)")
-    fig.add_annotation(x=s.years_all[-1], y=s.nasa_all[-1], text="NASA", showarrow=False, xanchor="left", xshift=10, font=dict(color=INK, size=12))
+    fig.add_annotation(x=s.years_all[-1], y=s.nasa_all[-1], text="NASA", showarrow=False, xanchor="left", xshift=10, font=dict(color=INK_2, size=11.5))
     last_ok = [(y, v) for y, v in zip(s.years_all, s.station_all) if fmt.is_num(v)][-1]
-    fig.add_annotation(x=last_ok[0], y=last_ok[1], text="Station", showarrow=False, xanchor="left", xshift=10, font=dict(color=INK, size=12))
+    fig.add_annotation(x=last_ok[0], y=last_ok[1], text="Station", showarrow=False, xanchor="left", xshift=10, font=dict(color=INK_2, size=11.5))
     _layout(fig, height)
     fig.update_layout(margin=dict(r=84))
-    fig.update_xaxes(title_text="Winter (gaps: station winter incomplete, not filled)", **_winter_ticks(s.years_all, step=6))
+    fig.update_xaxes(title_text="Winter<br>Gaps: station winter incomplete, not filled", **_winter_ticks(s.years_all, step=6))
     fig.update_yaxes(title_text="Oct-Dec freezing degree-days (°C-days)")
+    fig.update_layout(margin=dict(b=68))
     return fig
 
 

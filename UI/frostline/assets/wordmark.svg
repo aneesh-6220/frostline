@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="132" height="24" viewBox="0 0 132 24" fill="none" role="img" aria-label="Frostline">
+  <path d="M12 2.6 20.2 7.3v9.4L12 21.4 3.8 16.7V7.3z" stroke="#8CCBF0" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M1 12h22" stroke="#E7ECF2" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M12 2.6V12" stroke="#8CCBF0" stroke-width="1.2" stroke-linecap="round" opacity=".55"/>
+  <text x="31" y="17.2" fill="#E7ECF2" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Inter, Helvetica, Arial, sans-serif" font-size="16.5" font-weight="600" letter-spacing="-0.2">Frostline</text>
+</svg>

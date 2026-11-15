@@ -1,10 +1,30 @@
 # Frostline theme and server settings (read when the app is started from the repository root).
+# The [theme] values mirror the design tokens in UI/frostline/ui.py (CSS) and UI/frostline/charts.py (figures).
 [theme]
 base = "dark"
-primaryColor = "#3987E5"
-backgroundColor = "#0B1220"
-secondaryBackgroundColor = "#111B2E"
-textColor = "#E8EEF7"
+primaryColor = "#8CCBF0"
+backgroundColor = "#0B0E13"
+secondaryBackgroundColor = "#151A22"
+textColor = "#E7ECF2"
+linkColor = "#8CCBF0"
+borderColor = "#232A35"
+dataframeBorderColor = "#1C222C"
+dataframeHeaderBackgroundColor = "#12161D"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "8px"
+buttonRadius = "8px"
+baseFontSize = 15
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+headingFont = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+codeFont = "ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
+headingFontWeights = 600
+chartCategoricalColors = ["#4C9BE8", "#E0773F", "#4CC38A"]
+
+[theme.sidebar]
+backgroundColor = "#0E1117"
+secondaryBackgroundColor = "#151A22"
+borderColor = "#232A35"
 
 [browser]
 gatherUsageStats = false

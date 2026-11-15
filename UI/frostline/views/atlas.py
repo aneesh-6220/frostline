@@ -10,7 +10,7 @@ from .. import analysis as an
 from .. import fmt, ui
 from ..registry import ROAD_KIND_LABEL, primary_locations
 
-COLORS = {"dettah_bay": [57, 135, 229], "aklavik_delta": [217, 89, 38]}
+COLORS = {"dettah_bay": [76, 155, 232], "aklavik_delta": [224, 119, 63]}   # charts.LOCATION_COLOR
 
 
 def build_deck(ds, selected: str) -> pdk.Deck:
@@ -19,7 +19,7 @@ def build_deck(ds, selected: str) -> pdk.Deck:
     for l in locs:
         c, col = l.cell, COLORS[l.id]
         points.append(dict(location_id=l.id, name=l.name, lon=l.lon, lat=l.lat, color=col + [255], radius=9 if l.id == selected else 7,
-                           line=[255, 255, 255, 255] if l.id == selected else [11, 18, 32, 255],
+                           line=[231, 236, 242, 255] if l.id == selected else [11, 14, 19, 255],
                            tip=f"{l.lat:.2f} N, {abs(l.lon):.2f} W · sampling point (calculated)"))
         cells.append(dict(location_id=l.id, name=f"NASA grid cell for {l.short}", color=col + [46], line=col + [200],
                           polygon=[[c["west"], c["south"]], [c["east"], c["south"]], [c["east"], c["north"]], [c["west"], c["north"]]],
@@ -29,12 +29,12 @@ def build_deck(ds, selected: str) -> pdk.Deck:
         pdk.Layer("PolygonLayer", id="cells", data=cells, get_polygon="polygon", get_fill_color="color", get_line_color="line", line_width_min_pixels=1.5, stroked=True, filled=True, pickable=True),
         pdk.Layer("ScatterplotLayer", id="locations", data=points, get_position="[lon, lat]", get_fill_color="color", get_line_color="line", get_radius="radius",
                   radius_units="'pixels'", stroked=True, line_width_units="'pixels'", get_line_width=2, pickable=True, auto_highlight=True),
-        pdk.Layer("TextLayer", id="labels", data=labels, get_position="[lon, lat]", get_text="text", get_size=15, get_color=[232, 238, 247, 255],
+        pdk.Layer("TextLayer", id="labels", data=labels, get_position="[lon, lat]", get_text="text", get_size=13, get_color=[231, 236, 242, 255], font_family="'Inter, -apple-system, sans-serif'", font_weight=600,
                   get_text_anchor="'middle'", get_alignment_baseline="'bottom'", get_pixel_offset=[0, -16]),
     ]
     sel = next(l for l in locs if l.id == selected)
     view = pdk.ViewState(latitude=65.5, longitude=-122.6, zoom=3.6, pitch=0) if not st.session_state.get("atlas_zoom") else pdk.ViewState(latitude=sel.lat, longitude=sel.lon, zoom=7.2, pitch=0)
-    return pdk.Deck(layers=layers, initial_view_state=view, map_provider="carto", map_style="dark", tooltip={"html": "<b>{name}</b><br/>{tip}", "style": {"backgroundColor": "#17233B", "color": "#E8EEF7", "fontSize": "12px"}})
+    return pdk.Deck(layers=layers, initial_view_state=view, map_provider="carto", map_style="dark", tooltip={"html": "<b>{name}</b><br/>{tip}", "style": {"backgroundColor": "#1B212B", "color": "#E7ECF2", "fontSize": "12px", "border": "1px solid #2E3644", "borderRadius": "6px", "padding": "8px 10px"}})
 
 
 def _pick(ds, lid):
@@ -69,27 +69,29 @@ def render(ds):
     with right:
         for l in primary_locations(locs):
             on = l.id == inv.location_id
-            st.button(f"{l.name}", key=f"atlas_pick_{l.id}", type="primary" if on else "secondary", width="stretch", icon=":material/location_on:", on_click=_pick, args=(ds, l.id))
+            st.button(f"{l.name}", key=f"atlas_pick_{l.id}", type="primary" if on else "secondary", width="stretch", on_click=_pick, args=(ds, l.id))
         c = loc.cell
-        ui.html(f"<div class='fl-eyebrow' style='margin-top:.9rem'>{ui.esc(loc.role)} case study · {ui.esc(ROAD_KIND_LABEL[loc.road_kind])}</div>"
-                f"<div style='font-family:Space Grotesk,sans-serif;font-size:1.25rem;font-weight:700;color:#E8EEF7'>{ui.esc(loc.name)}</div><div class='fl-sub'>{ui.esc(loc.region)}</div>")
-        ui.html(ui.kv_table([
+        ui.html(f"<div class='fl-panel fl-place'><div class='fl-label'>{ui.esc(loc.role)} case study · {ui.esc(ROAD_KIND_LABEL[loc.road_kind])}</div>"
+                f"<div class='fl-place-name'>{ui.esc(loc.name)}</div><div class='fl-place-region'>{ui.esc(loc.region)}</div>"
+                + ui.kv_table([
             ("Setting", loc.setting), ("Access context", loc.access),
             ("Sampling point", f"{loc.lat:.2f} N, {abs(loc.lon):.2f} W. {loc.sampling_point}"),
             ("NASA grid cell (calculated)", f"Centre {c['center_lat']:.3f} N, {abs(c['center_lon']):.3f} W; {c['south']:.2f} to {c['north']:.2f} N, {abs(c['east']):.4f} to {abs(c['west']):.4f} W; "
                                             f"cell-average elevation {loc.cell_elevation_m} m (POWER file header)"),
             ("Nearest station check", loc.station),
-            ("Records held", f"NASA daily data for winters {fmt.period(*an.available_range(ds, loc.id, 'fdd_octdec'))}; road dates for {fmt.period(*an.available_range(ds, loc.id, 'open_day'))}")]))
+            ("Records held", f"NASA daily data for winters {fmt.period(*an.available_range(ds, loc.id, 'fdd_octdec'))}; road dates for {fmt.period(*an.available_range(ds, loc.id, 'open_day'))}")])
+                + "</div>")
         ui.caveat(loc.caution, "Read this first")
 
-    st.write("")
+    ui.section("Continue with this location")
     b = st.columns(3)
-    if b[0].button(f"Open the {loc.short} trend investigation", type="primary", icon=":material/show_chart:", width="stretch", key="atlas_det"):
+    if b[0].button(f"Open the {loc.short} trend investigation", type="primary", width="stretch", key="atlas_det"):
         ui.goto("detective")
-    if b[1].button(f"Open the {loc.short} corridor investigation", icon=":material/route:", width="stretch", key="atlas_cor"):
+    if b[1].button(f"Open the {loc.short} corridor investigation", width="stretch", key="atlas_cor"):
         ui.goto("corridor")
-    if b[2].button("Compare the two regions", icon=":material/compare_arrows:", width="stretch", key="atlas_cmp"):
+    if b[2].button("Compare the two regions", width="stretch", key="atlas_cmp"):
         ui.goto("compare")
+    st.write("")
 
     with st.expander("What is verified about this location, and what is not"):
         ui.html(ui.kv_table([(f"{f.label} [{f.status}]", f.text) for f in loc.facts]))

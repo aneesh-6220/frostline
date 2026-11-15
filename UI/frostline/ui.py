@@ -1,12 +1,16 @@
-"""Shared Streamlit layer: theme, the shared investigation state, and components used by every view.
+"""Shared Streamlit layer: design system, the shared investigation state, and components used by every view.
 
 One investigation state (location, variable, analysis window, guiding question) lives in st.session_state.
 Every view reads it through current(), and every statistic on screen is derived from it through
 analysis.trend(), so a change of selection re-derives every number, interval and sentence.
+
+Presentation only: this module styles and lays out values computed elsewhere. The design tokens below
+are mirrored in .streamlit/config.toml (native widgets and tables) and charts.py (figures).
 """
 from __future__ import annotations
 
 import html as _html
+import os
 from dataclasses import dataclass
 
 import streamlit as st
@@ -19,73 +23,303 @@ from . import fmt
 from .registry import DEFAULT_LOCATION, DEFAULT_VARIABLE, QUESTIONS, SOURCES, VARIABLES, primary_locations, variables_for
 
 PAGES: dict = {}   # view key -> st.Page, filled by the entrypoint on every run
+ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
 
 STATE_TONE = {an.SUPPORTED: "good", an.UNRESOLVED: "neutral", an.EXPLORATORY: "warn", an.INSUFFICIENT: "muted", an.UNAVAILABLE: "muted"}
 
+# ------------------------------------------------------------------ design tokens
+# Surfaces step up in lightness; ink steps down. Every text token passes WCAG AA (4.5:1) on --surface.
+# --frost is the single accent: focus, the active place in navigation and primary actions, nothing else.
+# Status hues are reserved for evidence states and always ship with a text label.
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-:root{--bg:#0B1220;--surface:#111B2E;--surface2:#16233A;--line:#22314D;--ink:#E8EEF7;--ink2:#A9B8CE;--ink3:#71829B;
---glacier:#7CCBF7;--blue:#3987E5;--amber:#FAB219;--good:#3FBF6B;--serious:#EC835A;}
-html,body,[class*="css"],.stApp{font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif}
-.stApp{background:radial-gradient(1200px 520px at 78% -160px,rgba(57,135,229,.16),transparent 62%),var(--bg)}
-.block-container{padding-top:3.4rem;padding-bottom:4rem;max-width:1280px}
-h1,h2,h3{font-family:'Space Grotesk','Inter',system-ui,sans-serif;letter-spacing:-.01em;color:var(--ink)}
-.fl-eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--glacier);font-weight:600;margin-bottom:.35rem}
-.fl-title{font-family:'Space Grotesk','Inter',sans-serif;font-size:2.05rem;line-height:1.14;font-weight:700;color:var(--ink);margin:0 0 .45rem}
-.fl-lede{color:var(--ink2);font-size:1.02rem;line-height:1.6;max-width:62rem;margin:0 0 1.1rem}
-.fl-hero{padding:1.2rem 0 .4rem}
-.fl-hero h1{font-family:'Space Grotesk','Inter',sans-serif;font-size:3.4rem;line-height:1.04;font-weight:700;margin:.3rem 0 1rem;max-width:15ch;padding:0}
-.fl-hero p{font-size:1.16rem;line-height:1.6;color:var(--ink2);max-width:40rem;margin:0}
-.fl-brand{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.3em;font-size:.86rem;color:var(--ink)}
-.fl-brand span{display:block;color:var(--ink3);font-weight:500;letter-spacing:.06em;font-size:.78rem;margin-top:.2rem}
-.fl-card{background:linear-gradient(180deg,rgba(22,35,58,.92),rgba(17,27,46,.92));border:1px solid var(--line);border-radius:14px;padding:1.05rem 1.2rem;height:100%}
-.fl-card h4{font-family:'Space Grotesk',sans-serif;font-size:1rem;color:var(--ink);margin:0 0 .35rem;padding:0}
-.fl-card p{color:var(--ink2);font-size:.9rem;line-height:1.55;margin:0}
-.fl-card .k{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:600;margin-bottom:.4rem}
-.fl-stat{font-family:'Space Grotesk',sans-serif;font-size:2.1rem;font-weight:700;color:var(--ink);line-height:1.1}
-.fl-stat small{display:block;font-family:'Inter',sans-serif;font-size:.84rem;font-weight:500;color:var(--ink2);margin:.15rem 0 0;line-height:1.3}
-.fl-sub{color:var(--ink2);font-size:.84rem;line-height:1.5;margin-top:.3rem}
-.fl-src{color:var(--ink3);font-size:.76rem;margin-top:.45rem}
-.fl-chip{display:inline-flex;align-items:center;gap:.4rem;padding:.2rem .7rem;border-radius:999px;font-size:.76rem;font-weight:600;border:1px solid var(--line);color:var(--ink);background:rgba(255,255,255,.04);white-space:nowrap}
-.fl-chip i{width:.5rem;height:.5rem;border-radius:50%;display:inline-block;background:var(--ink3)}
-.fl-chip.good i{background:var(--good)}.fl-chip.warn i{background:var(--amber)}.fl-chip.alert i{background:var(--serious)}.fl-chip.neutral i{background:var(--glacier)}
-.fl-chip.good{border-color:rgba(63,191,107,.5)}.fl-chip.warn{border-color:rgba(250,178,25,.5)}.fl-chip.alert{border-color:rgba(236,131,90,.55)}.fl-chip.neutral{border-color:rgba(124,203,247,.45)}
-.fl-finding{border:1px solid var(--line);border-left:3px solid var(--glacier);border-radius:12px;background:rgba(17,27,46,.9);padding:1rem 1.2rem;margin:.2rem 0 .8rem}
-.fl-finding.good{border-left-color:var(--good)}.fl-finding.warn{border-left-color:var(--amber)}.fl-finding.muted{border-left-color:var(--ink3)}
-.fl-finding .big{font-family:'Space Grotesk',sans-serif;font-size:1.9rem;font-weight:700;color:var(--ink);line-height:1.15;margin:.5rem 0 .15rem}
-.fl-finding .big small{display:block;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:500;color:var(--ink2);margin:.15rem 0 0;line-height:1.35}
-.fl-finding p{color:var(--ink);font-size:.93rem;line-height:1.55;margin:.35rem 0 0}
-.fl-finding p.dim{color:var(--ink2);font-size:.86rem}
-.fl-caveat{border:1px solid rgba(250,178,25,.35);background:rgba(250,178,25,.07);border-radius:10px;padding:.6rem .9rem;color:var(--ink);font-size:.84rem;line-height:1.5;margin:.5rem 0}
-.fl-caveat b{color:var(--amber)}
-.fl-note{border:1px solid var(--line);background:rgba(124,203,247,.06);border-radius:10px;padding:.6rem .9rem;color:var(--ink2);font-size:.86rem;line-height:1.5;margin:.5rem 0}
-.fl-kv{width:100%;border-collapse:collapse;font-size:.86rem}
-.fl-kv td{padding:.42rem .2rem;border-bottom:1px solid rgba(34,49,77,.8);vertical-align:top;color:var(--ink)}
-.fl-kv td:first-child{color:var(--ink2);width:44%;padding-right:.8rem}
-.fl-dim{border:1px solid var(--line);border-radius:12px;background:rgba(17,27,46,.85);padding:.85rem 1rem;margin-bottom:.7rem}
-.fl-dim .h{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.3rem}
-.fl-dim .h b{font-family:'Space Grotesk',sans-serif;color:var(--ink);font-size:.96rem}
-.fl-dim .s{color:var(--ink);font-size:.88rem;margin-bottom:.3rem}
-.fl-dim ul{margin:.2rem 0 0;padding-left:1.05rem}.fl-dim li{color:var(--ink2);font-size:.83rem;line-height:1.5;margin-bottom:.15rem}
-.fl-steps{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin:.9rem 0 .2rem}
-.fl-steps span{border:1px solid var(--line);border-radius:999px;padding:.3rem .8rem;font-size:.82rem;color:var(--ink);background:rgba(255,255,255,.03)}
-.fl-steps em{color:var(--ink3);font-style:normal}
-.fl-steps span.on{border-color:var(--glacier);background:rgba(124,203,247,.12);font-weight:600}
-.fl-steps span.done{color:var(--ink2)}
-.fl-foot{color:var(--ink3);font-size:.78rem;line-height:1.6;border-top:1px solid var(--line);margin-top:2.4rem;padding-top:1rem}
-.fl-layer{border-left:2px solid var(--line);padding:.1rem 0 .1rem .9rem;margin:.2rem 0 .9rem}
-.fl-layer b{font-family:'Space Grotesk',sans-serif;color:var(--ink);font-size:.95rem}
-.fl-layer .q{color:var(--ink3);font-size:.8rem;margin-bottom:.25rem}
-.fl-layer li{color:var(--ink2);font-size:.86rem;line-height:1.55}
-.fl-layer ul{margin:.1rem 0 0;padding-left:1.05rem}
-section[data-testid="stSidebar"]{background:#0E1728;border-right:1px solid var(--line)}
-section[data-testid="stSidebar"] .fl-eyebrow{margin-top:.2rem}
-div[data-testid="stMetric"]{background:rgba(17,27,46,.85);border:1px solid var(--line);border-radius:12px;padding:.7rem .9rem}
-.stTabs [data-baseweb="tab"]{font-weight:600}
-@media (max-width:900px){.fl-hero h1{font-size:2.4rem}.fl-title{font-size:1.6rem}}
+:root{
+--bg:#0B0E13;--bg-side:#0E1117;--surface:#12161D;--surface-2:#151A22;--surface-3:#1B212B;
+--line:#232A35;--line-soft:#1C222C;--line-strong:#2E3644;
+--ink:#E7ECF2;--ink-2:#A3AEBD;--ink-3:#7D8898;
+--frost:#8CCBF0;--frost-ink:#06121C;--frost-tint:rgba(140,203,240,.10);
+--good:#4CC38A;--warn:#E5B454;--alert:#EC835A;--muted:#7D8898;
+--r-sm:6px;--r:8px;--r-lg:12px;
+--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;
+--ease:cubic-bezier(.2,.7,.2,1);--fast:120ms;--med:200ms;
+--sans:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+--mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+--tabbar-h:64px;
+}
+
+/* ---------- base ---------- */
+html,body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+.stApp{background:var(--bg)}
+.fl-metric .v,.fl-finding .big,.fl-steps li::before{font-variant-numeric:tabular-nums}
+.fl-finding .big small{font-variant-numeric:normal}
+[data-testid="stMainBlockContainer"],.block-container{max-width:1240px;padding:calc(var(--s7) + var(--s5)) var(--s6) var(--s7)}
+h1,h2,h3,h4{letter-spacing:-.015em;color:var(--ink)}
+a{color:var(--frost);text-underline-offset:2px}
+::selection{background:rgba(140,203,240,.28)}
+:focus-visible{outline:2px solid var(--frost)!important;outline-offset:2px!important;border-radius:var(--r-sm)}
+.stMarkdown p{margin-bottom:0}
+hr{border-color:var(--line)}
+
+/* ---------- header and top navigation ---------- */
+[data-testid="stHeader"]{background:rgba(11,14,19,.96);border-bottom:1px solid var(--line-soft);height:56px}
+[data-testid="stToolbar"]{height:56px}
+[data-testid="stTopNav"]{gap:2px}
+[data-testid="stTopNav"] [data-testid="stIconMaterial"]{display:none}
+[data-testid="stTopNavLink"]{position:relative;height:56px;padding:0 12px;border-radius:0;background:transparent!important;transition:color var(--fast) var(--ease)}
+[data-testid="stTopNavLink"] p{font-size:13.5px;font-weight:500;color:var(--ink-3);letter-spacing:-.003em;transition:color var(--fast) var(--ease)}
+[data-testid="stTopNavLink"]:hover p{color:var(--ink)}
+[data-testid="stTopNavLink"][aria-current="page"] p{color:var(--ink)}
+[data-testid="stTopNavLink"]::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:2px;border-radius:2px;background:var(--frost);transform:scaleX(0);transition:transform var(--med) var(--ease)}
+[data-testid="stTopNavLink"][aria-current="page"]::after{transform:scaleX(1)}
+[data-testid="stLogo"]{height:22px}
+
+/* ---------- sidebar: the investigation console ---------- */
+[data-testid="stSidebar"]{background:var(--bg-side)}
+[data-testid="stSidebar"] [data-testid="stSidebarUserContent"]{padding-top:var(--s2)}
+[data-testid="stSidebarNav"] a span{font-size:14px}
+.fl-side-team{font-size:12px;color:var(--ink-3);margin:-2px 0 var(--s5);line-height:1.5}
+.fl-side-team b{color:var(--ink-2);font-weight:500}
+.fl-side-h{font-size:11.5px;font-weight:600;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;margin:0 0 var(--s3)}
+.fl-side-status{margin-top:var(--s4);padding:var(--s3);border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.fl-side-status .meta{font-size:12px;color:var(--ink-2);line-height:1.55;margin-top:var(--s2)}
+.fl-side-digest{font-size:11.5px;color:var(--ink-3);line-height:1.6;margin-top:var(--s5)}
+.fl-side-digest code{font-family:var(--mono);font-size:11px;color:var(--ink-2);background:none;padding:0}
+
+/* ---------- native controls ---------- */
+[data-testid="stWidgetLabel"] p{font-size:12.5px!important;font-weight:500;color:var(--ink-2)}
+[data-testid="stTooltipIcon"] svg{opacity:.55}
+[data-baseweb="select"]>div{min-height:40px;background:var(--surface);border-color:var(--line);transition:border-color var(--fast) var(--ease)}
+[data-baseweb="select"]>div:hover{border-color:var(--line-strong)}
+[data-baseweb="popover"] ul{background:var(--surface-2)}
+[data-baseweb="popover"] li{font-size:14px}
+button[data-testid^="stBaseButton"]{min-height:40px;padding:0 var(--s4);font-weight:500;letter-spacing:-.003em;
+  transition:background-color var(--fast) var(--ease),border-color var(--fast) var(--ease),color var(--fast) var(--ease),transform var(--fast) var(--ease)}
+button[data-testid^="stBaseButton"] p{font-size:14px;font-weight:500}
+button[data-testid^="stBaseButton"]:active:not(:disabled){transform:translateY(1px)}
+button[data-testid="stBaseButton-primary"]{background:var(--frost);border-color:var(--frost);color:var(--frost-ink)}
+button[data-testid="stBaseButton-primary"] p,button[data-testid="stBaseButton-primary"] span{color:var(--frost-ink)}
+button[data-testid="stBaseButton-primary"]:hover{background:#A6D7F4;border-color:#A6D7F4;color:var(--frost-ink)}
+button[data-testid="stBaseButton-secondary"]{background:var(--surface-2);border-color:var(--line)}
+button[data-testid="stBaseButton-secondary"]:hover{background:var(--surface-3);border-color:var(--line-strong);color:var(--ink)}
+button[data-testid^="stBaseButton"]:disabled{opacity:.42}
+[data-testid="stSidebar"] button[data-testid^="stBaseButton"]{min-height:36px}
+[data-testid="stSidebar"] button[data-testid^="stBaseButton"] p{font-size:13px}
+[data-testid="stSlider"] [data-testid="stSliderTickBarMin"],[data-testid="stSlider"] [data-testid="stSliderTickBarMax"]{font-size:12px;color:var(--ink-3)}
+[data-testid="stSliderThumbValue"]{font-size:12px;font-family:var(--sans)}
+
+/* tabs: an underline indicator, not pills */
+.stTabs [data-baseweb="tab-list"]{gap:28px!important;overflow-x:auto;scrollbar-width:none}
+.stTabs [data-baseweb="tab-list"]::-webkit-scrollbar{display:none}
+.stTabs [data-baseweb="tab"]{height:44px;padding:0;background:transparent;white-space:nowrap}
+.stTabs [data-baseweb="tab"] p{font-size:13.5px;font-weight:500;color:var(--ink-3);transition:color var(--fast) var(--ease)}
+.stTabs [data-baseweb="tab"]:hover p,.stTabs [aria-selected="true"] p{color:var(--ink)}
+.stTabs [data-baseweb="tab-highlight"]{background:var(--frost);height:2px;transition:left var(--med) var(--ease),width var(--med) var(--ease)}
+.stTabs [data-baseweb="tab-border"]{background:var(--line);height:1px}
+.stTabs [data-baseweb="tab-panel"]{padding-top:var(--s5)}
+
+[data-testid="stExpander"] details{border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+[data-testid="stExpander"] summary{padding:var(--s3) var(--s4)}
+[data-testid="stExpander"] summary p{font-size:14px;font-weight:500}
+[data-testid="stExpander"] summary:hover p{color:var(--ink)}
+[data-testid="stDataFrame"]{border-radius:var(--r);overflow:hidden}
+[data-testid="stPlotlyChart"]{min-height:0}
+[data-testid="stAlert"]{border-radius:var(--r)}
+[data-testid="stButtonGroup"] button{min-height:36px}
+[data-testid="stRadio"] label p{font-size:14px}
+[data-testid="stVerticalBlockBorderWrapper"]{border-color:var(--line)}
+[data-testid="stIFrame"]{border-radius:var(--r);background:#fff}
+
+/* ---------- type ---------- */
+.fl-page{margin:0 0 var(--s5)}
+.fl-kicker{display:flex;align-items:center;gap:var(--s2);font-size:12.5px;font-weight:500;color:var(--ink-3);margin:0 0 var(--s2)}
+.fl-kicker i{width:6px;height:6px;border-radius:1px;background:var(--frost);transform:rotate(45deg);flex:none}
+.fl-title{font-size:28px;line-height:1.18;font-weight:600;letter-spacing:-.022em;color:var(--ink);margin:0 0 var(--s2)}
+.fl-lede{color:var(--ink-2);font-size:15px;line-height:1.6;max-width:72ch;margin:0}
+.fl-section{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s3);margin:var(--s6) 0 var(--s3)}
+.fl-section h3{font-size:15px;line-height:1.3;font-weight:600;letter-spacing:-.008em;margin:0;padding:0}
+.fl-section span{font-size:12.5px;color:var(--ink-3)}
+.fl-label{font-size:12px;font-weight:500;color:var(--ink-3);letter-spacing:.005em}
+.fl-sub{color:var(--ink-2);font-size:14px;line-height:1.6;max-width:80ch}
+.fl-src{color:var(--ink-3);font-size:12px;line-height:1.55;margin-top:var(--s2)}
+.fl-src code,.fl-mono{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:none;padding:0}
+.fl-plain{font-size:14px;line-height:1.6;color:var(--ink-2);margin-top:var(--s4)}
+.fl-plain b{color:var(--ink);font-weight:600}
+.fl-gap{height:var(--s4)}
+
+/* ---------- hero (Observatory) ---------- */
+.fl-hero{padding:var(--s2) 0 var(--s4)}
+.fl-hero h1{font-size:44px;line-height:1.06;font-weight:600;letter-spacing:-.032em;margin:var(--s3) 0 var(--s4);max-width:14ch;padding:0}
+.fl-hero p{font-size:16px;line-height:1.6;color:var(--ink-2);max-width:44ch;margin:0}
+
+/* ---------- badge (evidence state) ---------- */
+.fl-chip{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:var(--r-sm);font-size:12px;font-weight:500;line-height:1;
+  border:1px solid var(--line-strong);color:var(--ink);background:var(--surface-2);white-space:nowrap}
+.fl-chip i{width:6px;height:6px;border-radius:50%;background:var(--muted);flex:none}
+.fl-chip.good i{background:var(--good)}.fl-chip.warn i{background:var(--warn)}.fl-chip.alert i{background:var(--alert)}.fl-chip.neutral i{background:var(--ink-2)}
+.fl-chip.good{border-color:rgba(76,195,138,.4)}.fl-chip.warn{border-color:rgba(229,180,84,.42)}.fl-chip.alert{border-color:rgba(236,131,90,.45)}
+
+/* ---------- panel: one bordered surface; the base of results and charts ---------- */
+.fl-panel{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:var(--s4) var(--s5)}
+.fl-panel-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);flex-wrap:wrap}
+.fl-panel-title{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.01em;margin-top:2px}
+[class*="st-key-fl_frame"]{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:var(--s4) var(--s4) var(--s3)}
+
+.fl-place{margin-top:var(--s3)}
+.fl-place-name{font-size:18px;font-weight:600;letter-spacing:-.015em;color:var(--ink);margin:var(--s1) 0 2px}
+.fl-place-region{font-size:13px;color:var(--ink-2);margin-bottom:var(--s2)}
+
+.fl-matched{display:flex;flex-direction:column;gap:2px;padding-bottom:6px}
+.fl-matched b{font-size:15px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* result */
+.fl-finding{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:var(--s4) var(--s5) var(--s4);margin:0 0 var(--s3)}
+.fl-finding .big{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:var(--s2);font-size:34px;font-weight:600;letter-spacing:-.03em;color:var(--ink);line-height:1.1;margin:var(--s4) 0 var(--s1)}
+.fl-finding .big small{font-size:13.5px;font-weight:500;letter-spacing:0;color:var(--ink-2);line-height:1.4}
+.fl-finding p{color:var(--ink);font-size:14px;line-height:1.6;margin:var(--s3) 0 0}
+.fl-finding p.dim{color:var(--ink-2);font-size:13px;margin-top:var(--s2)}
+.fl-finding .big + p.dim{margin-top:0}
+.fl-finding .fl-src{border-top:1px solid var(--line-soft);margin-top:var(--s4);padding-top:var(--s3)}
+.fl-finding .lead{font-size:15.5px;line-height:1.55}
+
+/* callouts */
+.fl-caveat,.fl-note{display:flex;gap:var(--s3);align-items:flex-start;border-radius:var(--r);padding:var(--s3) var(--s4);font-size:13.5px;line-height:1.6;margin:var(--s3) 0}
+.fl-caveat svg,.fl-note svg{flex:none;margin-top:3px}
+.fl-caveat{background:rgba(229,180,84,.06);border:1px solid rgba(229,180,84,.24);color:var(--ink)}
+.fl-caveat svg{color:var(--warn)}
+.fl-caveat b{color:var(--warn);font-weight:600}
+.fl-note{background:var(--surface);border:1px solid var(--line);color:var(--ink-2)}
+.fl-note svg{color:var(--ink-3)}
+.fl-note b{color:var(--ink);font-weight:600}
+
+/* key-value list */
+.fl-kv{width:100%;border-collapse:collapse;font-size:13.5px;border:0;margin:0!important}
+.fl-kv tr{border:0;background:transparent!important}
+.fl-kv td{padding:10px 0;border:0;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--ink);line-height:1.55}
+.fl-kv tr:last-child td{border-bottom:0}
+.fl-kv td:first-child{color:var(--ink-3);width:38%;padding-right:var(--s4);font-weight:500}
+
+/* ruled grid: cells share hairlines instead of floating as separate cards */
+.fl-grid{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;margin:0 0 var(--s3)}
+.fl-grid>div{padding:var(--s4) var(--s5);min-width:0;box-shadow:1px 0 0 var(--line),0 1px 0 var(--line)}   /* hairlines; the outer ones are clipped */
+.fl-metric .k{font-size:12px;font-weight:500;color:var(--ink-3);margin-bottom:var(--s3)}
+.fl-metric .v{font-size:28px;font-weight:600;letter-spacing:-.028em;color:var(--ink);line-height:1.1}
+.fl-metric .u{font-size:13px;color:var(--ink-2);margin-top:2px}
+.fl-metric .d{font-size:13px;color:var(--ink-2);line-height:1.55;margin-top:var(--s3)}
+.fl-metric .s{font-size:11.5px;color:var(--ink-3);margin-top:var(--s3)}
+.fl-dimcell .h{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s2);margin-bottom:var(--s2)}
+.fl-dimcell .h b{font-size:14px;font-weight:600;color:var(--ink);letter-spacing:-.006em;line-height:1.4}
+.fl-dimcell .s{color:var(--ink);font-size:13.5px;line-height:1.55;margin-bottom:var(--s2)}
+.fl-dimcell ul{margin:0;padding-left:16px}.fl-dimcell li{color:var(--ink-2);font-size:12.5px;line-height:1.55;margin-bottom:2px}
+.fl-dimcell .fl-src{margin-top:var(--s3)}
+
+/* plain card (used sparingly: one location, one variable) */
+.fl-card{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:var(--s4) var(--s5);height:100%}
+.fl-card .k{font-size:12px;font-weight:500;color:var(--ink-3);margin-bottom:var(--s2)}
+.fl-card h4{font-size:15px;font-weight:600;color:var(--ink);margin:0 0 var(--s2);padding:0;letter-spacing:-.01em}
+.fl-card p{color:var(--ink-2);font-size:13.5px;line-height:1.6;margin:0}
+.fl-card p + p{margin-top:var(--s2)}
+
+.fl-rec{display:flex;flex-direction:column;margin-bottom:var(--s2);min-height:236px}
+.fl-rec p.fit{color:var(--ink)}
+.fl-rec .fl-src{margin-top:auto;padding-top:var(--s3)}
+/* question picker: a selectable list instead of bare radio dots */
+.st-key-fl_qpick [role="radiogroup"]{gap:0;border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;width:100%}
+.st-key-fl_qpick [role="radiogroup"]>div{border-top:1px solid var(--line);background:var(--surface);transition:background-color var(--fast) var(--ease)}
+.st-key-fl_qpick [role="radiogroup"]>div:first-child{border-top:0}
+.st-key-fl_qpick [role="radiogroup"]>div:hover{background:var(--surface-2)}
+.st-key-fl_qpick [role="radiogroup"]>div[data-selected="true"]{background:var(--frost-tint)}
+.st-key-fl_qpick [data-testid="stRadioOption"]{display:flex;align-items:center;width:100%;min-height:46px;margin:0;padding:10px var(--s4);cursor:pointer}
+.st-key-fl_qpick [role="radiogroup"]>div[data-selected="true"] p{color:var(--ink);font-weight:500}
+.st-key-fl_qpick [role="radiogroup"] p{font-size:14px;color:var(--ink-2)}
+
+/* entry rows (Observatory) */
+.fl-rows{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.fl-rows>div{display:grid;grid-template-columns:28px 1fr;gap:var(--s3);padding:var(--s4) var(--s5);background:var(--surface);border-top:1px solid var(--line)}
+.fl-rows>div:first-child{border-top:0}
+.fl-rows .n{font-family:var(--mono);font-size:12px;color:var(--ink-3);padding-top:2px}
+.fl-rows .k{font-size:12px;color:var(--ink-3);margin-bottom:2px}
+.fl-rows h4{font-size:15px;font-weight:600;margin:0 0 var(--s1);padding:0;color:var(--ink);letter-spacing:-.01em}
+.fl-rows p{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0}
+
+/* stepper */
+.fl-steps{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);list-style:none;margin:var(--s3) 0 0;padding:0;counter-reset:s}
+.fl-steps li{display:flex;align-items:center;gap:var(--s2);font-size:13px;color:var(--ink-3);margin:0;padding:0;counter-increment:s}
+.fl-steps li::before{content:counter(s);display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1px solid var(--line-strong);font-size:11px;font-weight:600;color:var(--ink-3);font-family:var(--sans)}
+.fl-steps li.done{color:var(--ink-2)}
+.fl-steps li.done::before{background:var(--surface-3);color:var(--ink-2);border-color:var(--line-strong)}
+.fl-steps li.on{color:var(--ink);font-weight:500}
+.fl-steps li.on::before{background:var(--frost);border-color:var(--frost);color:var(--frost-ink)}
+.fl-progress{height:2px;background:var(--line);border-radius:2px;overflow:hidden;margin:var(--s4) 0 0}
+.fl-progress i{display:block;height:100%;background:var(--frost);transition:width var(--med) var(--ease)}
+
+/* evidence layers */
+.fl-layer{padding:0 0 0 var(--s4);margin:0 0 var(--s5);border-left:1px solid var(--line-strong)}
+.fl-layer b{color:var(--ink);font-size:14px;font-weight:600;letter-spacing:-.006em}
+.fl-layer .q{color:var(--ink-3);font-size:12.5px;margin:2px 0 var(--s2)}
+.fl-layer li{color:var(--ink-2);font-size:13.5px;line-height:1.6;margin-bottom:2px}
+.fl-layer ul{margin:0;padding-left:16px}
+
+/* footer */
+.fl-foot{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);justify-content:space-between;color:var(--ink-3);font-size:12px;line-height:1.6;border-top:1px solid var(--line-soft);margin-top:var(--s7);padding-top:var(--s4)}
+.fl-foot p{max-width:96ch;margin:0}
+.fl-foot b{color:var(--ink-2);font-weight:500}
+
+/* ---------- mobile tab bar (phones only) ---------- */
+.st-key-fl_tabbar{display:none}
+
+/* ---------- motion: content settles in once, on navigation ---------- */
+@keyframes fl-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.fl-page,.fl-hero{animation:fl-in var(--med) var(--ease) both}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .fl-grid{--cols:2!important}
+  [data-testid="stMainBlockContainer"],.block-container{padding-left:var(--s5);padding-right:var(--s5)}
+}
+@media (max-width:767px){
+  [data-testid="stMainBlockContainer"],.block-container{padding:calc(56px + var(--s5)) var(--s4) calc(var(--tabbar-h) + var(--s6) + env(safe-area-inset-bottom))}
+  .fl-hero h1{font-size:32px;max-width:none}
+  .fl-hero p{font-size:15px}
+  .fl-title{font-size:23px}
+  .fl-finding .big{font-size:30px}
+  .fl-grid>div,.fl-panel,.fl-finding,.fl-card{padding:var(--s4)}
+  .fl-rows>div{padding:var(--s4)}
+  .fl-metric .v{font-size:24px}
+  .fl-section{margin-top:var(--s5);flex-direction:column;align-items:flex-start;gap:2px}
+  .fl-rec{min-height:0}
+  .fl-kv tr,.fl-kv td{display:block;width:100%!important}
+  .fl-kv td:first-child{padding:var(--s3) 0 0;border-bottom:0;font-size:12px}
+  .fl-kv td:last-child{padding-top:2px}
+  button[data-testid^="stBaseButton"]{min-height:44px}
+  [data-baseweb="select"]>div{min-height:44px}
+  .stTabs [data-baseweb="tab"]{height:44px}
+  /* bottom tab bar: the five most used destinations; everything else stays in the menu */
+  .st-key-fl_tabbar{display:flex!important;position:fixed;left:0;right:0;bottom:0;z-index:999990;flex-wrap:nowrap!important;gap:0!important;
+    justify-content:space-around;align-items:stretch;background:var(--bg-side);border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(0,0,0,.35);
+    padding:0 var(--s1) env(safe-area-inset-bottom);height:calc(var(--tabbar-h) + env(safe-area-inset-bottom))}
+  .st-key-fl_tabbar>div{flex:1 1 0;min-width:0;width:auto!important}
+  .st-key-fl_tabbar [data-testid="stPageLink"]{height:100%}
+  .st-key-fl_tabbar a{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:var(--tabbar-h);min-width:44px;
+    padding:0!important;margin:0;border-radius:0;background:transparent!important}
+  .st-key-fl_tabbar a span{margin:0!important}
+  .st-key-fl_tabbar a [data-testid="stIconMaterial"]{font-size:22px;color:var(--ink-3)}
+  .st-key-fl_tabbar a p{font-size:11px!important;font-weight:500;color:var(--ink-3);white-space:nowrap}
+  .st-key-fl_tabbar [class*="st-key-fl_tab_on"] a [data-testid="stIconMaterial"],.st-key-fl_tabbar [class*="st-key-fl_tab_on"] a p{color:var(--frost)}
+}
+@media (max-width:480px){
+  .fl-grid{--cols:1!important}
+  .fl-hero h1{font-size:30px}
+  .fl-finding .big{font-size:28px}
+}
 </style>
 """
+
+ICON = {
+    # one stroke family: 16px grid, 1.5px stroke, round caps
+    "info": "<svg width='16' height='16' viewBox='0 0 16 16' fill='none' aria-hidden='true'><circle cx='8' cy='8' r='6.25' stroke='currentColor' stroke-width='1.5'/><path d='M8 7.2v3.6M8 5.2v.1' stroke='currentColor' stroke-width='1.5' stroke-linecap='round'/></svg>",
+    "alert": "<svg width='16' height='16' viewBox='0 0 16 16' fill='none' aria-hidden='true'><path d='M8 2.2 14.3 13.3H1.7z' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'/><path d='M8 6.6v3M8 11.4v.1' stroke='currentColor' stroke-width='1.5' stroke-linecap='round'/></svg>",
+}
 
 
 def esc(s) -> str:
@@ -98,6 +332,11 @@ def html(body: str) -> None:
 
 def inject_theme() -> None:
     st.markdown(CSS, unsafe_allow_html=True)
+
+
+def brand() -> None:
+    """The Frostline mark in the header and the sidebar (an original SVG; no third-party logo)."""
+    st.logo(os.path.join(ASSETS, "wordmark.svg"), icon_image=os.path.join(ASSETS, "mark.svg"), size="medium")
 
 
 # ------------------------------------------------------------------ state
@@ -186,8 +425,7 @@ def console(ds, where=None) -> Investigation:
     locs = an.locations(ds)
     prim = [l.id for l in primary_locations(locs)]
     with box:
-        html(f"<div class='fl-brand'>{APP_NAME.upper()}<span>by {TEAM_NAME}</span></div><div class='fl-src' style='margin:.25rem 0 1.1rem'>{TAGLINE}</div>")
-        html("<div class='fl-eyebrow'>Current investigation</div>")
+        html(f"<div class='fl-side-team'><b>by {TEAM_NAME}</b><br>{TAGLINE}</div><div class='fl-side-h'>Current investigation</div>")
         ss["w_loc"] = ss["loc"]
         st.selectbox("Location", prim, format_func=lambda i: locs[i].road_name, key="w_loc", on_change=_on_loc, args=(ds,),
                      help="The two documented case studies. Statistics, charts and the Evidence Brief all follow this choice.")
@@ -217,10 +455,10 @@ def console(ds, where=None) -> Investigation:
         inv = current()
         f = an.trend(ds, inv.location_id, inv.variable_id, inv.first, inv.last)
         fixed = an.is_fixed_window(inv.variable_id, inv.first, inv.last)
-        html(f"<div style='margin:.7rem 0 .3rem'>{chip(f.state_label, STATE_TONE[f.state])}</div>"
-             f"<div class='fl-src'>{fmt.period(inv.first, inv.last)} · n = {f.n} winters · "
-             f"{'approved fixed window' if fixed else 'user-selected window: exploratory, not adjusted for multiple testing'}</div>")
-        html(f"<div class='fl-src' style='margin-top:1.2rem'>Data digest {ds.digest} · all values from the approved files in UI/data_real · no live download</div>")
+        html(f"<div class='fl-side-status'>{chip(f.state_label, STATE_TONE[f.state])}"
+             f"<div class='meta'>{fmt.period(inv.first, inv.last)} · n = {f.n} winters · "
+             f"{'approved fixed window' if fixed else 'user-selected window: exploratory, not adjusted for multiple testing'}</div></div>")
+        html(f"<div class='fl-side-digest'>Data digest <code>{ds.digest}</code> · all values from the approved files in UI/data_real · no live download</div>")
     return inv
 
 
@@ -229,16 +467,36 @@ def chip(label: str, tone: str = "neutral") -> str:
     return f"<span class='fl-chip {tone}'><i></i>{esc(label)}</span>"
 
 
+def kicker(text: str) -> str:
+    return f"<div class='fl-kicker'><i></i>{esc(text)}</div>"
+
+
 def page_header(eyebrow: str, title: str, lede: str = "") -> None:
-    html(f"<div class='fl-eyebrow'>{esc(eyebrow)}</div><div class='fl-title'>{esc(title)}</div>" + (f"<p class='fl-lede'>{esc(lede)}</p>" if lede else ""))
+    html(f"<header class='fl-page'>{kicker(eyebrow) if eyebrow else ''}<div class='fl-title' role='heading' aria-level='1'>{esc(title)}</div>"
+         + (f"<p class='fl-lede'>{esc(lede)}</p>" if lede else "") + "</header>")
+
+
+def section(title: str, aside: str = "") -> None:
+    """A section heading inside a view."""
+    html(f"<div class='fl-section'><h3>{esc(title)}</h3>" + (f"<span>{esc(aside)}</span>" if aside else "") + "</div>")
+
+
+def caption(text: str, top: bool = False) -> None:
+    style = " style='margin-top:0'" if top else ""
+    html(f"<div class='fl-src'{style}>{esc(text)}</div>")
 
 
 def caveat(text: str, label: str = "Caveat") -> None:
-    html(f"<div class='fl-caveat'><b>{esc(label)}.</b> {esc(text)}</div>")
+    html(f"<div class='fl-caveat' role='note'>{ICON['alert']}<div><b>{esc(label)}.</b> {esc(text)}</div></div>")
 
 
-def note(text: str) -> None:
-    html(f"<div class='fl-note'>{esc(text)}</div>")
+def note(text: str, label: str = "") -> None:
+    html(f"<div class='fl-note' role='note'>{ICON['info']}<div>" + (f"<b>{esc(label)}.</b> " if label else "") + f"{esc(text)}</div></div>")
+
+
+def plain_language(ds, f) -> None:
+    """The plain-language reading of a finding, shown under its chart."""
+    note(f"{an.plain_language(ds, f)} {f.sentence}", "In plain language")
 
 
 def bias_caveat(ds) -> None:
@@ -257,32 +515,45 @@ def kv_table(rows) -> str:
     return "<table class='fl-kv'>" + "".join(f"<tr><td>{esc(k)}</td><td>{esc(v)}</td></tr>" for k, v in rows) + "</table>"
 
 
+def _head(label: str, badge: str = "") -> str:
+    return f"<div class='fl-panel-head'><span class='fl-label'>{esc(label)}</span>{badge}</div>"
+
+
 def finding_card(ds, f: an.Finding, title: str | None = None, show_table: bool = True) -> None:
     """One result with everything the contract requires beside it: n, period, units, intervals, p, q, status and provenance."""
     var, loc = VARIABLES[f.variable_id], an.locations(ds)[f.location_id]
     tone = STATE_TONE[f.state]
     d = var.slope_decimals
-    head = f"<div style='display:flex;justify-content:space-between;gap:.6rem;align-items:center;flex-wrap:wrap'><span class='fl-eyebrow' style='margin:0'>{esc(title or var.short + ' · ' + loc.short)}</span>{chip(f.state_label, tone)}</div>"
+    head = _head(title or var.short + " · " + loc.short, chip(f.state_label, tone))
     if f.estimated:
         big = (f"<div class='big'>{fmt.num(f.slope, d, True)}<small>{esc(var.unit_per_decade)} · {esc(f.direction)}</small></div>"
                f"<p class='dim'>95% interval {fmt.interval(f.ci_low, f.ci_high, d)} · n = {f.n} winters · {fmt.period(f.first, f.last)}</p>")
     else:
         big = f"<div class='big'>Not estimated</div><p class='dim'>n = {f.n} winters · {fmt.period(f.first, f.last)}</p>"
     body = f"<p>{esc(f.sentence)}</p>" + "".join(f"<p class='dim'>{esc(s)}</p>" for s in f.extra_sentences)
-    html(f"<div class='fl-finding {tone}'>{head}{big}{body}<div class='fl-src'>{esc(provenance_line(ds, var, loc))}</div></div>")
+    html(f"<section class='fl-finding {tone}'>{head}{big}{body}<div class='fl-src'>{esc(provenance_line(ds, var, loc))}</div></section>")
     if show_table:
-        html(kv_table(brief_mod.stat_rows(ds, f)))
+        with st.expander("Full statistical record", expanded=True):
+            html(kv_table(brief_mod.stat_rows(ds, f)))
     if var.is_temperature:
         bias_caveat(ds)
 
 
+def result_panel(label: str, badge: str, value: str = "", unit: str = "", meta: str = "", paragraphs=(), dim=(), source: str = "", tone: str = "neutral", lead: bool = False) -> None:
+    """A result-shaped panel for values that are not a single trend Finding (a comparison, an association, a conclusion)."""
+    big = f"<div class='big'>{esc(value)}" + (f"<small>{esc(unit)}</small>" if unit else "") + "</div>" if value else ""
+    meta_html = f"<p class='dim'>{esc(meta)}</p>" if meta else ""
+    body = "".join(f"<p class='{'lead' if lead and i == 0 else ''}'>{esc(p)}</p>" for i, p in enumerate(paragraphs)) + "".join(f"<p class='dim'>{esc(p)}</p>" for p in dim)
+    html(f"<section class='fl-finding {tone}'>{_head(label, badge)}{big}{meta_html}{body}" + (f"<div class='fl-src'>{esc(source)}</div>" if source else "") + "</section>")
+
+
 def dimension_cards(report: ev.EvidenceReport, columns: int = 2) -> None:
-    cols = st.columns(columns)
-    for i, d in enumerate(report.dimensions):
-        with cols[i % columns]:
-            html(f"<div class='fl-dim'><div class='h'><b>{esc(d.title)}</b>{chip(d.state, d.tone)}</div><div class='s'>{esc(d.summary)}</div><ul>"
-                 + "".join(f"<li>{esc(r)}</li>" for r in d.reasons) + "</ul>"
-                 + (f"<div class='fl-src'>From: {esc(', '.join(d.sources))}</div>" if d.sources else "") + "</div>")
+    cells = []
+    for d in report.dimensions:
+        cells.append(f"<div class='fl-dimcell'><div class='h'><b>{esc(d.title)}</b>{chip(d.state, d.tone)}</div><div class='s'>{esc(d.summary)}</div><ul>"
+                     + "".join(f"<li>{esc(r)}</li>" for r in d.reasons) + "</ul>"
+                     + (f"<div class='fl-src'>From: {esc(', '.join(d.sources))}</div>" if d.sources else "") + "</div>")
+    html(f"<div class='fl-grid' style='--cols:{columns}'>" + "".join(cells) + "</div>")
 
 
 def layer_blocks(report: ev.EvidenceReport, keys=None) -> None:
@@ -296,23 +567,48 @@ def steps(labels, active: int | None = None) -> None:
     parts = []
     for i, lab in enumerate(labels):
         cls = "on" if active == i else "done" if (active is not None and i < active) else ""
-        parts.append(f"<span class='{cls}'>{esc(lab)}</span>")
-    html("<div class='fl-steps'>" + "<em>→</em>".join(parts) + "</div>")
+        parts.append(f"<li class='{cls}'" + (" aria-current='step'" if active == i else "") + f">{esc(lab)}</li>")
+    bar = f"<div class='fl-progress' aria-hidden='true'><i style='width:{(active + 1) / len(labels) * 100:.1f}%'></i></div>" if active is not None else ""
+    html("<ol class='fl-steps'>" + "".join(parts) + "</ol>" + bar)
 
 
-def card(kicker: str, title: str, text: str) -> str:
-    return f"<div class='fl-card'><div class='k'>{esc(kicker)}</div><h4>{esc(title)}</h4><p>{esc(text)}</p></div>"
+def card(kicker_text: str, title: str, text: str) -> str:
+    return f"<div class='fl-card'><div class='k'>{esc(kicker_text)}</div><h4>{esc(title)}</h4><p>{esc(text)}</p></div>"
 
 
-def stat_card(kicker: str, value: str, unit: str, sub: str, source: str) -> str:
-    return (f"<div class='fl-card'><div class='k'>{esc(kicker)}</div><div class='fl-stat'>{esc(value)}<small>{esc(unit)}</small></div>"
-            f"<div class='fl-sub'>{esc(sub)}</div><div class='fl-src'>{esc(source)}</div></div>")
+def _metric_cell(kicker_text: str, value: str, unit: str, sub: str, source: str) -> str:
+    return (f"<div class='fl-metric'><div class='k'>{esc(kicker_text)}</div><div class='v'>{esc(value)}</div><div class='u'>{esc(unit)}</div>"
+            f"<div class='d'>{esc(sub)}</div><div class='s'>{esc(source)}</div></div>")
+
+
+def stat_card(kicker_text: str, value: str, unit: str, sub: str, source: str) -> str:
+    """A single metric on its own surface."""
+    return f"<div class='fl-grid' style='--cols:1'>{_metric_cell(kicker_text, value, unit, sub, source)}</div>"
+
+
+def metrics(items) -> None:
+    """A row of metrics in one ruled strip. items: (kicker, value, unit, description, source)."""
+    items = list(items)
+    html(f"<div class='fl-grid' style='--cols:{len(items)}'>" + "".join(_metric_cell(*i) for i in items) + "</div>")
 
 
 def footer() -> None:
-    html(f"<div class='fl-foot'>{APP_NAME} by {TEAM_NAME} · NASA Space Apps Challenge 2026, Be An Earth System Trend Detective! · "
+    html(f"<footer class='fl-foot'><p><b>{APP_NAME} by {TEAM_NAME}</b> · NASA Space Apps Challenge 2026, Be An Earth System Trend Detective! · "
          "An exploratory scientific investigation tool. It does not assess road safety, measure ice or predict opening dates, and it makes no statement of cause. "
-         "Built with AI assistance; see Methods and sources for the disclosure. NASA does not endorse this project.</div>")
+         "Built with AI assistance; see Methods and sources for the disclosure. NASA does not endorse this project.</p></footer>")
+
+
+TABBAR = [("observatory", "Home", ":material/home:"), ("detective", "Trends", ":material/show_chart:"), ("corridor", "Corridor", ":material/route:"),
+          ("evidence", "Evidence", ":material/fact_check:"), ("brief", "Brief", ":material/description:")]
+
+
+def tabbar(active_key: str | None) -> None:
+    """Bottom tab bar for phones (hidden by CSS above 767px). Same pages as the top navigation, so the session state is kept."""
+    with st.container(key="fl_tabbar", horizontal=True, gap=None):
+        for key, label, icon in TABBAR:
+            if key in PAGES:
+                with st.container(key=f"fl_tab_on_{key}" if key == active_key else f"fl_tab_{key}"):
+                    st.page_link(PAGES[key], label=label, icon=icon)
 
 
 def plot(fig, key: str) -> None:

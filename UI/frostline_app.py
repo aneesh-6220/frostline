@@ -17,8 +17,9 @@ import streamlit as st  # noqa: E402
 from frostline import APP_NAME, TEAM_NAME, data, ui  # noqa: E402
 from frostline.views import atlas, brief_view, compare, corridor, demo, detective, evidence_view, methods, observatory, questions  # noqa: E402
 
-st.set_page_config(page_title="Frostline - by Strongest Soldiers", page_icon=":material/ac_unit:", layout="wide", initial_sidebar_state="auto")
+st.set_page_config(page_title="Frostline - by Strongest Soldiers", page_icon=os.path.join(ui.ASSETS, "mark.svg"), layout="wide", initial_sidebar_state="auto")
 ui.inject_theme()
+ui.brand()
 
 try:
     ds = data.load_dataset()
@@ -65,3 +66,4 @@ except data.DataError as exc:
     st.error(f"This view cannot be shown: data file **{exc.filename}** failed a consistency check ({exc.reason}). No values are displayed for it.", icon=":material/error:")
     st.stop()
 ui.footer()
+ui.tabbar(next((k for k, p in ui.PAGES.items() if p.title == nav.title), None))

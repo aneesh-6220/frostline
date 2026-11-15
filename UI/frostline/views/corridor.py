@@ -51,19 +51,21 @@ def render(ds):
     ui.page_header(f"Corridor investigation · {ROAD_KIND_LABEL[loc.road_kind]}", loc.name, loc.setting)
     c = st.columns([1.2, 1], gap="large")
     with c[0]:
-        ui.html(ui.kv_table([("Community connection", loc.access), ("Sampling point", loc.sampling_point), ("Station check", loc.station)]))
+        ui.html("<div class='fl-panel'>" + ui.kv_table([("Community connection", loc.access), ("Sampling point", loc.sampling_point), ("Station check", loc.station)]) + "</div>")
     with c[1]:
         ui.caveat(loc.caution, "Read this first")
         ui.caveat(an.T_ROAD, "About the road record")
 
+    st.write("")
     tabs = st.tabs(["Road history", "Environmental record", "Timeline", "Associations", "All NWT routes", "Evidence conclusion"])
 
     with tabs[0]:
-        ui.html("<div class='fl-eyebrow'>Road-operations results · government record</div>")
+        ui.html(ui.kicker("Road-operations results · government record"))
         rv = st.segmented_control("Road measure", list(ROAD_VARS), default=inv.variable_id if inv.variable_id in ROAD_VARS else "open_day",
                                   format_func=lambda i: VARIABLES[i].short, key="cor_road_var", required=True) or "open_day"
         full, nasa = an.trend(ds, loc.id, rv, 1993, 2024), an.trend(ds, loc.id, rv, 2001, 2024)
-        ui.plot(charts.trend_chart(ds, full, height=380), key="cor_road_chart")
+        with st.container(key="fl_frame_cor_road"):
+            ui.plot(charts.trend_chart(ds, full, height=380), key="cor_road_chart")
         cc = st.columns(2)
         with cc[0]:
             ui.finding_card(ds, full, title=f"{VARIABLES[rv].short} · full record")
@@ -76,13 +78,14 @@ def render(ds):
                                    for r in an.road_record(ds, loc.id).itertuples()]), hide_index=True, height=260)
 
     with tabs[1]:
-        ui.html("<div class='fl-eyebrow'>Environmental results · NASA reanalysis</div>")
+        ui.html(ui.kicker("Environmental results · NASA reanalysis"))
         evv = st.segmented_control("Environmental variable", list(ENV_VARS), default=inv.variable_id if inv.variable_id in ENV_VARS else "fdd_octdec",
                                    format_func=lambda i: VARIABLES[i].short, key="cor_env_var", required=True) or "fdd_octdec"
         fe = an.trend(ds, loc.id, evv, 2001, 2024)
         cc = st.columns([1.6, 1], gap="large")
         with cc[0]:
-            ui.plot(charts.trend_chart(ds, fe, height=380), key="cor_env_chart")
+            with st.container(key="fl_frame_cor_env"):
+                ui.plot(charts.trend_chart(ds, fe, height=380), key="cor_env_chart")
         with cc[1]:
             ui.finding_card(ds, fe, show_table=False)
         t = ds.facts["thaw"][loc.id]
@@ -90,18 +93,19 @@ def render(ds):
                 "the reanalysis runs cold, so zero NASA thaw days does not mean no thaw.")
 
     with tabs[2]:
-        ui.html("<div class='fl-eyebrow'>Environmental and operational timeline</div>"
-                "<div class='fl-sub'>Two panels on one winter axis, each with its own units. The upper panel is NASA data; the lower panel is the government record.</div>")
+        ui.html(ui.kicker("Environmental and operational timeline") +
+                "<p class='fl-sub'>Two panels on one winter axis, each with its own units. The upper panel is NASA data; the lower panel is the government record.</p>")
         cc = st.columns([1, 1])
         tv = cc[0].selectbox("Environmental variable", list(ENV_VARS), format_func=lambda i: VARIABLES[i].label, key="cor_tl_var")
         rec = an.road_record(ds, loc.id)
         years = [int(y) for y in rec.season_start_year]
         yr = cc[1].select_slider("Inspect a winter", options=years, value=years[-1], format_func=fmt.winter, key="cor_tl_year")
-        ui.plot(charts.timeline_chart(ds, loc.id, tv, highlight=yr), key="cor_timeline")
+        with st.container(key="fl_frame_cor_timeline"):
+            ui.plot(charts.timeline_chart(ds, loc.id, tv, highlight=yr), key="cor_timeline")
         ov = an.window_overlap(ds, loc.id)
         cc = st.columns([1, 1], gap="large")
         with cc[0]:
-            ui.html(f"<div class='fl-eyebrow'>Winter {fmt.winter(yr)}</div>" + ui.kv_table(season_record(ds, loc.id, yr)))
+            ui.html(f"<div class='fl-panel'><div class='fl-place-name'>Winter {fmt.winter(yr)}</div>" + ui.kv_table(season_record(ds, loc.id, yr)) + "</div>")
         with cc[1]:
             if ov:
                 ui.caveat(f"In {ov['n_overlap']} of {ov['n_winters']} winters the road opened on or before Dec 31 (bars that start below the dotted line). In those winters the Oct to Dec "
@@ -110,9 +114,9 @@ def render(ds):
                     "Each bar runs from the recorded opening to the recorded closing; temporary closures are not recorded.")
 
     with tabs[3]:
-        ui.html("<div class='fl-eyebrow'>Exploratory associations · association, not cause</div>"
-                "<div class='fl-sub'>Spearman rank correlations between NASA climate predictors and road dates. Each predictor window ends the day before the earliest opening "
-                "(or closing) ever recorded for the road, so it never includes information from after the outcome.</div>")
+        ui.html(ui.kicker("Exploratory associations · association, not cause") +
+                "<p class='fl-sub'>Spearman rank correlations between NASA climate predictors and road dates. Each predictor window ends the day before the earliest opening "
+                "(or closing) ever recorded for the road, so it never includes information from after the outcome.</p><div class='fl-gap'></div>")
         a = an.associations(ds, loc.id)
         st.dataframe(pd.DataFrame({"Predictor": a.climate_metric, "Window": a.predictor_window, "Road outcome": a.road_metric,
                                    "Spearman rho": [fmt.num(v, 2, True) for v in a.spearman_rho], "95% interval (block bootstrap)": [fmt.interval(x, y, 2) for x, y in zip(a.ci95_low, a.ci95_high)],
@@ -123,23 +127,22 @@ def render(ds):
             ui.html(f"<div class='fl-src'>Why the windows are short: the full Oct 1 to Dec 31 window reached or passed the {ui.esc(loc.short)} opening date in {ov['n_overlap']} of {ov['n_winters']} winters (leakage_audit.csv), so pairs using it were removed.</div>")
         if loc.id == "dettah_bay":
             s = ds.facts["snow"]
-            st.write("")
-            ui.html("<div class='fl-eyebrow'>Snow hypothesis · hypothesis, not a cause</div>")
+            ui.section("Snow hypothesis · hypothesis, not a cause")
             cc = st.columns([1.5, 1], gap="large")
             with cc[0]:
-                ui.plot(charts.snow_chart(ds), key="cor_snow")
+                with st.container(key="fl_frame_cor_snow"):
+                    ui.plot(charts.snow_chart(ds), key="cor_snow")
             with cc[1]:
-                ui.html(f"<div class='fl-finding warn'><div class='fl-eyebrow' style='margin:0'>Snow on the ground, Nov 28 · Dettah opening day</div>"
-                        f"<div class='big'>{fmt.num(s['sog_nov28_rho'], 2, True)}<small>Spearman rho</small></div>"
-                        f"<p class='dim'>95% interval {fmt.interval(s['lo'], s['hi'], 2)} · n = {s['n']} winters · q = {fmt.pval(s['q'])} in a family of 5 snow predictors</p>"
-                        f"<p>Winters with more snow on the ground at the airport on Nov 28 tended to have later openings. The snow series itself has no detectable trend "
-                        f"({fmt.num(s['trend_cm_per_decade'], 1, True)} cm per decade, 95% interval {fmt.interval(s['trend_lo'], s['trend_hi'], 1)}), so the record does not show that snow cover changed. "
-                        "This is a hypothesis for further study, not a mechanism.</p><div class='fl-src'>ECCC Yellowknife A station and NWT Table 108</div></div>")
+                ui.result_panel("Snow on the ground, Nov 28 · Dettah opening day", ui.chip("Hypothesis", "warn"), fmt.num(s['sog_nov28_rho'], 2, True), "Spearman rho",
+                                f"95% interval {fmt.interval(s['lo'], s['hi'], 2)} · n = {s['n']} winters · q = {fmt.pval(s['q'])} in a family of 5 snow predictors",
+                                [f"Winters with more snow on the ground at the airport on Nov 28 tended to have later openings. The snow series itself has no detectable trend "
+                                 f"({fmt.num(s['trend_cm_per_decade'], 1, True)} cm per decade, 95% interval {fmt.interval(s['trend_lo'], s['trend_hi'], 1)}), so the record does not show that snow cover changed. "
+                                 "This is a hypothesis for further study, not a mechanism."], source="ECCC Yellowknife A station and NWT Table 108", tone="warn")
 
     with tabs[4]:
-        ui.html("<div class='fl-eyebrow'>Selection-adjusted view · all NWT routes</div>"
-                "<div class='fl-sub'>Dettah was chosen after its trend had been seen. To adjust for that, the same test is run for every NWT route with at least 15 verified winters "
-                "(17 routes, 3 measures, 51 tests) and corrected across all of them.</div>")
+        ui.html(ui.kicker("Selection-adjusted view · all NWT routes") +
+                "<p class='fl-sub'>Dettah was chosen after its trend had been seen. To adjust for that, the same test is run for every NWT route with at least 15 verified winters "
+                "(17 routes, 3 measures, 51 tests) and corrected across all of them.</p><div class='fl-gap'></div>")
         st.session_state.setdefault("cor_all_metric", "open_day")
         metric = st.segmented_control("Road measure", list(ROAD_VARS), format_func=lambda i: VARIABLES[i].short, key="cor_all_metric", required=True) or "open_day"
         window = st.radio("Window", ["1993/94 to 2024/25 (all-route family of 51 tests)", "2001/02 to 2024/25 (nine corridors with NASA data)"], key="cor_all_window", horizontal=True)
@@ -163,11 +166,10 @@ def render(ds):
                     "shown on each corridor's own result card and under Evidence Engine, Multiple testing.")
 
     with tabs[5]:
-        ui.html("<div class='fl-eyebrow'>Evidence conclusion</div>")
-        ui.html("<div class='fl-finding'>" + "".join(f"<p>{ui.esc(s)}</p>" for s in ev.corridor_conclusion(ds, loc.id)) + "</div>")
-        ui.html("<div class='fl-src'>Each sentence is generated from the computed results above; none is typed for a particular case.</div>")
-        b = st.columns(2)
-        if b[0].button("Audit this evidence", icon=":material/fact_check:", width="stretch", key="cor_ev"):
-            ui.goto("evidence")
-        if b[1].button("Export the Evidence Brief", type="primary", icon=":material/description:", width="stretch", key="cor_brief"):
-            ui.goto("brief")
+        ui.result_panel(f"Evidence conclusion · {loc.short}", "", paragraphs=ev.corridor_conclusion(ds, loc.id), lead=True,
+                        source="Each sentence is generated from the computed results above; none is typed for a particular case.")
+        with st.container(horizontal=True, gap="small"):
+            if st.button("Audit this evidence", key="cor_ev"):
+                ui.goto("evidence")
+            if st.button("Export the Evidence Brief", type="primary", key="cor_brief"):
+                ui.goto("brief")
