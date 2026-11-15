@@ -25,7 +25,9 @@ The Background text names MERRA-2 and GLDAS as example models and MODIS, OMI, AI
 | AI ("Super Intelligence") use | Allowed; the submission must describe how such tools were used during development. Frostline code and docs were produced with AI assistance and this must be disclosed in the submission. | VERIFIED (FAQ) |
 | Team rules | Teams of 1 to 6 for Local Events; one team, one challenge. Local event date, time and judging format (Halifax, Sun 2026-11-15 3 PM) come from the team brief and were not re-verified on the Local Events page. | PARTLY VERIFIED |
 
-## NASA Global Award resource requirement: NOT YET DEMONSTRATED (updated 2026-11-14 evening)
+## NASA Global Award resource requirement: Giovanni data now used in the app; organizer confirmation pending (updated 2026-11-15)
+
+Update 2026-11-15: the team exported MERRA-2 M2TMNXSLV v5.12.4 T2M monthly means (1980 to 2025) for the Dettah / Yellowknife cell from NASA Giovanni. The files were inspected, checksummed, ingested and are used in the app (Giovanni record view, Methods, Dettah Evidence Brief); details in `DATA_SOURCES.md`. Whether this satisfies the Global Award rule is for the organizers to decide; ask at the Halifax event. The history below is kept as it was written.
 
 The team supplied the official Resources list (it matches the verbatim list above). The Global Award guidance, as relayed by the team, requires meaningful use of at least one NASA data source from the chosen challenge's Resources. The NASA-listed sources are Giovanni, Hydrology Time Series (GES DISC), AppEEARS and NOAA Climate Data Online (the last is NOAA, not NASA). The challenge text also names MERRA-2 as a suitable model.
 
@@ -33,7 +35,7 @@ The team supplied the official Resources list (it matches the verbatim list abov
 |---|---|---|
 | Does our current data path use a listed NASA source? | No. The temperatures come from NASA POWER, which is not on the list. POWER's meteorology is MERRA-2, a product that Giovanni also serves, but our files were not obtained through Giovanni, so the listed-source requirement is **not demonstrated**. This repository must not describe it as met. | NOT DEMONSTRATED |
 | Is POWER/MERRA-2 scientifically appropriate for the challenge? | Yes on the challenge's own wording (model variables are allowed). This is separate from the Global Award rule. | PLAUSIBLE |
-| Giovanni extraction (this review) | Attempted. The Giovanni page loads, but Earthdata Login is required to plot or download and no signed-in session exists in the review browser. Credentials must not be entered by an assistant. No data were obtained. | BLOCKED, owner Cason |
+| Giovanni extraction (2026-11-14 review) | Superseded on 2026-11-15 by the team's own export (see the update above). At the time: attempted. The Giovanni page loads, but Earthdata Login is required to plot or download and no signed-in session exists in the review browser. Credentials must not be entered by an assistant. No data were obtained. | BLOCKED, owner Cason |
 | Hydrology Time Series (Data Rods) | The legacy endpoint redirected to a GES DISC notice titled "The Hydrology Data Rods service will be discontinued no earlier than October 31, 2025 and transitioned to a new data access method". No data were obtained; do not plan on it. | NOT USABLE as tested |
 | AppEEARS | Not attempted (needs the same Earthdata login). It serves MODIS products, which are a NASA instrument family the challenge names. A point sample of a MODIS snow or land-surface-temperature product would be a second eligible route. The existing Planetary Computer script (`docs/PLANETARY_COMPUTER_TODO.md`) uses the same MODIS products but is not itself a listed resource. | NOT ATTEMPTED |
 | Organizer view | Whether POWER counts toward the Global Award requirement has not been asked. | ASK at the Halifax event |

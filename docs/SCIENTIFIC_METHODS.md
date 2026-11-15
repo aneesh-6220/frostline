@@ -66,3 +66,15 @@ Prohibited (and tested for in `tests/test_scientific_acceptance.py`):
 
 ## L. Units and rounding
 Degree-C; FDD in degree-C days; slopes per decade in the metric's unit; p-values to 3 decimals ("<0.001" if smaller). Full precision in files; round only for display.
+
+## M. NASA Giovanni monthly record (added 2026-11-15)
+- Input: Giovanni "Time Series, Area-Averaged" export of MERRA-2 M2TMNXSLV v5.12.4 T2M (kelvin) for the cell centred 62.5 N, 114.375 W, 1980-01 to 2025-12. Celsius = K - 273.15.
+- Missing values: the header fill value (1e15), any value of magnitude 1e14 or more, or a non-number is missing. None occur. Nothing is filled.
+- Aggregation: a calendar-year, seasonal (DJF labelled with the year of its January, MAM, JJA, SON) or winter-part (Oct to Dec, Jan to Mar, labelled by winter start year) mean is computed only from a complete set of months.
+- Trend: the same Theil-Sen / Mann-Kendall function as section C (at least 15 years), on the values as stored (4 decimals). The seven full-record aggregates form one family for Benjamini-Hochberg q. A user-chosen window is exploratory and reports an unadjusted p only. A first-decade versus last-decade difference uses a Welch interval and treats years as independent (lag-1 autocorrelation of residuals is reported; all are 0.21 or less for the full record).
+- Result on the full record (exploratory, not reviewed): only the Sep to Nov mean shows a change that survives the family correction (+0.60 C per decade, 95% interval +0.23 to +0.97, q = 0.013). The annual mean (+0.18, interval -0.07 to +0.49) and the other seasons are not statistically distinguishable from no change.
+- Never: monthly means do not enter FDD, thaw-day or road metrics, and Giovanni results are not compared with road dates.
+
+## N. Exploratory points (live NASA POWER, added 2026-11-15)
+- Any point in the supported area gets the section B metrics computed from live POWER daily T2M with the section A season rules and the section C trend function, unchanged. On Frostline's cached Dettah daily values the exploratory engine reproduces the curated 2001 to 2024 trends (tested).
+- These results are exploratory, carry no multiple-testing adjustment, and have no road, station or community validation.

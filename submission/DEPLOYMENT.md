@@ -1,6 +1,6 @@
 # Deploying Frostline
 
-Status: **not deployed.** The machine used for the build has no GitHub credentials, so the implementation branch could not be pushed and no hosted application could be created or checked. No public URL exists yet. Do not write one into the submission until someone has opened it in a private browser window.
+Status: **not deployed.** Release candidate for deployment (2026-11-15): local branch `frostline-map-giovanni-release`, one commit ahead of `origin/main` (`bc1b7d0`). It needs no secrets: NASA POWER needs no key, Giovanni data are committed files, and the map tiles need no key. The machine used for the build has no GitHub credentials, so the implementation branch could not be pushed and no hosted application could be created or checked. No public URL exists yet. Do not write one into the submission until someone has opened it in a private browser window.
 
 The repository stays private. Changing its visibility is the Captain's decision and is not needed for deployment.
 
@@ -32,8 +32,9 @@ Open the URL in a private or logged-out browser window and check:
 
 - the Observatory loads with a chart and four indicators, with no login prompt;
 - Begin an Investigation runs through all six demo stages and the Evidence Brief downloads;
-- the sidebar shows "Data digest 7037c7be7383fe25" (the approved data at this commit);
-- Atlas shows two markers (the dark background map needs internet; the location list works without it).
+- the sidebar shows "Data digest a1f1cd6387875487" (approved data plus the Giovanni files at the release-candidate commit);
+- Map shows the Esri basemap with place labels and two coloured case-study markers; clicking an empty spot inside the dashed area selects a white-ringed point, and "Retrieve NASA POWER daily data for this point" returns a trend, a chart and a downloadable Evidence Brief (needs outbound HTTPS to power.larc.nasa.gov from the host);
+- Giovanni record shows 1980 to 2025 monthly data with a trend, and its Evidence Brief downloads.
 
 Then record the URL in `submission/SUBMISSION_DRAFT.md` and in the slide deck.
 
@@ -51,6 +52,20 @@ Static fallbacks that need nothing at all: `submission/frostline_slides.pdf`, th
 ## Verification commands
 
 ```bash
-python3 -I -m unittest discover -s tests          # expect 150 or more tests, OK
+python3 -I -m unittest discover -s tests          # expect 198 tests, OK
 python3 -I scripts/regenerate_all.py --check      # expect "regeneration is a no-op"
 ```
+
+## Release candidate 2026-11-15 (map, Giovanni, live NASA POWER)
+
+Push and deploy only with the Captain's authorization:
+
+```bash
+git push -u origin frostline-map-giovanni-release
+# Streamlit Community Cloud: repository aneesh-6220/nasa-space-apps-2026, branch frostline-map-giovanni-release
+# (or main after a reviewed merge), main file UI/frostline_app.py, Python 3.12, no secrets; then set the app to public.
+```
+
+New runtime dependencies (pinned in `UI/requirements.txt`): folium 1.0.0, streamlit-folium 0.27.4, branca 0.8.2, xyzservices 2026.9.1. `requirements-dev.txt` adds h5py for the offline NetCDF check only.
+
+If the host blocks outbound requests or NASA POWER is down, the Map view shows the error and the curated case studies, guided demo, Giovanni record and all briefs keep working from committed files.

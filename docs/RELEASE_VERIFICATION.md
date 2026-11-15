@@ -58,3 +58,25 @@ gh pr create --base main --head frostline-global-audit --title "Frostline global
 ```
 
 Then deploy per `submission/DEPLOYMENT.md` section 2 using branch `frostline-global-audit` (or `main` after merge), and record the URL only after opening it in a private window.
+
+## Release candidate: map, Giovanni and live NASA POWER (2026-11-15)
+
+Branch `frostline-map-giovanni-release` (local only; not pushed). Environment as above, plus folium 1.0.0, streamlit-folium 0.27.4 and, for verification only, h5py 3.16.0.
+
+| Capability | Status |
+|---|---|
+| Giovanni files inspected, checksummed, NetCDF checked against CSV, ingested | implemented, tested |
+| Giovanni record view (season and period selection, trend, uncertainty, POWER cross-check, provenance, brief/CSV/JSON export) | implemented, tested, verified locally |
+| Leaflet map with Esri basemap and labels, curated markers, click-to-select exploratory points, coordinate fallback | implemented, tested, verified locally (1440x900 and 375x812) |
+| Live NASA POWER retrieval, validation, caching and exploratory analysis | implemented, tested (fixtures from real cached POWER values), verified locally against the live API on 2026-11-15 |
+| Public deployment | not done (needs authorization) |
+
+Commands and results:
+
+```bash
+.venv312/bin/python -I -m unittest discover -s tests          # 198 tests OK (164 baseline + 34 new)
+.venv312/bin/python -I scripts/regenerate_all.py --check      # "regeneration is a no-op", raw digest 2f4bc4f02926fbc2
+.venv312/bin/python -I scripts/verify_giovanni_netcdf.py      # "NetCDF verification passed for 1 file(s)"
+```
+
+Browser check (in-app browser, http://localhost:8611): Map page clicked at an empty point, selected 62.59 N, 120.91 W; "Retrieve NASA POWER daily data" made a live request (POWER v2.10.3, 15,888 daily values, 0 missing) and showed Oct to Dec freezing degree-days -39.5 C-days per decade (95% interval -87.9 to 3.3, p = 0.061, 44 winters, exploratory) with chart, details and the three downloads. Giovanni record page rendered the 1980 to 2025 record. The approved data files in `UI/data_real/` other than the new `giovanni_*` files are unchanged.

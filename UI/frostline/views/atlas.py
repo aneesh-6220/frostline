@@ -246,7 +246,7 @@ def render(ds):
             st.rerun()
         ui.html("<div class='fl-src'>Coloured dots: curated case studies (NASA daily data plus government road records). White ring: your exploratory point. "
                 "Shaded rectangles: calculated NASA MERRA-2 grid cells. Dashed outline: area supported for exploration. No road line, risk layer or raster is drawn. "
-                "Basemap and labels &copy; Esri and contributors, including &copy; OpenStreetMap contributors (other basemaps in the layer menu, top right). If tiles do not load, markers still work and the form on the right needs no map.</div>")
+                "Basemap and labels &copy; Esri and contributors, including &copy; OpenStreetMap contributors (other basemaps in the layer menu, top right). If tiles do not load, markers still work, and the case-study buttons and coordinate form beside the map (below it on a phone) need no map.</div>")
         if ss.get("xp_outside"):
             o = ss["xp_outside"]
             st.warning(f"{o[0]:.2f}, {o[1]:.2f} is outside the supported area ({pa.COVERAGE['south']:.0f} to {pa.COVERAGE['north']:.0f} N, "
