@@ -1,0 +1,13 @@
+# Frostline theme and server settings (read when the app is started from the repository root).
+[theme]
+base = "dark"
+primaryColor = "#3987E5"
+backgroundColor = "#0B1220"
+secondaryBackgroundColor = "#111B2E"
+textColor = "#E8EEF7"
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
