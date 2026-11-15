@@ -34,6 +34,15 @@ from frostline.registry import (DEFAULT_LOCATION, DEFAULT_VARIABLE, LITERATURE, 
 WEB_DIR = os.path.join(ROOT, "web")
 
 
+class RevalidatingStatic(StaticFiles):
+    """Static files that browsers must revalidate (cheap 304 via ETag), so an updated client is picked up on reload."""
+
+    def file_response(self, *args, **kwargs):
+        resp = super().file_response(*args, **kwargs)
+        resp.headers["Cache-Control"] = "no-cache"
+        return resp
+
+
 # ------------------------------------------------------------------ helpers
 def jsonable(o):
     if dataclasses.is_dataclass(o) and not isinstance(o, type):
@@ -246,7 +255,7 @@ def brief_json(req: Request):
 
 
 async def index(req: Request):
-    return FileResponse(os.path.join(WEB_DIR, "index.html"))
+    return FileResponse(os.path.join(WEB_DIR, "index.html"), headers={"Cache-Control": "no-cache"})
 
 
 async def health(req: Request):
@@ -268,7 +277,7 @@ routes = [
     Route("/api/brief.html", guarded(brief_html)),
     Route("/api/series.csv", guarded(brief_csv)),
     Route("/api/brief.json", guarded(brief_json)),
-    Mount("/static", StaticFiles(directory=WEB_DIR), name="static"),
+    Mount("/static", RevalidatingStatic(directory=WEB_DIR), name="static"),
 ]
 
 app = Starlette(routes=routes)

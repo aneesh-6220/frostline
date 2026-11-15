@@ -1,5 +1,5 @@
 :root{--navy:#0B1220;--blue:#2563EB;--white:#F8FAFC;--slate:#334155;--muted:#64748B;--border:#E2E8F0;--amber:#D97706;--amber-bg:#FFFBEB;--surface:#FFFFFF;--good:#047857;--alert:#B91C1C;--r:6px;font-family:Inter,system-ui,sans-serif;color:var(--slate);background:var(--white)}
-*{box-sizing:border-box}body{margin:0;background:var(--white);font-size:14px;line-height:1.5}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--white);font-size:14px;line-height:1.5}
 .shell{display:grid;grid-template-columns:208px 1fr;min-height:100vh}
 .nav{background:var(--navy);color:#CBD5E1;padding:20px 12px;display:flex;flex-direction:column;gap:20px;position:sticky;top:0;height:100vh}
 .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:600;font-size:16px;letter-spacing:-.01em;padding:0 8px}
@@ -30,8 +30,8 @@ select:hover{border-color:#CBD5E1}
 .chart{height:360px;width:100%}.chart.short{height:260px}
 .muted{color:var(--muted)}.small{font-size:12px}
 .sentence{color:var(--navy);font-weight:500;margin:0 0 12px}
-.stats{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:13px}
-.stats dt{color:var(--muted)}.stats dd{margin:0;color:var(--navy);font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:1fr;gap:0;margin:0;font-size:13px}
+.stats dt{color:var(--muted);font-size:12px;padding-top:8px;border-top:1px solid #F1F5F9}.stats dt:first-child{border-top:0;padding-top:0}.stats dd{margin:2px 0 8px;color:var(--navy);font-size:13px;font-weight:500;font-variant-numeric:tabular-nums}
 .state{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;border:1px solid var(--border);white-space:nowrap}
 .state.supported{color:var(--good);border-color:#A7F3D0}.state.unresolved{color:var(--slate)}.state.exploratory{color:var(--blue);border-color:#BFDBFE}.state.insufficient,.state.unavailable{color:var(--amber);border-color:#FDE68A}
 .caveat{border-left:3px solid var(--amber);background:var(--amber-bg);padding:8px 10px;font-size:12.5px;margin:12px 0 0;color:#78350F}

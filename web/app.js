@@ -87,10 +87,10 @@
     const c = chart(id);
     c.setOption({
       animationDuration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 250,
-      grid: { left: 56, right: 18, top: 28, bottom: 40 },
+      grid: { left: 56, right: 18, top: 32, bottom: 64 },
       tooltip: { trigger: "axis", backgroundColor: "#0B1220", borderWidth: 0, textStyle: { color: "#F8FAFC", fontSize: 12 },
         valueFormatter: (v) => (v === null || v === undefined || Number.isNaN(v) ? "no value" : `${Number(v).toFixed(opts.decimals ?? 1)} ${opts.unit}`) },
-      legend: { top: 0, right: 0, textStyle: { color: C.slate, fontSize: 12 }, icon: "roundRect", itemWidth: 12, itemHeight: 3 },
+      legend: { type: "scroll", bottom: 0, left: 0, textStyle: { color: C.slate, fontSize: 12 }, icon: "roundRect", itemWidth: 12, itemHeight: 3 },
       xAxis: { type: "category", data: opts.x.map(W), axisLine: { lineStyle: { color: C.border } }, axisLabel: { color: C.muted, fontSize: 11 }, axisTick: { show: false } },
       yAxis: { type: "value", name: opts.unit, nameTextStyle: { color: C.muted, fontSize: 11, align: "left" }, scale: true, splitLine: { lineStyle: { color: "#F1F5F9" } }, axisLabel: { color: C.muted, fontSize: 11 } },
       series: opts.series,
