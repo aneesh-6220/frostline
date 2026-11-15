@@ -476,7 +476,7 @@ Scientific limits that apply everywhere: reanalysis is a grid-cell model estimat
 
 **What the repository shows** (`git log`):
 
-- **2026-11-14**: the repository began with a Streamlit UI and prototype ("NorthLink UI", commit `ffc0dbe`, author `seetheseaagain-dev`). The same day, a sequence of AI-authored commits (author "Claude") added the real NASA POWER data, station validation, extended variables, nine-corridor analysis, a scientific remediation (bias diagnosis, leak-free windows, multiplicity families, route identity), and the handoff documents.
+- **2026-11-14**: the repository began with a Streamlit UI and prototype under an earlier project name (commit `ffc0dbe`, author `seetheseaagain-dev`). The same day, a sequence of AI-authored commits (author "Claude") added the real NASA POWER data, station validation, extended variables, nine-corridor analysis, a scientific remediation (bias diagnosis, leak-free windows, multiplicity families, route identity), and the handoff documents.
 - **2026-11-14 to 15**: AI-authored commits built the Frostline application on the approved data layer, verified it in a browser and redesigned the frontend.
 - **2026-11-15**: Shaurya Veer Singh committed credential ignores and `.env.example` (`3feb9a8`). Aneesh Mahatekar committed the global audit, caveat repairs, the Giovanni integration with the interactive map and live POWER exploration, release documentation, and today's final qualification (`f3edb22` and the documentation commit). Those commits were made in AI-assisted sessions.
 - Commit counts up to `f3edb22`: 16 by "Claude", 7 by Aneesh Mahatekar, 1 by Shaurya Veer Singh, 1 by `seetheseaagain-dev`.
