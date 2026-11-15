@@ -163,6 +163,13 @@ def _explore_panel(point):
             + "</div>")
 
 
+def error_for(stored, point) -> str | None:
+    """The retrieval error recorded for this point, or None. An error raised for another point is never shown here."""
+    if isinstance(stored, tuple) and len(stored) == 2 and stored[0] == point:
+        return stored[1]
+    return None
+
+
 def _run_explorer(ds, point):
     ss = st.session_state
     ui.section("2 · Choose a question")
@@ -184,10 +191,11 @@ def _run_explorer(ds, point):
                 store[point] = pa.fetch_daily(point[0], point[1], pa.FIRST_WINTER, pa.LAST_WINTER)
                 ss.pop("xp_error", None)
             except pa.PowerError as exc:
-                ss["xp_error"] = str(exc)
+                ss["xp_error"] = (point, str(exc))   # an error belongs to the point it was raised for
         have = store.get(point)
-    if ss.get("xp_error") and not have:
-        st.error(f"No data retrieved: {ss['xp_error']}", icon=":material/cloud_off:")
+    err = error_for(ss.get("xp_error"), point)
+    if err and not have:
+        st.error(f"No data retrieved: {err}", icon=":material/cloud_off:")
         return
     if not have:
         ui.note("Nothing is shown until real NASA observations are retrieved for this point. One request covers every winter from 1981/82 to 2024/25; "

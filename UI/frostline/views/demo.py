@@ -8,6 +8,7 @@ from streamlit_folium import st_folium
 
 from .. import analysis as an
 from .. import charts, evidence as ev, fmt, ui
+from .. import giovanni as gv
 from ..registry import primary_locations
 
 from . import atlas
@@ -45,6 +46,26 @@ def _scroll_to_top(step: int) -> None:
     if st.session_state.pop("demo_scroll_top", False):
         st.html("<script>/* stage %d */ for (const el of document.querySelectorAll('[data-testid=\"stMain\"], section.main, .stMain')) "
                 "{ el.scrollTo({top: 0}); } window.scrollTo({top: 0});</script>" % step, unsafe_allow_javascript=True)
+
+
+def _longer_record(ds, location_id: str) -> None:
+    """Stage 4 adds the 46-year NASA Giovanni record where one exists: the whole pre-declared seasonal family, not one picked result."""
+    if location_id not in gv.locations(ds):
+        return
+    full = [gv.trend(ds, location_id, s) for s in gv.SEASON_ORDER]
+    fam = [t for t in full if t.q is not None]
+    sup = [t for t in fam if t.q < an.ALPHA]
+    octdec = next(t for t in full if t.season == "octdec_mean_c")
+    ui.section("The longer NASA record", f"NASA Giovanni, MERRA-2 monthly temperature, {octdec.first} to {octdec.last}")
+    lines = [f"{gv.SEASON_LABEL[t.season]}: {fmt.num(t.slope_per_decade, 2, True)} °C per decade (95% interval {fmt.interval(t.ci_low, t.ci_high, 2)}, q = {fmt.pval(t.q)})"
+             for t in sup]
+    head = (f"{len(sup)} of the {len(fam)} seasonal temperature trends tested on this record {'survives' if len(sup) == 1 else 'survive'} correction for multiple testing. "
+            f"Early winter (Oct to Dec) warmed by an estimated {fmt.num(octdec.slope_per_decade, 2, True)} °C per decade, but that is not resolved (q = {fmt.pval(octdec.q)}).")
+    ui.result_panel(f"Same grid cell, {octdec.last - octdec.first + 1} years of monthly means", ui.chip(f"{len(sup)} of {len(fam)} supported", "good" if sup else "neutral"),
+                    paragraphs=(head,), dim=tuple(lines) + ("Monthly reanalysis means for one grid cell. They are not used to compute the daily freezing degree-days above, "
+                                                            "and they say nothing about the road by themselves.",),
+                    source="Computed from the ingested Giovanni export; full table and export on the Giovanni record page")
+    st.page_link(ui.PAGES["giovanni"], label="Open the Giovanni record", icon=":material/arrow_forward:")
 
 
 def render(ds):
@@ -105,6 +126,7 @@ def render(ds):
             ui.plain_language(ds, f)
         with c[1]:
             ui.finding_card(ds, f)
+        _longer_record(ds, inv.location_id)
 
     elif step == 4:
         f = an.trend(ds, inv.location_id, "open_day", 1993, 2024)

@@ -458,7 +458,7 @@ def console(ds, where=None) -> Investigation:
         html(f"<div class='fl-side-status'>{chip(f.state_label, STATE_TONE[f.state])}"
              f"<div class='meta'>{fmt.period(inv.first, inv.last)} · n = {f.n} winters · "
              f"{'approved fixed window' if fixed else 'user-selected window: exploratory, not adjusted for multiple testing'}</div></div>")
-        html(f"<div class='fl-side-digest'>Data digest <code>{ds.digest}</code> · all values from the approved files in UI/data_real · no live download</div>")
+        html(f"<div class='fl-side-digest'>Data digest <code>{ds.digest}</code> · case-study values come from the approved files in UI/data_real; only exploratory map points use live NASA POWER requests</div>")
     return inv
 
 
@@ -598,7 +598,8 @@ def footer() -> None:
          "Built with AI assistance; see Methods and sources for the disclosure. NASA does not endorse this project.</p></footer>")
 
 
-TABBAR = [("observatory", "Home", ":material/home:"), ("detective", "Trends", ":material/show_chart:"), ("corridor", "Corridor", ":material/route:"),
+# phones: the investigation path (place, trend, evidence, export); every other view stays in the top navigation menu
+TABBAR = [("observatory", "Home", ":material/home:"), ("atlas", "Map", ":material/map:"), ("detective", "Trends", ":material/show_chart:"),
           ("evidence", "Evidence", ":material/fact_check:"), ("brief", "Brief", ":material/description:")]
 
 
