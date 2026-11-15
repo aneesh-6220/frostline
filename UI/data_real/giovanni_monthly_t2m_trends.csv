@@ -1,0 +1,8 @@
+location_id,metric,first_year,last_year,n,slope_per_decade,ci95_low,ci95_high,mk_p,lag1,status,source_id,q_bh_within_location,family_size
+dettah_bay,ANN,1980,2025,46,0.181,-0.072,0.494,0.185,0.054,ok,giovanni_merra2_M2TMNXSLV_T2M,0.35,7
+dettah_bay,DJF,1981,2025,45,0.416,-0.213,0.947,0.2,0.112,ok,giovanni_merra2_M2TMNXSLV_T2M,0.35,7
+dettah_bay,MAM,1980,2025,46,-0.188,-0.66,0.342,0.5075,0.002,ok,giovanni_merra2_M2TMNXSLV_T2M,0.6134,7
+dettah_bay,JJA,1980,2025,46,0.092,-0.192,0.363,0.5258,0.204,ok,giovanni_merra2_M2TMNXSLV_T2M,0.6134,7
+dettah_bay,SON,1980,2025,46,0.603,0.23,0.973,0.0018,0.016,ok,giovanni_merra2_M2TMNXSLV_T2M,0.0126,7
+dettah_bay,octdec_mean_c,1980,2025,46,0.537,-0.008,1.021,0.0511,0.082,ok,giovanni_merra2_M2TMNXSLV_T2M,0.1789,7
+dettah_bay,janmar_mean_c,1979,2024,46,0.107,-0.517,0.605,0.7332,-0.006,ok,giovanni_merra2_M2TMNXSLV_T2M,0.7332,7

@@ -1,0 +1,2 @@
+location_id,n_months,first,last,mean_diff_giovanni_minus_power_c,max_abs_diff_c,pearson_r
+dettah_bay,285,2001-10,2025-06,-0.001,0.394,1.0

@@ -230,6 +230,13 @@ def build(ds, location_id: str, variable_id: str, first: int, last: int, questio
     cited = [var.source_id] + [k for k in ("merra2", "nwt_t108", "eccc") if k != var.source_id]
     for k in cited:
         H.append(f"<li>{_e(SOURCES[k].citation)} <a href='{_e(SOURCES[k].url)}'>{_e(SOURCES[k].url)}</a></li>")
+    from . import giovanni as gv   # local import: giovanni depends on analysis, not on this module
+
+    if gv.available(ds) and location_id in gv.locations(ds):
+        chk = gv.power_check(ds, location_id)
+        H.append(f"<li>{_e(gv.CITATION)} Monthly 2 m temperature for this grid cell, 1980 to 2025 (file {_e(gv.provenance(ds, location_id).get('source_file', ''))}). "
+                 f"Used only as a monthly consistency check and for the separate Giovanni record view: over {chk.get('n_months')} months it differs from the monthly mean of the POWER daily "
+                 f"series by {_e(fmt.num(chk.get('mean_diff_giovanni_minus_power_c'), 3, True))} °C on average. It does not enter the daily metrics in this brief.</li>")
     H.append("</ul>")
     H.append(f"<p class='meta'>POWER acknowledgement: {_e(POWER_ACK)}</p>")
     H.append("<p class='meta'>Context literature: " + " ".join(_e(x.split(' https://')[0]) + "." for x in LITERATURE[:2] + LITERATURE[3:5]) + "</p>")

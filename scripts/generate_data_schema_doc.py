@@ -36,7 +36,10 @@ DESC = {
     "canonical_facts.json": ("required", "single object", "Machine-readable canonical numbers (status counts, periods, bias, headline trends, caveat text) generated from the data.", "Use for text; tables and charts should read the CSVs."),
     "giovanni_monthly_t2m_seasonal.csv": ("optional", "location x winter", "ONLY if a real Giovanni MERRA-2 M2TMNXSLV T2M file was ingested: Oct-Dec and Jan-Mar mean of monthly means.", "Hide the panel when absent; never fill from synthetic data."),
     "giovanni_monthly_t2m_trends.csv": ("optional", "location x metric", "ONLY if ingested: Theil-Sen trends of the Giovanni monthly seasonal means.", "Mean temperature only; never FDD or thaw days."),
-    "giovanni_vs_power_check.csv": ("optional", "location", "ONLY if ingested: month-by-month Giovanni minus POWER agreement check.", ""),
+    "giovanni_vs_power_check.csv": ("optional", "location", "ONLY if ingested: month-by-month Giovanni minus POWER agreement check (complete POWER months only).", "Same MERRA-2 source: a check on access routes, not independent validation."),
+    "giovanni_monthly_t2m.csv": ("optional", "location x month", "ONLY if ingested: every monthly value exactly as published by Giovanni (kelvin) plus its Celsius conversion and a missing flag.", "Monthly reanalysis means; never used to reconstruct daily FDD or thaw days."),
+    "giovanni_t2m_calendar_seasons.csv": ("optional", "location x year x season", "ONLY if ingested: calendar-year and meteorological seasonal (DJF, MAM, JJA, SON) means from complete sets of months; DJF is labelled with the year of its January.", "Incomplete seasons are left empty, not filled."),
+    "giovanni_provenance.csv": ("optional", "location x key", "ONLY if ingested: source file names, SHA-256 checksums, Giovanni header fields (title, dates, requested box, resolved grid point, reproduce URL, fill value) and the location match rule.", ""),
 }
 
 L = ["# App data schema (generated file; do not edit by hand)\n",

@@ -1,0 +1,40 @@
+[
+  {
+    "all_checks_pass": true,
+    "cell_methods": "time: mean lat, lon: mean",
+    "checks": {
+      "monthly_contiguous": true,
+      "no_fill_values": true,
+      "product_short_name": true,
+      "product_version": true,
+      "same_length_as_csv": true,
+      "same_months_as_csv": true,
+      "single_grid_point": true,
+      "time_units": true,
+      "units_K": true,
+      "values_match_csv_within_1e-4_K": true,
+      "variable_T2M": true
+    },
+    "conventions": "CF-1.4",
+    "csv_file": "g4.areaAvgTimeSeries.M2TMNXSLV_5_12_4_T2M.19800101-20251231.114W_62N_113W_62N.csv",
+    "csv_sha256": "d38952225524e35360425d23eb941abd7fc44acf38540ae87f5621c55c812a7e",
+    "fill_value": 999999986991104.0,
+    "first_month": "1980-01",
+    "grid_point_lat": "62.5",
+    "grid_point_lon": "-114.375",
+    "last_month": "2025-12",
+    "long_name": "2-meter air temperature",
+    "max_K": 294.1979,
+    "max_abs_diff_csv_vs_netcdf_K": 5e-07,
+    "min_K": 230.0455,
+    "n_months": 552,
+    "netcdf_file": "g4.areaAvgTimeSeries.M2TMNXSLV_5_12_4_T2M.19800101-20251231.114W_62N_113W_62N.nc",
+    "netcdf_sha256": "be265b97b70bfd92490f40c03ab44d24cb2c866474d623af7b545aa3fbc02897",
+    "processing_history_first_line": "Sun Nov 15 14:57:28 2026: ncwa -w wlat -a lat,lon ./file_M2TMNXSLV_5_12_4_T2M_1_weighted.nc ./file_M2TMNXSLV_5_12_4_T2M_1_avg.nc",
+    "temporal_resolution": "monthly",
+    "title": "Time Series, Area-Averaged of 2-meter air temperature monthly 0.5 x 0.625 deg. [MERRA-2 Reanalysis M2TMNXSLV v5.12.4] K over 1980-Jan - 2025-Dec, Region 114.75W, 62.2N, 113.85W, 62.75N",
+    "units": "K",
+    "user_end": "2025-12-31T23:59:59Z",
+    "user_start": "1980-01-01T00:00:00Z"
+  }
+]

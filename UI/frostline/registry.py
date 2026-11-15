@@ -77,7 +77,7 @@ LITERATURE = [
     "ClimateData.ca, Winter Ice Roads in Northern Ontario. https://climatedata.ca/?p=15894",
 ]
 
-SOFTWARE = ["Python", "Streamlit", "Plotly", "pandas", "NumPy", "SciPy", "PyDeck (deck.gl)", "CARTO basemap tiles with OpenStreetMap data (optional map background)"]
+SOFTWARE = ["Python", "Streamlit", "Plotly", "pandas", "NumPy", "SciPy", "Leaflet (via folium and streamlit-folium)", "Esri ArcGIS Online basemap and label tiles, with OpenStreetMap as an alternative (map background; markers work without it)", "NASA POWER Daily API (live exploratory points only)", "h5py (offline verification of the Giovanni NetCDF file)"]
 
 # ---------------------------------------------------------------- locations
 MERRA2_DLAT, MERRA2_DLON = 0.5, 0.625

@@ -31,4 +31,5 @@ REQUIRED_COLUMNS = {
 }
 
 # Present only after a real Giovanni extraction has been ingested (scripts/ingest_giovanni_monthly.py).
-OPTIONAL_FILES = ('giovanni_monthly_t2m_seasonal.csv', 'giovanni_monthly_t2m_trends.csv', 'giovanni_vs_power_check.csv')
+OPTIONAL_FILES = ('giovanni_monthly_t2m_seasonal.csv', 'giovanni_monthly_t2m_trends.csv', 'giovanni_vs_power_check.csv',
+                  'giovanni_monthly_t2m.csv', 'giovanni_t2m_calendar_seasons.csv', 'giovanni_provenance.csv')

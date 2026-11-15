@@ -4,10 +4,12 @@ Every stage renders the same components, data and analysis functions as the free
 The stage only fixes the starting selection; the sidebar controls stay live throughout.
 """
 import streamlit as st
+from streamlit_folium import st_folium
 
 from .. import analysis as an
 from .. import charts, evidence as ev, fmt, ui
 from ..registry import primary_locations
+
 from . import atlas
 
 STAGES = ["The problem", "The geography", "The NASA data", "The scientific finding", "The transportation evidence", "The Evidence Brief"]
@@ -72,7 +74,7 @@ def render(ds):
                        "Two documented ice roads in the Northwest Territories, about 1,100 km apart and very different in kind. Pick one; the rest of the demo follows your choice.")
         c = st.columns([1.35, 1], gap="large")
         with c[0]:
-            st.pydeck_chart(atlas.build_deck(ds, inv.location_id), key="demo_map", height=400)
+            st_folium(atlas.build_map(ds, inv.location_id), key="demo_map", height=400, use_container_width=True, returned_objects=[])
             ui.caption("Markers: calculated sampling points. Rectangles: NASA grid cells. No road geometry is drawn.")
         with c[1]:
             for l in primary_locations(locs):

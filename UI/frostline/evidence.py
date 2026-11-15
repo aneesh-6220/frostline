@@ -106,7 +106,8 @@ def _provenance(ds, loc, var, f) -> Dimension:
                "Downloaded 2026-11-14 through the POWER daily API; the file headers do not state a service version, which limits exact re-citation.",
                "Results are reproducible from the cached source files; a live re-download has not been compared."]
     elig = "NASA POWER is not on the challenge's listed Resources. A cross-extraction through NASA Giovanni has " + (
-        "been ingested and is shown under Methods and sources." if ds.giovanni else "not been obtained.")
+        "been ingested for the Dettah / Yellowknife grid cell (MERRA-2 M2TMNXSLV T2M, monthly, 1980 to 2025) and is shown in the Giovanni record view and under Methods and sources; "
+        "it is monthly reanalysis and never feeds the daily metrics." if ds.giovanni else "not been obtained.")
     reasons.append(elig)
     return Dimension("provenance", "Source provenance", CAUTION, f"Documented NASA product ({src.kind}), with version and eligibility caveats.", tuple(reasons), ("canonical_facts.json",))
 

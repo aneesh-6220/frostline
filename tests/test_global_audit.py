@@ -134,13 +134,15 @@ class DemoAndAtlas(unittest.TestCase):
         self.assertEqual(at.session_state["demo_step"], 1)
         self.assertNotIn("demo_scroll_top", at.session_state)   # consumed by the stage render
 
-    def test_atlas_has_only_reference_line(self):
+    def test_atlas_has_no_invented_geometry(self):
         from frostline.views import atlas
 
-        deck = json.loads(atlas.build_deck(DS, "dettah_bay").to_json())
-        kinds = [l["@@type"] for l in deck["layers"]]
-        self.assertNotIn("HeatmapLayer", kinds)
-        self.assertEqual([l["id"] for l in deck["layers"] if l["@@type"] in ("PathLayer", "LineLayer", "ArcLayer")], ["arctic_circle"])
+        html = atlas.build_map(DS, "dettah_bay").get_root().render()
+        for banned in ("L.polyline", "L.heatLayer", "L.imageOverlay", "L.geoJson", "L.geoJSON"):
+            self.assertNotIn(banned, html)
+        self.assertIn("server.arcgisonline.com", html)        # a real, attributed basemap; no generated imagery
+        self.assertIn("OpenStreetMap", html)
+        self.assertNotIn("cartocdn", html)                     # CARTO now serves an "API key required" tile without a key
 
 
 if __name__ == "__main__":

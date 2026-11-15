@@ -480,7 +480,11 @@ class AC12_NoLegacyPaths(unittest.TestCase):
             self.assertNotRegex(s, r"generate_data", f)
             self.assertNotRegex(s, r"""["']data/[a-z_]+\.csv["']""", f)
             self.assertNotRegex(s, r"UI/data/|SYNTHETIC_DATA", f)
-            self.assertNotRegex(s, r"\bimport requests\b|urlopen|http\.client|urllib\.request", f)   # no network call for data
+            if os.path.basename(f) != "power_api.py":   # the one documented live adapter (exploratory points only)
+                self.assertNotRegex(s, r"\bimport requests\b|urlopen|http\.client|urllib\.request", f)   # no other network call for data
+        api = open(P("UI/frostline/power_api.py"), encoding="utf-8").read()
+        self.assertEqual(set(re.findall(r"https?://([a-z0-9.-]+)", api)), {"power.larc.nasa.gov"})   # it talks to NASA POWER only
+        self.assertNotRegex(api, r"(?i)api[_-]?key\s*=|token\s*=")                                    # and needs no credential
         self.assertIn('page_title="Frostline - by Strongest Soldiers"', open(APP, encoding="utf-8").read())
         self.assertNotIn("Provisional synthetic data", open(P("UI/northlink_app.py"), encoding="utf-8").read())
 
@@ -733,6 +737,18 @@ class GuidedDemo(unittest.TestCase):
             self.assertIn(needle, text)
 
 
+def map_objects(m):
+    """Class names of every object on a folium map, and its circle markers."""
+    kinds, markers, stack = set(), [], list(m._children.values())
+    while stack:
+        o = stack.pop()
+        kinds.add(type(o).__name__)
+        if type(o).__name__ == "CircleMarker":
+            markers.append(o)
+        stack.extend(getattr(o, "_children", {}).values())
+    return kinds, markers
+
+
 class AtlasSync(unittest.TestCase):
     def test_selection_updates_state_panel_and_map(self):
         from frostline.views import atlas
@@ -746,18 +762,13 @@ class AtlasSync(unittest.TestCase):
         self.assertIn("68.29 N, 134.37 W", text)
         self.assertIn("Mackenzie Delta", text)
         self.assertNotIn("62.43 N, 114.34 W", text)
-        deck = json.loads(atlas.build_deck(DS, "aklavik_delta").to_json())
-        pts = {p["location_id"]: p for p in next(l for l in deck["layers"] if l["id"] == "locations")["data"]}
-        self.assertEqual(set(pts), set(PRIMARY))                       # only verified, mapped locations; no custom point
-        self.assertGreater(pts["aklavik_delta"]["radius"], pts["dettah_bay"]["radius"])
+        m = atlas.build_map(DS, "aklavik_delta")
+        kinds, markers = map_objects(m)
         c = DS["corridors"].set_index("corridor_id")
-        for lid, p in pts.items():
-            self.assertEqual((p["lat"], p["lon"]), (float(c.loc[lid, "lat"]), float(c.loc[lid, "lon"])))
-        self.assertEqual({l["@@type"] for l in deck["layers"]}, {"PolygonLayer", "ScatterplotLayer", "TextLayer", "PathLayer"})   # no heatmap
-        # the only line on the map is the Arctic Circle reference: one constant-latitude path, never route geometry
-        paths = [l for l in deck["layers"] if l["@@type"] == "PathLayer"]
-        self.assertEqual([l["id"] for l in paths], ["arctic_circle"])
-        self.assertEqual({round(pt[1], 3) for row in paths[0]["data"] for pt in row["path"]}, {66.563})
+        pts = {lid: next(mk for mk in markers if tuple(mk.location) == (float(c.loc[lid, "lat"]), float(c.loc[lid, "lon"]))) for lid in PRIMARY}
+        self.assertEqual(len(markers), len(PRIMARY))                       # only verified, mapped locations; no custom point
+        self.assertGreater(pts["aklavik_delta"].options["radius"], pts["dettah_bay"].options["radius"])   # the selection is highlighted
+        self.assertLessEqual(kinds, {"TileLayer", "Rectangle", "CircleMarker", "LayerControl", "Tooltip"})   # no line, heatmap, raster or GeoJSON
 
     def test_grid_cell_is_the_documented_merra2_cell(self):
         c = merra2_cell(62.43, -114.34)
@@ -793,11 +804,15 @@ class Questions(unittest.TestCase):
 
 class OptionalGiovanni(unittest.TestCase):
     def test_panel_hidden_without_files_and_status_is_honest(self):
-        self.assertIsNone(DS.giovanni)
-        text = visible(rendered_text(run_view("methods")))
+        # The repository now holds a real Giovanni extraction; a copy without the optional files must hide the panel.
+        bare = copy_data()
+        for n in OPTIONAL_FILES:
+            os.remove(os.path.join(bare, n))
+        self.assertIsNone(data.load_dataset(bare).giovanni)
+        text = visible(rendered_text(run_view("methods", env={"FROSTLINE_DATA_DIR": bare})))
         self.assertIn("Status: not demonstrated", text)
         self.assertNotIn("MERRA-2 monthly temperature through NASA Giovanni", text)
-        d = copy_data()
+        d = bare
         open(os.path.join(d, OPTIONAL_FILES[0]), "w").write("location_id,season_start_year\n")   # a partial set is ignored
         self.assertIsNone(data.load_dataset(d).giovanni)
 
@@ -819,7 +834,12 @@ class OptionalGiovanni(unittest.TestCase):
         self.assertIn("MERRA-2 monthly temperature through NASA Giovanni", text)
         self.assertIn("not an independent observation", text)
         self.assertNotIn("Status: not demonstrated", text)
-        self.assertEqual(glob.glob(P("UI/data_real/giovanni_*")), [])
+        # The committed Giovanni files are exactly what the strict ingest makes from the committed raw Giovanni export.
+        out = tempfile.mkdtemp()
+        r = subprocess.run([sys.executable, "-I", P("scripts/ingest_giovanni_monthly.py"), "--out-dir", out], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        for n in OPTIONAL_FILES:
+            self.assertEqual(open(os.path.join(out, n), "rb").read(), open(P("UI/data_real", n), "rb").read(), n)
 
 
 class Extensibility(unittest.TestCase):

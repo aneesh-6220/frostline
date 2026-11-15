@@ -7,6 +7,7 @@ from .. import analysis as an
 from .. import fmt, ui
 from ..data import code_version
 from ..registry import LITERATURE, POWER_ACK, SOFTWARE, SOURCES
+from ..giovanni import SEASON_LABEL
 from .questions import catalogue
 
 
@@ -19,7 +20,7 @@ def giovanni_panel(ds) -> bool:
     ui.html("<p class='fl-sub' style='margin-bottom:var(--s4)'>Monthly mean 2 m air temperature (collection M2TMNXSLV, variable T2M) extracted through Giovanni for the same grid cells. "
             "POWER and Giovanni share the MERRA-2 source, so this is a consistency check on access routes, not an independent observation. "
             "Monthly means are used for seasonal mean-temperature trends only, never for freezing degree-days or thaw counts.</p>")
-    st.dataframe(pd.DataFrame({"Location": tr.location_id, "Seasonal mean": tr.metric.map({"octdec_mean_c": "Oct to Dec", "janmar_mean_c": "Jan to Mar"}).fillna(tr.metric), "n": tr.n,
+    st.dataframe(pd.DataFrame({"Location": tr.location_id, "Seasonal mean": tr.metric.map(SEASON_LABEL).fillna(tr.metric), "n": tr.n,
                                "Slope (°C per decade)": [fmt.num(v, 2, True) for v in tr.slope_per_decade], "95% interval": [fmt.interval(a, b, 2) for a, b in zip(tr.ci95_low, tr.ci95_high)],
                                "p (unadjusted)": [fmt.pval(p) for p in tr.mk_p], "Status": tr.status}), hide_index=True)
     st.dataframe(pd.DataFrame({"Location": chk.location_id, "Months compared": chk.n_months, "Mean difference, Giovanni minus POWER (°C)": chk.mean_diff_giovanni_minus_power_c,

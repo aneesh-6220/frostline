@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import streamlit as st  # noqa: E402
 
 from frostline import APP_NAME, TEAM_NAME, data, ui  # noqa: E402
-from frostline.views import atlas, brief_view, compare, corridor, demo, detective, evidence_view, methods, observatory, questions  # noqa: E402
+from frostline.views import atlas, brief_view, compare, corridor, demo, detective, evidence_view, giovanni_view, methods, observatory, questions  # noqa: E402
 
 st.set_page_config(page_title="Frostline - by Strongest Soldiers", page_icon=os.path.join(ui.ASSETS, "mark.svg"), layout="wide", initial_sidebar_state="auto")
 ui.inject_theme()
@@ -33,10 +33,11 @@ ui.init_state(ds)
 VIEWS = [
     ("observatory", "Observatory", observatory, ":material/ac_unit:"),
     ("demo", "Guided demo", demo, ":material/play_circle:"),
-    ("atlas", "Atlas", atlas, ":material/public:"),
+    ("atlas", "Map", atlas, ":material/map:"),
     ("questions", "Questions", questions, ":material/help:"),
     ("detective", "Trend Detective", detective, ":material/show_chart:"),
     ("compare", "Compare", compare, ":material/compare_arrows:"),
+    ("giovanni", "Giovanni record", giovanni_view, ":material/satellite_alt:"),
     ("corridor", "Corridor", corridor, ":material/route:"),
     ("evidence", "Evidence", evidence_view, ":material/fact_check:"),
     ("brief", "Brief", brief_view, ":material/description:"),

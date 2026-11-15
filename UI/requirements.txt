@@ -7,3 +7,7 @@ scipy==1.18.1
 plotly==7.1.0
 pydeck==0.9.3
 openpyxl==3.1.5
+folium==1.0.0
+streamlit-folium==0.27.4
+branca==0.8.2
+xyzservices==2026.9.1
