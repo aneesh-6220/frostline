@@ -4,7 +4,6 @@ Every stage renders the same components, data and analysis functions as the free
 The stage only fixes the starting selection; the sidebar controls stay live throughout.
 """
 import streamlit as st
-import streamlit.components.v1 as components
 
 from .. import analysis as an
 from .. import charts, evidence as ev, fmt, ui
@@ -42,9 +41,8 @@ def _nav(ds, step):
 def _scroll_to_top(step: int) -> None:
     """After Back or Next, show the new stage from its top (a presenter should not land mid-page)."""
     if st.session_state.pop("demo_scroll_top", False):
-        components.html("<script>/* stage %d */ const d = window.parent.document; "
-                        "for (const el of d.querySelectorAll('[data-testid=\"stMain\"], section.main, .stMain')) { el.scrollTo({top: 0}); } "
-                        "window.parent.scrollTo({top: 0});</script>" % step, height=0)
+        st.html("<script>/* stage %d */ for (const el of document.querySelectorAll('[data-testid=\"stMain\"], section.main, .stMain')) "
+                "{ el.scrollTo({top: 0}); } window.scrollTo({top: 0});</script>" % step, unsafe_allow_javascript=True)
 
 
 def render(ds):
