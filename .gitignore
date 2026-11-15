@@ -3,3 +3,12 @@ __pycache__/
 .DS_Store
 .venv/
 .venv312/
+
+# credentials: never commit
+.env
+.env.*
+!.env.example
+.netrc
+
+# frontend build tooling
+UI/frontend/node_modules/
