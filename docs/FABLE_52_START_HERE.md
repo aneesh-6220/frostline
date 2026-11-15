@@ -2,6 +2,8 @@
 
 *Trace the evidence behind changing winters.*
 
+> Historical note: this is the hand-off as it stood when `fable-ready` was cut. The app has since been built and merged to `main`, and the Giovanni record has been integrated (`docs/SCIENTIFIC_METHODS.md` section M). For the current state, start with `README.md`.
+
 ## 0. Who and what (read first)
 - The public product is **Frostline**. The team is **Strongest Soldiers**. Public branding is "Frostline - by Strongest Soldiers". [legacy-name note] The earlier names (NorthLink for the product, Asterfen for the team) must never appear in anything a user or judge sees. Technical file names that still contain `northlink` (`UI/northlink_app.py`, `scripts/northlink_metrics.py`, `scripts/northlink_stats.py`, `scripts/northlink_recompute.py`) are preserved on purpose so imports, tests and the regeneration pipeline keep working; renaming them is optional and only safe if every import, test and doc is updated together.
 - **`docs/FROSTLINE_NORTH_STAR.md` is the authoritative product specification** and your primary execution instruction. Build the **complete Frostline application**, not a demo. The Guided Demo must be a path through the real production components and real `UI/data_real/` data, never a separate mockup.

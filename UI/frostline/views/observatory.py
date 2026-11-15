@@ -6,7 +6,7 @@ import streamlit as st
 from .. import analysis as an
 from .. import charts, fmt, ui
 from .. import giovanni as gv
-from ..registry import DEFAULT_LOCATION, DEFAULT_VARIABLE
+from ..registry import DEFAULT_LOCATION, DEFAULT_VARIABLE, GLOBAL_CONTEXT
 
 
 def _begin(ds):
@@ -36,6 +36,54 @@ def _giovanni_metric(ds) -> tuple:
             "MERRA-2 monthly T2M through NASA Giovanni")
 
 
+def _story(ds, op, op_n, env) -> None:
+    """The investigation in three plain steps, each with its live number and its verdict. No step claims a cause."""
+    s = ds.facts["snow"]
+    fragile = op_n.q is not None and (op_n.q < an.ALPHA) != (op.q is not None and op.q < an.ALPHA)
+    rows = [
+        ("Road record · Dettah", f"The ice road opens {op.direction}: {fmt.num(op.slope, 1, True)} days per decade",
+         f"Over {fmt.period(op.first, op.last)}, the recorded opening date moved {op.direction} ({ui.PLAIN_VERDICT[op.state].lower()}, q = {fmt.pval(op.q)}). "
+         "Dettah was picked after this trend was seen"
+         + (f", and the result does not hold in the shorter {fmt.period(op_n.first, op_n.last)} window (q = {fmt.pval(op_n.q)})" if fragile else "")
+         + ", so treat it as a lead, not a settled fact."),
+        ("NASA data · Dettah", f"But early-winter cold shows {ui.PLAIN_VERDICT[env.state].lower()}",
+         f"Freezing degree-days moved {fmt.num(env.slope, 0, True)} °C-days per decade, with a 95% interval of {fmt.interval(env.ci_low, env.ci_high, 0)}. "
+         "Year-to-year swings are much larger than any long-term shift, so this record alone does not show a matching shift in early-winter cold."),
+        ("Station data · Yellowknife A", "So other conditions may matter: snow is one open lead",
+         f"Winters with more snow on the ground on Nov 28 tended to open later (Spearman rho {fmt.num(s['sog_nov28_rho'], 2, True)}, n = {s['n']}, q = {fmt.pval(s['q'])}). "
+         "This is a hypothesis for further study, not a mechanism."),
+    ]
+    ui.section("The story in three steps", "Roads, cold and snow")
+    ui.html("<div class='fl-rows'>" + "".join(
+        f"<div><div class='n'>{i + 1}</div><div><div class='k'>{ui.esc(k)}</div><h4>{ui.esc(h)}</h4><p>{ui.esc(p)}</p></div></div>"
+        for i, (k, h, p) in enumerate(rows)) + "</div>")
+    with st.expander("How we tested this", expanded=False):
+        ui.html(ui.kv_table([
+            ("The trend line", "Theil-Sen slope: the median of the slopes between every pair of winters, so one extreme winter cannot drag it."),
+            ("Is it real or noise?", "Mann-Kendall test: do values rise or fall more often than chance would give?"),
+            ("The grey band", "The 95% range of plausible slopes. If it allows both up and down, the record cannot tell the direction."),
+            ("Many tests at once", "Running many tests produces some small p-values by luck, so results are corrected (Benjamini-Hochberg q). "
+                                   "Only q below 0.05 counts as a clear change."),
+        ]))
+
+
+def _global_context(ds) -> None:
+    """Published global and Arctic warming rates beside the local estimates. Context only: nothing is tested against them."""
+    ui.section("How this compares with global warming", "Context, not cause")
+    cells = [c for c in GLOBAL_CONTEXT]
+    if gv.available(ds):
+        loc = gv.locations(ds)[0]
+        for season, label in (("ANN", "This grid cell, whole year"), ("SON", "This grid cell, autumn (Sep to Nov)")):
+            t = gv.trend(ds, loc, season)
+            verdict = "clear change" if t.q is not None and t.q < an.ALPHA else "no clear change"
+            cells.append((label, fmt.num(t.slope_per_decade, 2, True), "°C per decade",
+                          f"{t.first} to {t.last}, 95% interval {fmt.interval(t.ci_low, t.ci_high, 2)}, q = {fmt.pval(t.q)}: {verdict}.",
+                          "MERRA-2 monthly T2M through NASA Giovanni"))
+    ui.metrics(cells)
+    ui.note("The global and Arctic figures are published averages over very large areas, shown for scale. One grid cell is far noisier than a global average, "
+            "so its intervals are much wider. Frostline does not test whether these winters match global warming and makes no statement of cause.", "How to read this")
+
+
 def render(ds):
     left, right = st.columns([0.92, 1.08], gap="large", vertical_alignment="center")
     with left:
@@ -53,16 +101,22 @@ def render(ds):
         f = an.trend(ds, DEFAULT_LOCATION, DEFAULT_VARIABLE, 2001, 2024)
         with st.container(key="fl_frame_home"):
             ui.html("<div class='fl-panel-head'><div><div class='fl-label'>Live from the data · Dettah, Yellowknife Bay</div>"
-                    "<div class='fl-panel-title'>Early-winter freezing degree-days, 24 winters of NASA data</div></div>"
-                    f"{ui.chip(f.state_label, ui.STATE_TONE[f.state])}</div>")
+                    "<div class='fl-panel-title'>How cold an average early-winter day was (Oct to Dec), 24 winters of NASA data</div></div>"
+                    f"{ui.verdict_chip(f)}</div>")
+            ui.answer(ds, f, subject="Early-winter cold at Dettah")
             ui.plot(charts.trend_chart(ds, f, height=320), key="home_chart")
-            ui.caption(f"NASA POWER daily T2M (MERRA-2 reanalysis, grid-cell value). Theil-Sen estimate "
-                       f"{fmt.num(f.slope, 0, True)} °C-days per decade, 95% interval {fmt.interval(f.ci_low, f.ci_high, 0)}: "
+            k = charts.PER_DAY[DEFAULT_VARIABLE]
+            ui.caption(f"Each dot is one winter: on average, how many degrees below 0 °C each day from Oct 1 to Dec 31 was "
+                       f"(the freezing degree-day total divided by its {k} days). NASA POWER daily T2M (MERRA-2 reanalysis, grid-cell value). "
+                       f"Theil-Sen estimate {fmt.num(f.slope / k, 2, True)} °C per day per decade, 95% interval {fmt.interval(f.ci_low / k, f.ci_high / k, 2)} "
+                       f"(as a total: {fmt.num(f.slope, 0, True)} °C-days per decade, {fmt.interval(f.ci_low, f.ci_high, 0)}): "
                        f"{f.state_label.lower()}.", top=True)
 
-    ui.section("What the evidence shows so far", "Computed from the approved data on every load")
     op = an.trend(ds, "dettah_bay", "open_day", 1993, 2024)
     op_n = an.trend(ds, "dettah_bay", "open_day", 2001, 2024)
+    _story(ds, op, op_n, f)
+
+    ui.section("What the evidence shows so far", "Computed from the approved data on every load")
     b, e = ds.facts["bias"], ds.facts["extended_126"]
     long_metric = _giovanni_metric(ds)
     ui.metrics([
@@ -78,6 +132,7 @@ def render(ds):
          f"{e['nominal']} of {e['n']} trend tests have p below 0.05 (about {e['expected_by_chance']} expected by chance). None survives correction for multiple testing.",
          "126-test family, winters 2001/02 to 2024/25"),
     ])
+    _global_context(ds)
 
     c = st.columns([1.1, 1], gap="large")
     with c[0]:

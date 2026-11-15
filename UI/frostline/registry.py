@@ -75,7 +75,20 @@ LITERATURE = [
     "Transportation Association of Canada (2018), conference paper 'Winter roads and climate adaptation'. "
     "https://tac-atc.ca/wp-content/uploads/barrettep_winter_roads_and_climate_adaptation.pdf",
     "ClimateData.ca, Winter Ice Roads in Northern Ontario. https://climatedata.ca/?p=15894",
+    "IPCC (2018). Summary for Policymakers, statement A.1. In: Global Warming of 1.5 °C. An IPCC Special Report. "
+    "https://www.ipcc.ch/sr15/chapter/spm/",
+    "Rantanen, M., Karpechko, A. Yu., Lipponen, A., et al. (2022). The Arctic has warmed nearly four times faster than the globe since 1979. "
+    "Communications Earth & Environment 3, 168. https://doi.org/10.1038/s43247-022-00498-3",
 ]
+
+# External reference rates shown beside the local results as context only (landing page). They are published values,
+# not computed by Frostline, and they are never tested against or combined with the local data.
+GLOBAL_CONTEXT = (
+    ("Global surface temperature", "about +0.2", "°C per decade",
+     "Recent rate of global warming (likely range 0.1 to 0.3 °C per decade).", "IPCC Special Report on 1.5 °C (2018), SPM A.1"),
+    ("The Arctic since 1979", "nearly 4×", "the global rate",
+     "Warming north of the Arctic Circle (66.5° N). Aklavik lies inside it; Dettah, at 62.4° N, lies south of it.", "Rantanen et al. (2022)"),
+)
 
 SOFTWARE = ["Python", "Streamlit", "Plotly", "pandas", "NumPy", "SciPy", "Leaflet (via folium and streamlit-folium)", "Esri ArcGIS Online basemap and label tiles, with OpenStreetMap as an alternative (map background; markers work without it)", "NASA POWER Daily API (live exploratory points only)", "h5py (offline verification of the Giovanni NetCDF file)"]
 

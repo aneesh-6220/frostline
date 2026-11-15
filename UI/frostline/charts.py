@@ -6,6 +6,7 @@ categorical colours follow the entity in a fixed order; text is never drawn in a
 """
 from __future__ import annotations
 
+import dataclasses
 import math
 
 import plotly.graph_objects as go
@@ -32,6 +33,7 @@ C_THIRD = "#4CC38A"       # slot 3
 TREND = "#E7ECF2"
 BAND = "rgba(163,174,189,0.14)"
 NEUTRAL = "#7D8898"
+GOOD = "#4CC38A"          # evidence state "supported" (matches --good in ui.CSS); never an entity colour
 WARN = "#E5B454"
 COLD, WARM = "#4C9BE8", "#E0776A"
 HOVER_BG, HOVER_LINE = "#1B212B", "#2E3644"
@@ -72,6 +74,35 @@ def _winter_ticks(years, step: int | None = None) -> dict:
                 range=[years[0] - 0.7, years[-1] + 0.7] if years else None)   # no tick label for a winter outside the record
 
 
+# How to read the y axis, in plain words. Defaults to the variable's own up_word; a few are spelled out.
+READING_HINT = {"fdd_octdec": "colder", "open_day": "later opening", "close_day": "later closing",
+                "open_to_close_days": "longer season"}
+
+# Display-only rescaling for trend charts. Oct-Dec freezing degree-days are a 92-day total (about 1,500 °C-days),
+# which is hard to picture; divided by the 92 days it reads as "about 17 °C below freezing per day on average".
+# Dividing every value, the trend line and its band by the same constant leaves the shape, p, q and verdict unchanged.
+# The statistics shown beside the chart stay in the approved units (°C-days).
+PER_DAY = {"fdd_octdec": 92}
+
+
+def display_var(var):
+    """(variable as plotted, divisor). Only variables in PER_DAY are rescaled."""
+    k = PER_DAY.get(var.id)
+    if not k:
+        return var, 1
+    return dataclasses.replace(var, short="Average cold per day, Oct to Dec", unit="°C below freezing", decimals=1), k
+
+
+def reading_hint(var) -> str:
+    """'↑ higher = colder' style hint so a viewer knows which way is which without reading the method."""
+    return f"↑ higher = {READING_HINT.get(var.id, var.up_word)}"
+
+
+def y_title(var, label: str | None = None) -> str:
+    """Two-line y-axis title: what is measured, then which direction is which."""
+    return f"{label or var.short} ({var.unit})<br><span style='font-size:11px'>{reading_hint(var)}</span>"
+
+
 def _value_hover(var, name: str) -> str:
     if var.id in ("open_day", "close_day"):
         return f"<b>Winter %{{customdata[0]}}</b><br>{name}: day %{{y:.0f}} (%{{customdata[1]}})<extra></extra>"
@@ -93,7 +124,7 @@ def _add_series(fig, var, years, values, color, name, row=None, col=None, showle
                              customdata=_custom(var, years, values), hovertemplate=_value_hover(var, name)), **kw)
 
 
-def _add_trend(fig, finding, years, color=TREND, name="Theil-Sen trend", band=True, row=None, col=None, showlegend=True):
+def _add_trend(fig, finding, years, color=TREND, name="Theil-Sen trend", band=True, row=None, col=None, showlegend=True, scale=1):
     if not finding.estimated or not len(years):
         return
     kw = dict(row=row, col=col) if row else {}
@@ -101,9 +132,10 @@ def _add_trend(fig, finding, years, color=TREND, name="Theil-Sen trend", band=Tr
     if band:
         bx = sorted(set(float(y) for y in years) | {float(finding.pivot_year)})
         lo, hi = an.slope_band(finding, bx)
+        lo, hi = [v / scale for v in lo], [v / scale for v in hi]
         fig.add_trace(go.Scatter(x=bx + bx[::-1], y=hi + lo[::-1], fill="toself", fillcolor=BAND, line=dict(width=0), hoverinfo="skip",
                                  name="95% interval of the slope", showlegend=showlegend), **kw)
-    fig.add_trace(go.Scatter(x=xs, y=an.fitted_line(finding, xs), mode="lines", name=name, showlegend=showlegend,
+    fig.add_trace(go.Scatter(x=xs, y=[v / scale for v in an.fitted_line(finding, xs)], mode="lines", name=name, showlegend=showlegend,
                              line=dict(color=color, width=2), hoverinfo="skip"), **kw)
 
 
@@ -113,20 +145,23 @@ def trend_chart(ds, finding, height: int = 430) -> go.Figure:
     s = an.get_series(ds, finding.location_id, finding.variable_id)
     color = LOCATION_COLOR.get(loc.id, C_PRIMARY)
     fig = go.Figure()
-    inside = [(y, v) for y, v in zip(s.years, s.values) if finding.first <= y <= finding.last]
-    outside = [(y, v) for y, v in zip(s.years, s.values) if not (finding.first <= y <= finding.last)]
+    shown, k = display_var(var)
+    inside = [(y, v / k) for y, v in zip(s.years, s.values) if finding.first <= y <= finding.last]
+    outside = [(y, v / k) for y, v in zip(s.years, s.values) if not (finding.first <= y <= finding.last)]
     obs_name = "Recorded value" if var.kind == "road" else "NASA value (reanalysis)" if var.source_id == "power" else "NASA value (satellite-derived)"
     if outside:
         fig.add_trace(go.Scatter(x=[y for y, _ in outside], y=[v for _, v in outside], mode="markers", name="Outside the selected period",
                                  marker=dict(color="rgba(0,0,0,0)", size=8, line=dict(color=NEUTRAL, width=1.5)),
-                                 customdata=_custom(var, [y for y, _ in outside], [v for _, v in outside]), hovertemplate=_value_hover(var, "Not in this analysis")))
-    _add_trend(fig, finding, [y for y, _ in inside])
-    _add_series(fig, var, [y for y, _ in inside], [v for _, v in inside], color, obs_name)
+                                 customdata=_custom(var, [y for y, _ in outside], [v for _, v in outside]), hovertemplate=_value_hover(shown, "Not in this analysis")))
+    _add_trend(fig, finding, [y for y, _ in inside], scale=k)
+    _add_series(fig, shown, [y for y, _ in inside], [v for _, v in inside], color, obs_name)
     _layout(fig, height)
     fig.update_xaxes(title_text="Winter (Oct 1 to Mar 31 of the next year)", **_winter_ticks(s.years))
-    fig.update_yaxes(title_text=f"{var.short} ({var.unit})")
+    fig.update_yaxes(title_text=y_title(shown))
+    fig.update_layout(margin=dict(l=76))
     if var.id in ("open_day", "close_day"):
         _date_ticks(fig, [v for v in s.values if fmt.is_num(v)])
+        fig.update_yaxes(title_text=reading_hint(var))
     return fig
 
 
@@ -158,7 +193,8 @@ def comparison_chart(ds, cmp: an.Comparison, height: int = 430) -> go.Figure:
     _layout(fig, height)
     fig.update_layout(margin=dict(r=84))
     fig.update_xaxes(title_text="Winter (matched in both series)", **_winter_ticks(cmp.common_years or [cmp.first, cmp.last]))
-    fig.update_yaxes(title_text=f"{var.short} ({var.unit})")
+    fig.update_yaxes(title_text=y_title(var))
+    fig.update_layout(margin=dict(l=76))
     return fig
 
 
@@ -186,15 +222,17 @@ def forest_chart(rows: list, unit: str, decimals: int = 1, height: int | None = 
     rows = [r for r in rows if fmt.is_num(r.get("slope"))]
     rows = sorted(rows, key=lambda r: r["slope"])
     fig = go.Figure()
-    for emphasis, name in ((True, "q below 0.05 in the stated family"), (False, "Not supported after correction")):
+    # "Clear change" uses the evidence-state green (the same hue as the Supported badge), not Dettah's blue,
+    # so one colour never means both a place and a verdict.
+    for emphasis, name in ((True, "Clear change (q below 0.05 in the stated family)"), (False, "No clear change after correction")):
         sub = [r for r in rows if bool(r.get("emphasis")) == emphasis]
         if not sub:
             continue
         fig.add_trace(go.Scatter(
             x=[r["slope"] for r in sub], y=[r["label"] for r in sub], mode="markers", name=name,
-            marker=dict(size=11, color=C_PRIMARY if emphasis else BG, line=dict(color=C_PRIMARY if emphasis else NEUTRAL, width=2), symbol="circle"),
+            marker=dict(size=11, color=GOOD if emphasis else BG, line=dict(color=GOOD if emphasis else NEUTRAL, width=2), symbol="circle"),
             error_x=dict(type="data", symmetric=False, array=[r["hi"] - r["slope"] for r in sub], arrayminus=[r["slope"] - r["lo"] for r in sub],
-                         color=C_PRIMARY if emphasis else NEUTRAL, thickness=2, width=0),
+                         color=GOOD if emphasis else NEUTRAL, thickness=2, width=0),
             customdata=[[fmt.num(r["slope"], decimals, True), fmt.interval(r["lo"], r["hi"], decimals), r.get("note", "")] for r in sub],
             hovertemplate=f"<b>%{{y}}</b><br>%{{customdata[0]}} {unit}<br>95% interval %{{customdata[1]}}<br>%{{customdata[2]}}<extra></extra>"))
     fig.add_vline(x=0, line=dict(color=AXIS, width=1, dash="dot"))
@@ -233,7 +271,7 @@ def timeline_chart(ds, location_id: str, env_variable_id: str = "fdd_octdec", hi
     fig.update_xaxes(**_winter_ticks(all_years, step=6))
     fig.update_xaxes(title_text="Winter<br>Dotted line: Dec 31, the end of the Oct to Dec window", row=2, col=1)
     fig.update_layout(margin=dict(b=68))
-    fig.update_yaxes(title_text=var.unit, row=1, col=1)
+    fig.update_yaxes(title_text=f"{var.unit}<br><span style='font-size:11px'>{reading_hint(var)}</span>", row=1, col=1)
     vals = list(ok.open_day) + list(ok.close_day)
     _date_ticks(fig, vals, row=2, col=1)
     fig.update_yaxes(range=[min(vals) - 12, max(vals) + 10], row=2, col=1)
@@ -272,8 +310,8 @@ def station_fdd_chart(ds, height: int = 380) -> go.Figure:
     _layout(fig, height)
     fig.update_layout(margin=dict(r=84))
     fig.update_xaxes(title_text="Winter<br>Gaps: station winter incomplete, not filled", **_winter_ticks(s.years_all, step=6))
-    fig.update_yaxes(title_text="Oct-Dec freezing degree-days (°C-days)")
-    fig.update_layout(margin=dict(b=68))
+    fig.update_yaxes(title_text=y_title(var))
+    fig.update_layout(margin=dict(b=68, l=76))
     return fig
 
 

@@ -33,11 +33,14 @@ def render(ds):
     with left:
         with st.container(key="fl_frame_detective"):
             ui.html(f"<div class='fl-panel-head'><div><div class='fl-label'>{ui.esc(loc.short)} · winters {fmt.period(inv.first, inv.last)}</div>"
-                    f"<div class='fl-panel-title'>{ui.esc(var.short)} ({ui.esc(var.unit)})</div></div></div>")
+                    f"<div class='fl-panel-title'>{ui.esc(var.short)} ({ui.esc(var.unit)})</div></div>{ui.verdict_chip(f)}</div>")
+            ui.answer(ds, f)
             ui.plot(charts.trend_chart(ds, f), key="detective_chart")
             kind = "Recorded values from the government record" if var.kind == "road" else "NASA estimates for a grid cell, not station observations"
             ui.caption(f"Points: {kind}, one per winter. White line: Theil-Sen estimate for the selected period. "
-                       "Grey band: 95% interval of the slope. Hollow points lie outside the selected period. Hover a point to inspect that winter.", top=True)
+                       "Grey band: 95% interval of the slope. Hollow points lie outside the selected period. Hover a point to inspect that winter."
+                    + (f" The chart shows the average per day (the {var.unit} total divided by {charts.PER_DAY[var.id]} days) so it is easier to picture; "
+                       f"the statistics use the total, and dividing by a constant does not change the verdict." if var.id in charts.PER_DAY else ""), top=True)
         ui.plain_language(ds, f)
     with right:
         ui.finding_card(ds, f)

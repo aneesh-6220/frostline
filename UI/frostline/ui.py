@@ -26,6 +26,14 @@ PAGES: dict = {}   # view key -> st.Page, filled by the entrypoint on every run
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
 
 STATE_TONE = {an.SUPPORTED: "good", an.UNRESOLVED: "neutral", an.EXPLORATORY: "warn", an.INSUFFICIENT: "muted", an.UNAVAILABLE: "muted"}
+# The same evidence states in everyday words, for badges and one-line answers. The technical label stays in the tooltip.
+PLAIN_VERDICT = {an.SUPPORTED: "Clear change", an.UNRESOLVED: "No clear change", an.EXPLORATORY: "Uncertain (exploratory)",
+                 an.INSUFFICIENT: "Too little data", an.UNAVAILABLE: "Cannot be tested"}
+PLAIN_MEANING = {an.SUPPORTED: "The change stands out from year-to-year swings, even after correcting for the number of tests run.",
+                 an.UNRESOLVED: "Year-to-year swings are larger than any long-term shift, so the record cannot separate a trend from no change. That is not proof of no change.",
+                 an.EXPLORATORY: "This uses a period you picked yourself, so it is a first look rather than a tested result.",
+                 an.INSUFFICIENT: "There are not enough winters with data to estimate a trend.",
+                 an.UNAVAILABLE: "The values barely vary, so a trend cannot be estimated."}
 
 # ------------------------------------------------------------------ design tokens
 # Surfaces step up in lightness; ink steps down. Every text token passes WCAG AA (4.5:1) on --surface.
@@ -154,6 +162,9 @@ button[data-testid^="stBaseButton"]:disabled{opacity:.42}
 .fl-plain{font-size:14px;line-height:1.6;color:var(--ink-2);margin-top:var(--s4)}
 .fl-plain b{color:var(--ink);font-weight:600}
 .fl-gap{height:var(--s4)}
+.fl-answer{font-size:15px;line-height:1.55;color:var(--ink-2);margin:0 0 var(--s3);max-width:80ch}
+.fl-answer b{color:var(--ink);font-weight:600}
+.fl-hint{color:var(--ink-3);font-size:13px;white-space:nowrap}
 
 /* ---------- hero (Observatory) ---------- */
 .fl-hero{padding:var(--s2) 0 var(--s4)}
@@ -473,7 +484,7 @@ def console(ds, where=None) -> Investigation:
         inv = current()
         f = an.trend(ds, inv.location_id, inv.variable_id, inv.first, inv.last)
         fixed = an.is_fixed_window(inv.variable_id, inv.first, inv.last)
-        html(f"<div class='fl-side-status'>{chip(f.state_label, STATE_TONE[f.state])}"
+        html(f"<div class='fl-side-status'>{verdict_chip(f)}"
              f"<div class='meta'>{fmt.period(inv.first, inv.last)} · n = {f.n} winters · "
              f"{'approved fixed window' if fixed else 'user-selected window: exploratory, not adjusted for multiple testing'}</div></div>")
         html(f"<div class='fl-side-digest'>Data digest <code>{ds.digest}</code> · case-study values come from the approved files in UI/data_real; only exploratory map points use live NASA POWER requests</div>")
@@ -481,8 +492,24 @@ def console(ds, where=None) -> Investigation:
 
 
 # -------------------------------------------------------------- components
-def chip(label: str, tone: str = "neutral") -> str:
-    return f"<span class='fl-chip {tone}'><i></i>{esc(label)}</span>"
+def chip(label: str, tone: str = "neutral", tip: str = "") -> str:
+    title = f" title='{_html.escape(tip, quote=True)}'" if tip else ""
+    return f"<span class='fl-chip {tone}'{title}><i></i>{esc(label)}</span>"
+
+
+def verdict_chip(f) -> str:
+    """Evidence badge in everyday words (Clear change / No clear change / Uncertain); the technical label is the tooltip."""
+    return chip(PLAIN_VERDICT[f.state], STATE_TONE[f.state], tip=f.state_label)
+
+
+def answer(ds, f, subject: str | None = None) -> None:
+    """A one-line plain answer above a chart: the verdict, what it means, and which way the axis reads."""
+    from .charts import reading_hint
+
+    var, loc = VARIABLES[f.variable_id], an.locations(ds)[f.location_id]
+    what = subject or f"{var.short} at {loc.short}"
+    html(f"<div class='fl-answer' role='status'><b>{esc(PLAIN_VERDICT[f.state])}.</b> {esc(what)}, winters {fmt.period(f.first, f.last)}: "
+         f"{esc(PLAIN_MEANING[f.state])} <span class='fl-hint'>Chart: {esc(reading_hint(var))}.</span></div>")
 
 
 def kicker(text: str) -> str:
@@ -542,7 +569,7 @@ def finding_card(ds, f: an.Finding, title: str | None = None, show_table: bool =
     var, loc = VARIABLES[f.variable_id], an.locations(ds)[f.location_id]
     tone = STATE_TONE[f.state]
     d = var.slope_decimals
-    head = _head(title or var.short + " · " + loc.short, chip(f.state_label, tone))
+    head = _head(title or var.short + " · " + loc.short, verdict_chip(f))
     if f.estimated:
         big = (f"<div class='big'>{fmt.num(f.slope, d, True)}<small>{esc(var.unit_per_decade)} · {esc(f.direction)}</small></div>"
                f"<p class='dim'>95% interval {fmt.interval(f.ci_low, f.ci_high, d)} · n = {f.n} winters · {fmt.period(f.first, f.last)}"
