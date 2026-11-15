@@ -16,28 +16,28 @@ from . import fmt
 from .registry import ROAD_KIND_LABEL, VARIABLES
 
 # surfaces and ink (the same tokens as ui.CSS and .streamlit/config.toml)
-BG = "#0B0E13"
-SURFACE = "#12161D"
-INK = "#E7ECF2"
-INK_2 = "#A3AEBD"
-INK_3 = "#7D8898"
-GRID = "rgba(163,174,189,0.09)"
-AXIS = "rgba(163,174,189,0.28)"
+BG = "#FFFFFF"
+SURFACE = "#FFFFFF"
+INK = "#1D1D1F"
+INK_2 = "#424245"
+INK_3 = "#6E6E73"
+GRID = "rgba(60,60,67,0.08)"
+AXIS = "rgba(60,60,67,0.22)"
 # categorical slots (fixed order; the entity keeps its colour everywhere).
-# Checked against the dark surface: contrast >= 5.9:1 for each; pair separation >= 23 dE (OKLab x100) under
-# deuteranopia, protanopia and tritanopia simulation.
-C_PRIMARY = "#4C9BE8"     # slot 1: Dettah / NASA
-C_SECOND = "#E0773F"      # slot 2: Aklavik / station
-C_THIRD = "#4CC38A"       # slot 3
-TREND = "#E7ECF2"
-BAND = "rgba(163,174,189,0.14)"
-NEUTRAL = "#7D8898"
-WARN = "#E5B454"
-COLD, WARM = "#4C9BE8", "#E0776A"
-HOVER_BG, HOVER_LINE = "#1B212B", "#2E3644"
+# Chosen for a white surface: blue and orange differ in lightness as well as hue, so they separate under
+# colour-vision deficiency; green is the third slot.
+C_PRIMARY = "#0071E3"     # slot 1: Dettah / NASA
+C_SECOND = "#E8700A"      # slot 2: Aklavik / station
+C_THIRD = "#248A3D"       # slot 3
+TREND = "#1D1D1F"
+BAND = "rgba(60,60,67,0.10)"
+NEUTRAL = "#8E8E93"
+WARN = "#B25000"
+COLD, WARM = "#0071E3", "#D70015"
+HOVER_BG, HOVER_LINE = "#FFFFFF", "#D2D2D7"
 
 LOCATION_COLOR = {"dettah_bay": C_PRIMARY, "aklavik_delta": C_SECOND}
-FONT = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+FONT = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', Inter, 'Segoe UI', sans-serif"
 CONFIG = {"displaylogo": False, "modeBarButtonsToRemove": ["lasso2d", "select2d", "autoScale2d", "zoomIn2d", "zoomOut2d"], "responsive": True}
 
 

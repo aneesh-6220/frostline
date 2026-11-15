@@ -5,7 +5,7 @@ Select a place -> choose a question -> retrieve NASA observations -> analyse the
 * Curated case studies (Dettah, Aklavik) select the shared investigation and open the precomputed, reproducible analyses.
 * Any other click inside the supported area becomes an exploratory point: live NASA POWER daily data are retrieved on request
   and run through the same metric and trend engine. No road records are attached to exploratory points.
-* Basemap tiles are Esri ArcGIS Online basemaps (dark canvas plus a place-label layer, or topographic) with an OpenStreetMap alternative, all attributed on the map. Nothing on the map is
+* Basemap tiles are Esri ArcGIS Online basemaps (light gray canvas plus a place-label layer, or topographic) with an OpenStreetMap alternative, all attributed on the map. Nothing on the map is
   invented: no road geometry, no risk overlay, no raster surface. Rectangles are calculated grid cells or the supported area.
 * Without tiles (offline) the markers still draw, and the coordinate form and case-study buttons below the map work without the map.
 """
@@ -28,15 +28,15 @@ from ..data import code_version
 from ..registry import ROAD_KIND_LABEL, primary_locations
 
 COLORS = {"dettah_bay": ch.C_PRIMARY, "aklavik_delta": ch.C_SECOND}
-EXPLORE_COLOR = "#E7ECF2"
+EXPLORE_COLOR = "#1D1D1F"
 ESRI = "https://server.arcgisonline.com/ArcGIS/rest/services/{}/MapServer/tile/{{z}}/{{y}}/{{x}}"
 ESRI_ATTR = 'Basemap &copy; <a href="https://www.esri.com/">Esri</a>, HERE, Garmin, FAO, NOAA, USGS, &copy; OpenStreetMap contributors, and the GIS User Community'
 OSM_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 # (name, url, attribution, is_overlay, shown). CARTO basemaps were dropped: since 2026 they return an "API key required" tile without a key.
-TILES = (("Dark (Esri Dark Gray Canvas)", ESRI.format("Canvas/World_Dark_Gray_Base"), ESRI_ATTR, False, True),
+TILES = (("Light (Esri Light Gray Canvas)", ESRI.format("Canvas/World_Light_Gray_Base"), ESRI_ATTR, False, True),
          ("Topographic (Esri World Topo)", ESRI.format("World_Topo_Map"), ESRI_ATTR, False, False),
          ("OpenStreetMap", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", OSM_ATTR, False, False),
-         ("Place labels (Esri)", ESRI.format("Canvas/World_Dark_Gray_Reference"), ESRI_ATTR, True, True))
+         ("Place labels (Esri)", ESRI.format("Canvas/World_Light_Gray_Reference"), ESRI_ATTR, True, True))
 STEPS = ["Select a place", "Choose a question", "Retrieve observations", "Analyze the trend", "Understand the evidence", "Export"]
 MATCH_TOL = 1e-4
 
@@ -52,13 +52,13 @@ def build_map(ds, selected: str | None, point: tuple | None = None) -> folium.Ma
     for name, url, attr, overlay, show in TILES:
         folium.TileLayer(tiles=url, attr=attr, name=name, max_zoom=16, max_native_zoom=16, show=show, overlay=overlay, control=True).add_to(m)
     cov = pa.COVERAGE
-    folium.Rectangle([[cov["south"], cov["west"]], [cov["north"], cov["east"]]], color="#8CCBF0", weight=1, dash_array="6 6", fill=False,
+    folium.Rectangle([[cov["south"], cov["west"]], [cov["north"], cov["east"]]], color="#0071E3", weight=1, dash_array="6 6", fill=False,
                      tooltip="Supported area for exploratory points (click anywhere inside)", interactive=False).add_to(m)
     for loc in primary_locations(an.locations(ds)):
         on = loc.id == selected
         folium.Rectangle(_rect(loc.cell), color=COLORS[loc.id], weight=1.5, fill=True, fill_opacity=0.12,
                          tooltip=f"NASA MERRA-2 grid cell for {loc.short} (calculated)" + (" · Giovanni monthly record 1980 to 2025" if loc.id in gv.locations(ds) else "")).add_to(m)
-        folium.CircleMarker([loc.lat, loc.lon], radius=11 if on else 8, color="#E7ECF2" if on else "#0B0E13", weight=3 if on else 2, fill=True,
+        folium.CircleMarker([loc.lat, loc.lon], radius=11 if on else 8, color="#1D1D1F" if on else "#FFFFFF", weight=3 if on else 2, fill=True,
                             fill_color=COLORS[loc.id], fill_opacity=1.0,
                             tooltip=folium.Tooltip(f"<b>{loc.name}</b><br>Curated case study · NASA data + road records" + ("<br><i>selected</i>" if on else ""), sticky=True)).add_to(m)
     folium.LayerControl(position="topright", collapsed=True).add_to(m)
@@ -71,7 +71,7 @@ def selection_layer(point: tuple | None) -> folium.FeatureGroup:
         cell = pa.merra2_cell(*point)
         folium.Rectangle(_rect(cell), color=EXPLORE_COLOR, weight=1.5, dash_array="4 4", fill=True, fill_opacity=0.06,
                          tooltip="NASA MERRA-2 grid cell that POWER values describe (calculated)").add_to(fg)
-        folium.CircleMarker(list(point), radius=9, color=EXPLORE_COLOR, weight=3, fill=True, fill_color="#0B0E13", fill_opacity=0.9,
+        folium.CircleMarker(list(point), radius=9, color=EXPLORE_COLOR, weight=3, fill=True, fill_color="#FFFFFF", fill_opacity=0.9,
                             tooltip=f"Exploratory point {point[0]:.2f} N, {abs(point[1]):.2f} W (selected)").add_to(fg)
     return fg
 
@@ -252,7 +252,7 @@ def render(ds):
             kind, val = resolve_click(ds, click["lat"], click["lng"])
             apply_selection(ds, kind, val)
             st.rerun()
-        ui.html("<div class='fl-src'>Coloured dots: curated case studies (NASA daily data plus government road records). White ring: your exploratory point. "
+        ui.html("<div class='fl-src'>Coloured dots: curated case studies (NASA daily data plus government road records). Dark ring: your exploratory point. "
                 "Shaded rectangles: calculated NASA MERRA-2 grid cells. Dashed outline: area supported for exploration. No road line, risk layer or raster is drawn. "
                 "Basemap and labels &copy; Esri and contributors, including &copy; OpenStreetMap contributors (other basemaps in the layer menu, top right). If tiles do not load, markers still work, and the case-study buttons and coordinate form beside the map (below it on a phone) need no map.</div>")
         if ss.get("xp_outside"):

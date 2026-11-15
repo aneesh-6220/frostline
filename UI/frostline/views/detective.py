@@ -36,7 +36,7 @@ def render(ds):
                     f"<div class='fl-panel-title'>{ui.esc(var.short)} ({ui.esc(var.unit)})</div></div></div>")
             ui.plot(charts.trend_chart(ds, f), key="detective_chart")
             kind = "Recorded values from the government record" if var.kind == "road" else "NASA estimates for a grid cell, not station observations"
-            ui.caption(f"Points: {kind}, one per winter. White line: Theil-Sen estimate for the selected period. "
+            ui.caption(f"Points: {kind}, one per winter. Black line: Theil-Sen estimate for the selected period. "
                        "Grey band: 95% interval of the slope. Hollow points lie outside the selected period. Hover a point to inspect that winter.", top=True)
         ui.plain_language(ds, f)
     with right:
