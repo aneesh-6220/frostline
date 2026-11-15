@@ -7,7 +7,7 @@ Question: how are freezing-season conditions (NASA POWER / MERRA-2 reanalysis) a
 
 Start with `docs/FABLE_52_START_HERE.md` (single entry point), then `docs/FABLE_HANDOFF_FINAL.md` and `docs/APP_IMPLEMENTATION_CONTRACT.md`. Approved findings: `docs/APPROVED_FINDINGS.md` (generated). Submission draft: `submission/SUBMISSION_DRAFT.md`. Rules for what may be claimed: `docs/SCIENTIFIC_METHODS.md`. Numbers: `docs/RESULTS.md` (generated).
 
-Status: data, statistics, documentation and tests are complete for the remediation described in the handoff; open items are listed there. The Streamlit prototype in `UI/` still runs on synthetic data (`UI/data/`) and must not be shown as real until it is repointed to `UI/data_real/` (see `UI/README.md`).
+Status: the Frostline application is built on the real data in `UI/data_real/` (branch `frostline-implementation`). Run it from the repository root with `pip install -r UI/requirements.txt` and `streamlit run UI/frostline_app.py` (Python 3.12). What is implemented, how each feature was verified and what is still open: `docs/FROSTLINE_IMPLEMENTATION_MATRIX.md`. Submission assets: `submission/`. Still open: public deployment, the NASA listed-resource extraction (Giovanni) and statistical sign-off. The files under `UI/data/` are a legacy synthetic prototype that the application never reads (see `UI/README.md`).
 
 Reproduce everything from the cached raw data (no network): `python3 -I scripts/regenerate_all.py`
 Check that committed outputs match: `python3 -I scripts/regenerate_all.py --check`

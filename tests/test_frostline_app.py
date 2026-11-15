@@ -836,5 +836,53 @@ class Extensibility(unittest.TestCase):
         self.assertEqual({l.road_id for l in LOCS.values()}, set(DS["corridor_panel"].road_id))
 
 
+class SubmissionAssets(unittest.TestCase):
+    """The presentation material quotes only figures the app computes, and claims nothing that has not happened."""
+    TEXT = ["submission/DEMO_SCRIPT.md", "submission/frostline_slides.html", "submission/ARCHITECTURE.md", "submission/AI_USE_DISCLOSURE.md",
+            "submission/DEPLOYMENT.md", "docs/FROSTLINE_IMPLEMENTATION_MATRIX.md", "docs/EXTENDING_FROSTLINE.md"]
+
+    def read(self, f):
+        return open(P(f), encoding="utf-8").read()
+
+    def test_assets_exist(self):
+        for f in self.TEXT + ["submission/frostline_slides.pdf", "submission/sample_evidence_brief_dettah_opening_day.html", "submission/sample_evidence_brief_dettah_opening_day.csv"]:
+            self.assertTrue(os.path.getsize(P(f)) > 500, f)
+        shots = glob.glob(P("submission/screenshots/*.png"))
+        self.assertGreaterEqual(len(shots), 12)
+        for img in re.findall(r'src="([^"]+)"', self.read("submission/frostline_slides.html")):
+            self.assertTrue(os.path.exists(P("submission", img)), img)
+        self.assertEqual(len(re.findall(r'<section class="slide">', self.read("submission/frostline_slides.html"))), 7)   # at most seven slides
+
+    def test_quoted_figures_are_the_computed_figures(self):
+        op = an.trend(DS, "dettah_bay", "open_day", 1993, 2024)
+        env = an.trend(DS, "dettah_bay", "fdd_octdec", 2001, 2024)
+        e, b = DS.facts["extended_126"], DS.facts["bias"]
+        needles = [f"{fmt.num(op.slope, 1, True)} days per decade", f"{fmt.num(op.ci_low, 1)} to {fmt.num(op.ci_high, 1)}", f"{fmt.num(env.slope, 0, True)} °C-days per decade",
+                   f"{fmt.num(env.ci_low, 0)} to {fmt.num(env.ci_high, 0)}", f"{e['nominal']}", f"{e['n']}", f"{op.q_family_n} route-level tests"]
+        for f in ("submission/DEMO_SCRIPT.md", "submission/frostline_slides.html"):
+            s = re.sub(r"<[^>]+>", " ", self.read(f))
+            for n in needles:
+                self.assertIn(n, s, f"{f}: {n}")
+        self.assertIn(f"q = {fmt.pval(op.q)}", self.read("submission/frostline_slides.html"))
+        self.assertIn(fmt.num(b["overall_oct_dec"], 2, True), self.read("submission/frostline_slides.html"))
+        self.assertIn(f"{b['paired_days']:,} paired days", self.read("submission/frostline_slides.html"))
+        sample = self.read("submission/sample_evidence_brief_dettah_opening_day.html")
+        for label, value in brief.stat_rows(DS, op):
+            import html as _h
+            self.assertIn(_h.escape(value, quote=True), sample, label)
+
+    def test_no_overclaiming_or_prohibited_wording(self):
+        bad = [r"giovanni extraction (was|has been) (completed|done|verified)", r"eligibility (is|was) (confirmed|verified)", r"signed off by", r"(is|was|has been) deployed (at|to)\b",
+               r"NorthLink|Asterfen", r"pre-?registered", r"caused by", r"due to warming"]
+        for f in self.TEXT:
+            s = self.read(f)
+            self.assertNotIn("\u2014", s, f)
+            for pat in bad:
+                self.assertIsNone(re.search(pat, re.sub(r"northlink_[a-z_]+(\.py)?", "", s), re.I), f"{f}: {pat}")
+        self.assertIn("not deployed", self.read("submission/DEPLOYMENT.md").lower())
+        self.assertIn("not yet obtained", self.read("submission/frostline_slides.html"))
+        self.assertIn("[____]", self.read("submission/SUBMISSION_DRAFT.md"))
+
+
 if __name__ == "__main__":
     unittest.main()

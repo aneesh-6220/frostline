@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Frostline - by Strongest Soldiers</title>
+<style>
+@page{size:13.333in 7.5in;margin:0}
+*{box-sizing:border-box}
+body{margin:0;background:#060b14;font-family:Inter,'Segoe UI',system-ui,-apple-system,sans-serif;color:#E8EEF7}
+.slide{width:13.333in;height:7.5in;padding:.55in .65in;background:radial-gradient(900px 420px at 80% -120px,rgba(57,135,229,.2),transparent 62%),#0B1220;page-break-after:always;display:flex;flex-direction:column;position:relative;overflow:hidden;margin:0 auto 16px}
+.eyebrow{font-size:11pt;letter-spacing:.2em;text-transform:uppercase;color:#7CCBF7;font-weight:600}
+h1{font-size:44pt;line-height:1.05;margin:.12in 0 .14in;letter-spacing:-.01em}
+h2{font-size:28pt;line-height:1.12;margin:.08in 0 .18in;letter-spacing:-.01em}
+p,li{font-size:14.5pt;line-height:1.5;color:#C5D1E2;margin:0 0 .1in}
+ul{margin:0;padding-left:.25in}
+b{color:#E8EEF7}
+.row{display:flex;gap:.4in;flex:1;min-height:0}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.shot{flex:1.35;min-width:0;display:flex;align-items:center}
+.shot img{width:100%;border-radius:12px;border:1px solid #22314D;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.stat{border:1px solid #22314D;border-radius:12px;background:rgba(17,27,46,.9);padding:.16in .2in;margin-bottom:.12in}
+.stat .n{font-size:26pt;font-weight:700;color:#E8EEF7;line-height:1.1}
+.stat .n small{font-size:12pt;font-weight:500;color:#A9B8CE;margin-left:.08in}
+.stat p{font-size:12pt;margin:.04in 0 0}
+.foot{position:absolute;left:.65in;right:.65in;bottom:.26in;display:flex;justify-content:space-between;font-size:9.5pt;color:#71829B}
+.steps span{display:inline-block;border:1px solid #22314D;border-radius:999px;padding:.05in .14in;font-size:11.5pt;margin:0 .04in .08in 0;color:#E8EEF7}
+.amber{border-color:rgba(250,178,25,.45);background:rgba(250,178,25,.07)}
+@media print{body{background:none}.slide{margin:0}}
+</style></head><body>
+
+<section class="slide"><div class="row"><div class="col">
+<div class="eyebrow">NASA Space Apps 2026 · Be An Earth System Trend Detective!</div>
+<h1>Frostline</h1>
+<p style="font-size:20pt;color:#E8EEF7">Trace the evidence behind changing winters.</p>
+<p>An interactive investigation platform that turns NASA Earth science data into a guided, reproducible study of how northern winter conditions are changing, and of what the evidence does and does not show about seasonal roads.</p>
+<p><b>Strongest Soldiers</b> · Halifax</p>
+</div><div class="shot"><img src="screenshots/01_observatory.png" alt="Frostline Observatory"></div></div>
+<div class="foot"><span>Frostline - by Strongest Soldiers</span><span>1 / 7</span></div></section>
+
+<section class="slide"><div class="eyebrow">The problem</div><h2>Change is easy to talk about and hard to investigate</h2>
+<div class="row"><div class="col">
+<p>Seasonal roads on frozen lakes and rivers connect northern communities and carry supplies each winter.</p>
+<p>Asking how winters and road seasons have changed means:</p>
+<ul><li>finding the right NASA datasets and variables</li><li>cleaning daily records and computing seasonal indicators</li><li>fitting trends and judging uncertainty</li><li>comparing places fairly</li><li>locating government road records and aligning them in time</li><li>deciding what can honestly be concluded</li></ul>
+<p style="margin-top:.14in"><b>Frostline compresses that workflow into one guided investigation.</b></p>
+</div><div class="shot"><img src="screenshots/04_northern_atlas.png" alt="Northern Atlas"></div></div>
+<div class="foot"><span>Frostline - by Strongest Soldiers</span><span>2 / 7</span></div></section>
+
+<section class="slide"><div class="eyebrow">What Frostline does</div><h2>From a question to a reproducible finding</h2>
+<div class="steps"><span>Ask a question</span><span>Select a location</span><span>Discover a NASA variable</span><span>Examine the record</span><span>Quantify change</span><span>Evaluate uncertainty</span><span>Compare regions</span><span>Investigate road history</span><span>Assess the evidence</span><span>Export a brief</span></div>
+<div class="row"><div class="col">
+<ul><li><b>Choose</b> a location, a variable and a period</li><li><b>See</b> the real per-winter series</li><li><b>Get</b> the rate of change per decade, two confidence intervals and a Mann-Kendall test</li><li><b>Change</b> anything and every number is recomputed</li><li>Your own period is labelled <b>exploratory</b> and loses its adjusted value</li></ul>
+</div><div class="shot"><img src="screenshots/06_trend_detective.png" alt="Trend Detective"></div></div>
+<div class="foot"><span>Frostline - by Strongest Soldiers</span><span>3 / 7</span></div></section>
+
+<section class="slide"><div class="eyebrow">Data and method</div><h2>NASA data, tested statistics, nothing typed by hand</h2>
+<div class="row"><div class="col">
+<ul><li><b>NASA POWER daily</b> (MERRA-2 reanalysis): 24 winters, 2001/02 to 2024/25, 0 missing days</li><li><b>NWT Table 108</b>: government opening and closing dates, 1993/94 to 2024/25, 17 routes</li><li><b>ECCC stations</b>: 8,574 paired days of ground truth</li><li>Theil-Sen slope, Mann-Kendall test, moving-block bootstrap interval</li><li>Benjamini-Hochberg correction in declared families</li><li>Predictor windows that end before the outcome, to avoid leakage</li><li>More than 150 automated tests; every derived file regenerates byte for byte</li></ul>
+</div><div class="shot"><img src="screenshots/07_regional_comparison.png" alt="Regional comparison"></div></div>
+<div class="foot"><span>Frostline - by Strongest Soldiers</span><span>4 / 7</span></div></section>
+
+<section class="slide"><div class="eyebrow">What the evidence shows</div><h2>A later-opening road, and a climate record that does not resolve a trend</h2>
+<div class="row"><div class="col">
+<div class="stat"><div class="n">+9.0<small>days per decade</small></div><p>Dettah ice road opening, 1993/94 to 2024/25 (95% interval 3.6 to 12.4, n = 32; q = 0.002 across 51 route-level tests). Exploratory.</p></div>
+<div class="stat"><div class="n">+15<small>°C-days per decade</small></div><p>NASA freezing accumulation at Dettah, 24 winters (95% interval -108 to 111). Not statistically distinguishable from no change. That is not proof of no change.</p></div>
+<div class="stat"><div class="n">0 of 126<small>survive correction</small></div><p>20 of 126 trend tests have p below 0.05; none survives correction for multiple testing.</p></div>
+</div><div class="shot"><img src="screenshots/08_corridor_road_history.png" alt="Corridor road history"></div></div>
+<div class="foot"><span>The evidence does not show what produced the change in opening dates.</span><span>5 / 7</span></div></section>
+
+<section class="slide"><div class="eyebrow">The Evidence Engine</div><h2>How far can this evidence be trusted?</h2>
+<div class="row"><div class="col">
+<p>Seven aspects of evidence quality, judged one by one with reasons read from the data. No overall score.</p>
+<div class="stat amber"><div class="n">-5.50<small>°C in Oct to Dec</small></div><p>NASA reanalysis against the Yellowknife A station. Frostline shows the disagreement instead of hiding it, and applies no correction.</p></div>
+<ul><li>Observations, derived indicators and inference kept apart</li><li>Limitations and unanswered questions listed for every investigation</li><li>A downloadable <b>Evidence Brief</b> with sources and file hashes</li></ul>
+</div><div class="shot"><img src="screenshots/10_evidence_engine.png" alt="Evidence Engine"></div></div>
+<div class="foot"><span>Frostline - by Strongest Soldiers</span><span>6 / 7</span></div></section>
+
+<section class="slide"><div class="eyebrow">Limits, status and how to try it</div><h2>What Frostline claims, and what it does not</h2>
+<div class="row"><div class="col">
+<ul><li>Not a road-safety tool. It does not measure ice or predict opening dates.</li><li>All results are exploratory. Dettah was chosen after its trend was seen; the all-route correction adjusts for that.</li><li>NASA grid-cell values are not local conditions.</li><li><b>NASA listed resource:</b> data come from NASA POWER (MERRA-2). A Giovanni extraction is prepared and not yet obtained.</li><li><b>Statistical sign-off:</b> pending.</li><li><b>AI use:</b> code and documents were written with AI assistance; no number is written by a language model.</li></ul>
+<p style="margin-top:.14in"><b>Try it:</b> [live application link to be added after deployment]</p>
+</div><div class="shot"><img src="screenshots/11_source_disagreement.png" alt="Source disagreement explorer"></div></div>
+<div class="foot"><span>Data: NASA POWER (NASA LaRC, funded through the NASA Earth Science Division) · NWT Bureau of Statistics · Environment and Climate Change Canada. NASA does not endorse this project.</span><span>7 / 7</span></div></section>
+</body></html>

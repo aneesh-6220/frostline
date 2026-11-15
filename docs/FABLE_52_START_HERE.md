@@ -52,9 +52,9 @@ python3 -I scripts/regenerate_all.py            # rebuild every derived file fro
 python3 -I scripts/regenerate_all.py --check    # after a commit: fails if committed outputs differ
 python3 -I -m unittest discover -s tests -v     # scientific, data and contract tests
 pip install -r UI/requirements.txt
-streamlit run UI/northlink_app.py   # LEGACY synthetic prototype; the real Frostline entrypoint does not exist yet
+streamlit run UI/frostline_app.py   # the production Frostline application (reads only UI/data_real)
 ```
-The legacy entrypoint `UI/northlink_app.py` reads synthetic `UI/data/` and must not be shown as real. The production Frostline entrypoint is yours to create and then record here and in the submission draft (do not invent a path in advance). `UI/requirements.txt` currently lists only streamlit, pandas, altair and numpy; the North Star needs Plotly, PyDeck and SciPy (SciPy is already used by `scripts/`), so add and pin them when you build.
+Update from the implementation branch: the production entrypoint is `UI/frostline_app.py` (package `UI/frostline/`). `UI/northlink_app.py` is now only a launcher for it; the synthetic prototype code and its threshold metric were removed, and `UI/data/` is never read. `UI/requirements.txt` pins Streamlit, pandas, NumPy, SciPy, Plotly and PyDeck to the versions under which the regeneration check is a no-op (Python 3.12). Feature status and verification: `docs/FROSTLINE_IMPLEMENTATION_MATRIX.md`.
 Reproducibility proven here is from **cached** sources, not a live re-download.
 
 ## 11. Suggested order

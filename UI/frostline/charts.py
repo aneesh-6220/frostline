@@ -256,7 +256,7 @@ def station_fdd_chart(ds, height: int = 380) -> go.Figure:
     fig.add_annotation(x=last_ok[0], y=last_ok[1], text="Station", showarrow=False, xanchor="left", xshift=10, font=dict(color=INK, size=12))
     _layout(fig, height)
     fig.update_layout(margin=dict(r=84))
-    fig.update_xaxes(title_text="Winter (gaps: station winter incomplete, not filled)", **_winter_ticks(s.years_all))
+    fig.update_xaxes(title_text="Winter (gaps: station winter incomplete, not filled)", **_winter_ticks(s.years_all, step=6))
     fig.update_yaxes(title_text="Oct-Dec freezing degree-days (°C-days)")
     return fig
 

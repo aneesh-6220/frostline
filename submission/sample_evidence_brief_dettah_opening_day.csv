@@ -1,0 +1,35 @@
+# Frostline Evidence Brief data. Road opening day; Dettah Ice Road (Yellowknife Bay); source: NWT Bureau of Statistics, Table 108; app data digest 7037c7be7383fe25
+# analysis period 1993/94 to 2024/25; empty value = no usable record for that winter (never zero-filled)
+season_start_year,winter,value,unit,in_analysis_period,theil_sen_fit
+1993,1993/94,68.0,days since Oct 1,true,67.05
+1994,1994/95,73.0,days since Oct 1,true,67.95
+1995,1995/96,59.0,days since Oct 1,true,68.85
+1996,1996/97,72.0,days since Oct 1,true,69.75
+1997,1997/98,78.0,days since Oct 1,true,70.65
+1998,1998/99,91.0,days since Oct 1,true,71.55
+1999,1999/00,102.0,days since Oct 1,true,72.45
+2000,2000/01,81.0,days since Oct 1,true,73.35
+2001,2001/02,81.0,days since Oct 1,true,74.25
+2002,2002/03,66.0,days since Oct 1,true,75.15
+2003,2003/04,79.0,days since Oct 1,true,76.05
+2004,2004/05,70.0,days since Oct 1,true,76.95
+2005,2005/06,80.0,days since Oct 1,true,77.85
+2006,2006/07,95.0,days since Oct 1,true,78.75
+2007,2007/08,81.0,days since Oct 1,true,79.65
+2008,2008/09,83.0,days since Oct 1,true,80.55
+2009,2009/10,84.0,days since Oct 1,true,81.45
+2010,2010/11,76.0,days since Oct 1,true,82.35
+2011,2011/12,91.0,days since Oct 1,true,83.25
+2012,2012/13,80.0,days since Oct 1,true,84.15
+2013,2013/14,73.0,days since Oct 1,true,85.05
+2014,2014/15,79.0,days since Oct 1,true,85.95
+2015,2015/16,93.0,days since Oct 1,true,86.85
+2016,2016/17,97.0,days since Oct 1,true,87.75
+2017,2017/18,96.0,days since Oct 1,true,88.65
+2018,2018/19,102.0,days since Oct 1,true,89.55
+2019,2019/20,102.0,days since Oct 1,true,90.45
+2020,2020/21,84.0,days since Oct 1,true,91.35
+2021,2021/22,84.0,days since Oct 1,true,92.25
+2022,2022/23,101.0,days since Oct 1,true,93.15
+2023,2023/24,119.0,days since Oct 1,true,94.05
+2024,2024/25,81.0,days since Oct 1,true,94.95
