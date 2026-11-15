@@ -1,8 +1,18 @@
 # Deploying Frostline
 
-Status: **not deployed.** Release candidate for deployment (2026-11-15): local branch `frostline-map-giovanni-release`, one commit ahead of `origin/main` (`bc1b7d0`). It needs no secrets: NASA POWER needs no key, Giovanni data are committed files, and the map tiles need no key. The machine used for the build has no GitHub credentials, so the implementation branch could not be pushed and no hosted application could be created or checked. No public URL exists yet. Do not write one into the submission until someone has opened it in a private browser window.
+Status: **not deployed.** No public URL exists yet. Do not write one into the submission until someone has opened it in a private browser window.
 
-The repository stays private. Changing its visibility is the Captain's decision and is not needed for deployment.
+Current facts (checked 2026-11-15, 11:55 Atlantic): the repository is **`aneesh-6220/frostline`** (renamed from `nasa-space-apps-2026`; GitHub redirects the old name) and it is **public**. Branch `frostline-map-giovanni-release` (`fe04f73`, 198 tests passing) is already pushed and can be deployed now. The final-qualification branch `frostline-final-qualification` (204 tests, landing/demo/map fixes, team documents) is local only; pushing it, or fast-forwarding the deployed branch to it, needs the Captain's approval. The app needs no secrets: NASA POWER needs no key, Giovanni data are committed files, and the map tiles need no key.
+
+## Fastest path (about 7 minutes, needs the repository owner's GitHub login)
+
+1. https://share.streamlit.io, sign in with GitHub, **Create app**, **Deploy a public app from GitHub**.
+2. Repository `aneesh-6220/frostline`, branch `frostline-map-giovanni-release` (or the approved final branch), main file path `UI/frostline_app.py`.
+3. Advanced settings: Python **3.12**. No secrets.
+4. Deploy, then set sharing to public and run the checklist in section 3 from a private window.
+5. To ship later approved commits: `git push origin frostline-final-qualification:frostline-map-giovanni-release` (a fast-forward; never force-push). Streamlit redeploys on push.
+
+The sections below are the earlier, longer instructions; where they name the old repository or say it is private, the facts above take precedence.
 
 ## 1. Push the branch (about 2 minutes, needs a GitHub login with write access)
 
