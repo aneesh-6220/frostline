@@ -1,0 +1,120 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+/* ------------------------------------------------------------------
+   Frostline design system: blue and white.
+   One accent (blue-600) for navigation, actions and data; deep navy for
+   type and the brand surface; cool neutrals for everything else.
+   Status hues are reserved for evidence states and always carry a label.
+------------------------------------------------------------------- */
+@theme {
+  --font-sans: "Geist Variable", "Geist", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --color-canvas: #f5f8fc;
+  --color-surface: #ffffff;
+  --color-subtle: #f8fafd;
+  --color-line: #e4eaf2;
+  --color-line-soft: #edf1f7;
+  --color-line-strong: #cfd8e5;
+
+  --color-navy: #0b1736;
+  --color-navy-2: #13224a;
+  --color-ink: #0f1a33;
+  --color-ink-body: #1e293b;
+  --color-ink-2: #475569;
+  --color-ink-3: #64748b;
+
+  --color-brand: #2563eb;
+  --color-brand-hover: #1d4ed8;
+  --color-brand-press: #1e40af;
+  --color-brand-soft: #eff5ff;
+  --color-brand-tint: #dbeafe;
+  --color-brand-ice: #60a5fa;
+
+  --color-good: #047857;
+  --color-good-soft: #ecfdf5;
+  --color-good-line: #a7f3d0;
+  --color-warn: #a35a00;
+  --color-warn-soft: #fff8eb;
+  --color-warn-line: #fcd9a0;
+  --color-alert: #c2410c;
+  --color-alert-soft: #fff4ed;
+  --color-alert-line: #fdc9a8;
+  --color-akl: #ea580c;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --shadow-card: 0 1px 2px rgb(11 23 54 / 0.04), 0 0 0 1px rgb(11 23 54 / 0.02);
+  --shadow-lift: 0 1px 2px rgb(11 23 54 / 0.05), 0 8px 24px -12px rgb(11 23 54 / 0.18);
+  --shadow-pop: 0 2px 6px rgb(11 23 54 / 0.06), 0 24px 48px -16px rgb(11 23 54 / 0.28);
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --animate-shimmer: shimmer 1.4s linear infinite;
+
+  @keyframes shimmer {
+    from { background-position: -400px 0; }
+    to { background-position: 400px 0; }
+  }
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-canvas text-ink-body font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 { @apply text-ink; letter-spacing: -0.02em; }
+  ::selection { background: rgb(37 99 235 / 0.18); }
+  :focus-visible { outline: 2px solid var(--color-brand); outline-offset: 2px; border-radius: 6px; }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  .tnum { font-variant-numeric: tabular-nums; }
+}
+
+@layer components {
+  .kicker {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-brand;
+  }
+  .prose-frost { @apply text-[15px] leading-[1.65] text-ink-2; }
+  .card {
+    @apply rounded-lg border border-line bg-surface;
+    box-shadow: var(--shadow-card);
+  }
+  .skeleton {
+    background: linear-gradient(90deg, #eef2f8 0px, #f7f9fc 160px, #eef2f8 320px);
+    background-size: 800px 100%;
+    animation: var(--animate-shimmer);
+    @apply rounded-md;
+  }
+  /* hairline grid: cells share rules instead of floating as separate cards */
+  .ruled {
+    @apply grid overflow-hidden rounded-lg border border-line bg-surface;
+    box-shadow: var(--shadow-card);
+  }
+  .ruled > * { box-shadow: 1px 0 0 var(--color-line), 0 1px 0 var(--color-line); }
+}
+
+/* Plotly: inherit the app type and keep the modebar quiet */
+.js-plotly-plot .plotly .modebar { opacity: 0; transition: opacity 160ms var(--ease-out); }
+.js-plotly-plot:hover .plotly .modebar { opacity: 1; }
+.js-plotly-plot .plotly .modebar-btn svg { fill: #94a3b8 !important; }
+.js-plotly-plot .plotly .modebar-btn:hover svg, .js-plotly-plot .plotly .modebar-btn.active svg { fill: var(--color-brand) !important; }
+.js-plotly-plot .plotly .hoverlayer .hovertext path { filter: drop-shadow(0 6px 14px rgb(11 23 54 / 0.14)); }
+.maplibregl-ctrl-attrib { font-size: 10px !important; }
+
+/* scrollbars in data tables */
+.scroll-thin { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+@keyframes fadein { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
+@keyframes sheetup { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }

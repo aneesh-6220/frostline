@@ -1,0 +1,4 @@
+# Frostline web server. The analysis stack is the pinned UI/requirements.txt, unchanged.
+-r ../requirements.txt
+fastapi==0.163.1
+uvicorn==0.54.0
