@@ -43,6 +43,9 @@ Do not delay application development on this. The app, the findings and the stat
 ### What a Giovanni extraction would and would not add
 POWER and Giovanni MERRA-2 are not independent datasets. A Giovanni pull is useful because (a) it uses a listed NASA tool on a model the challenge names, and (b) it verifies that POWER T2M equals the MERRA-2 product at the same cell (`giovanni_vs_power_check.csv`). Monthly means are used **only** for seasonal and annual mean-temperature trends. They never replace daily values: FDD, thaw days and road-date metrics stay on the POWER daily series (`docs/SCIENTIFIC_METHODS.md`). Expect the Giovanni monthly trends to resemble the POWER ones; that is a consistency check, not a new finding.
 
+### Faster route with a token (added by the 2026-11-15 audit; not yet run by anyone with credentials)
+The Giovanni time-series API (`https://api.giovanni.earthdata.nasa.gov/timeseries`) exists and answers "Bad or missing token" without credentials (checked 2026-11-15). With a free Earthdata token in a git-ignored `.env` (`EARTHDATA_TOKEN=...`, see `.env.example`), `python3 -I scripts/fetch_giovanni_monthly.py` requests `M2TMNXSLV_5_12_4_T2M` at both points and saves the response verbatim plus a provenance sidecar. The ingest guard below still decides whether the file is accepted; if it refuses, use the manual web route. Then continue with steps 8 to 10.
+
 ### Manual action for Cason (about 30 minutes, needs an Earthdata login, which is free)
 1. Open https://giovanni.gsfc.nasa.gov/giovanni/ and log in.
 2. Plot type **Time Series, Area-Averaged** (a point is acceptable; Giovanni returns the cell containing it).
