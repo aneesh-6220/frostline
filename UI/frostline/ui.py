@@ -156,8 +156,7 @@ def goto(view: str) -> None:
 # ---------------------------------------------------------------- console
 def _var_label(vid: str) -> str:
     v = VARIABLES[vid]
-    group = "Road record" if v.kind == "road" else "NASA" if v.tier == "core" else "NASA, exploratory"
-    return f"{v.short}  ·  {group}"
+    return v.short + (" (exploratory)" if v.tier == "exploratory" else "")
 
 
 def _on_loc(ds):
@@ -168,10 +167,12 @@ def _on_var(ds):
     set_investigation(ds, variable_id=st.session_state["w_var"])
 
 
-def _on_period(ds, key):
-    value = st.session_state.get(key)
+def _on_period(ds):
+    ss = st.session_state
+    value = ss.get("w_period")
     if isinstance(value, (tuple, list)) and len(value) == 2:
         set_investigation(ds, window=(min(value), max(value)))
+        ss["_w_period_canon"] = (ss["loc"], ss["var"], ss["first"], ss["last"])
 
 
 def _on_preset(ds, window):
@@ -190,22 +191,29 @@ def console(ds, where=None) -> Investigation:
         ss["w_loc"] = ss["loc"]
         st.selectbox("Location", prim, format_func=lambda i: locs[i].road_name, key="w_loc", on_change=_on_loc, args=(ds,),
                      help="The two documented case studies. Statistics, charts and the Evidence Brief all follow this choice.")
-        opts = [v.id for v in variables_for(locs[ss["loc"]])]
+        if VARIABLES[ss["var"]].tier == "exploratory":
+            ss["show_exploratory"] = True
+        ss.setdefault("show_exploratory", False)
+        opts = [v.id for v in variables_for(locs[ss["loc"]]) if v.tier == "core" or ss["show_exploratory"]]
         ss["w_var"] = ss["var"]
         st.selectbox("Variable", opts, format_func=_var_label, key="w_var", on_change=_on_var, args=(ds,),
                      help="NASA environmental variables and the government road record. Exploratory variables have no station check.")
+        st.toggle("Include exploratory NASA variables", key="show_exploratory", disabled=VARIABLES[ss["var"]].tier == "exploratory",
+                  help="Skin temperature, precipitation, wind, humidity and surface radiation. They have no station check and are offered for exploration only.")
         lo, hi = an.available_range(ds, ss["loc"], ss["var"])
         years = list(range(lo, hi + 1))
-        # the key carries the canonical selection, so a change made elsewhere (a preset, a new variable) rebuilds the slider in step
-        pkey = f"w_period_{ss['loc']}_{ss['var']}_{ss['first']}_{ss['last']}"
-        st.select_slider("Analysis period (winters)", options=years, value=(ss["first"], ss["last"]), format_func=fmt.winter, key=pkey, on_change=_on_period, args=(ds, pkey),
+        # the slider keeps one key (so it keeps keyboard focus); a change made elsewhere (a preset, a new variable) is pushed into it
+        canon = (ss["loc"], ss["var"], ss["first"], ss["last"])
+        if "w_period" in ss and ss.get("_w_period_canon") != canon:
+            ss["w_period"] = (ss["first"], ss["last"])
+        ss["_w_period_canon"] = canon
+        st.select_slider("Analysis period (winters)", options=years, value=(ss["first"], ss["last"]), format_func=fmt.winter, key="w_period", on_change=_on_period, args=(ds,),
                          help="Winter y runs Oct 1 of y to Mar 31 of y+1. Changing the period recomputes every statistic.")
         var = VARIABLES[ss["var"]]
         if len(var.fixed_windows) > 1 or (ss["first"], ss["last"]) not in var.fixed_windows:
-            cols = st.columns(len(var.fixed_windows) or 1)
-            for c, w in zip(cols, var.fixed_windows or ((lo, hi),)):
-                c.button(fmt.period(*w).replace(" to ", " – "), key=f"preset_{w[0]}_{w[1]}", on_click=_on_preset, args=(ds, w), width="stretch",
-                         type="primary" if (ss["first"], ss["last"]) == w else "secondary", help="Approved fixed window with a multiplicity-adjusted q.")
+            for w in var.fixed_windows or ((lo, hi),):
+                st.button("Approved window: " + fmt.period(*w), key=f"preset_{w[0]}_{w[1]}", on_click=_on_preset, args=(ds, w), width="stretch",
+                          type="primary" if (ss["first"], ss["last"]) == w else "secondary", help="A fixed window whose result carries a multiplicity-adjusted q.")
         inv = current()
         f = an.trend(ds, inv.location_id, inv.variable_id, inv.first, inv.last)
         fixed = an.is_fixed_window(inv.variable_id, inv.first, inv.last)

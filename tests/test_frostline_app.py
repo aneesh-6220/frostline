@@ -273,7 +273,7 @@ class AC6_SelectionDrivesEveryNumber(unittest.TestCase):
         self.assertNotIn(fmt.interval(a.ci_low, a.ci_high, 0), text)
         self.assertIn("Aklavik", text)
 
-        at.sidebar.select_slider[0].set_value((2006, 2024)).run()
+        at.sidebar.select_slider(key="w_period").set_value((2006, 2024)).run()
         c = an.trend(DS, "aklavik_delta", "fdd_octdec", 2006, 2024)
         text = visible(rendered_text(at, charts=False))
         self.assertEqual((c.n, c.window_kind, c.q), (19, "exploratory", None))
@@ -322,6 +322,24 @@ class AC7_CustomLocation(unittest.TestCase):
         self.assertEqual(list(at.sidebar.selectbox(key="w_loc").options), ["Dettah Ice Road", "Aklavik Ice Road"])
         for view in ("atlas", "questions", "compare"):
             self.assertNotRegex(visible(rendered_text(run_view(view))), r"\bCustom\b")
+
+
+class ExploratoryVariablesAreGated(unittest.TestCase):
+    def test_extended_variables_appear_only_when_asked_for(self):
+        core = [v.short for v in VARIABLES.values() if v.tier == "core"]
+        at = run_view("detective")
+        self.assertEqual(list(at.sidebar.selectbox(key="w_var").options), core)
+        self.assertEqual(set(core), {"Oct-Dec mean temperature", "Jan-Mar mean temperature", "Oct-Dec freezing degree-days", "Mar 15-Apr 15 mean daily max",
+                                     "Jan-Mar above-freezing days", "Opening day", "Closing day", "Open-to-close interval"})
+        at.sidebar.toggle(key="show_exploratory").set_value(True).run()
+        opts = list(at.sidebar.selectbox(key="w_var").options)
+        self.assertEqual(len(opts), len(VARIABLES))
+        self.assertTrue(all(o.endswith("(exploratory)") for o in opts if o not in core))
+        at.sidebar.selectbox(key="w_var").set_value("precip_octdec_mm").run()
+        self.assertEqual(len(at.exception), 0)
+        text = visible(rendered_text(at, charts=False))
+        self.assertIn("mm per decade", text)
+        self.assertNotIn(DS.facts["bias_caveat"], text)        # the temperature caveat belongs to temperature figures
 
 
 class AC8_ThawDays(unittest.TestCase):

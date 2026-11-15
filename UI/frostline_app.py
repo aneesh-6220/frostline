@@ -17,7 +17,7 @@ import streamlit as st  # noqa: E402
 from frostline import APP_NAME, TEAM_NAME, data, ui  # noqa: E402
 from frostline.views import atlas, brief_view, compare, corridor, demo, detective, evidence_view, methods, observatory, questions  # noqa: E402
 
-st.set_page_config(page_title="Frostline - by Strongest Soldiers", page_icon=":material/ac_unit:", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Frostline - by Strongest Soldiers", page_icon=":material/ac_unit:", layout="wide", initial_sidebar_state="auto")
 ui.inject_theme()
 
 try:

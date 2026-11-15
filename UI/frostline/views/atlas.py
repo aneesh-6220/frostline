@@ -33,7 +33,7 @@ def build_deck(ds, selected: str) -> pdk.Deck:
                   get_text_anchor="'middle'", get_alignment_baseline="'bottom'", get_pixel_offset=[0, -16]),
     ]
     sel = next(l for l in locs if l.id == selected)
-    view = pdk.ViewState(latitude=65.4, longitude=-124.4, zoom=3.55, pitch=0) if not st.session_state.get("atlas_zoom") else pdk.ViewState(latitude=sel.lat, longitude=sel.lon, zoom=7.2, pitch=0)
+    view = pdk.ViewState(latitude=65.5, longitude=-122.6, zoom=3.6, pitch=0) if not st.session_state.get("atlas_zoom") else pdk.ViewState(latitude=sel.lat, longitude=sel.lon, zoom=7.2, pitch=0)
     return pdk.Deck(layers=layers, initial_view_state=view, map_provider="carto", map_style="dark", tooltip={"html": "<b>{name}</b><br/>{tip}", "style": {"backgroundColor": "#17233B", "color": "#E8EEF7", "fontSize": "12px"}})
 
 

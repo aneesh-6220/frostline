@@ -51,11 +51,11 @@ def _layout(fig: go.Figure, height: int = 420, title: str | None = None, legend:
     return fig
 
 
-def _winter_ticks(years) -> dict:
+def _winter_ticks(years, step: int | None = None) -> dict:
     years = sorted(int(y) for y in years)
-    step = 4 if len(years) > 20 else 2 if len(years) > 10 else 1
+    step = step or (4 if len(years) > 20 else 2 if len(years) > 10 else 1)
     vals = [y for y in years if (y - years[0]) % step == 0]
-    return dict(tickmode="array", tickvals=vals, ticktext=[fmt.winter(y) for y in vals])
+    return dict(tickmode="array", tickvals=vals, ticktext=[fmt.winter(y) for y in vals], tickangle=0)
 
 
 def _value_hover(var, name: str) -> str:
@@ -209,16 +209,15 @@ def timeline_chart(ds, location_id: str, env_variable_id: str = "fdd_octdec", hi
                   row=2, col=1)
     fig.add_trace(go.Scatter(x=years, y=list(ok.open_day), mode="markers", name="Opening date", showlegend=False, hoverinfo="skip",
                              marker=dict(color=INK, size=7, symbol="line-ew", line=dict(color=INK, width=2))), row=2, col=1)
-    fig.add_hline(y=91.5, line=dict(color=WARN, width=1, dash="dot"), row=2, col=1,
-                  annotation_text="Dec 31: end of the Oct to Dec environmental window", annotation_position="top left", annotation_font=dict(color=INK_2, size=11))
+    fig.add_hline(y=91.5, line=dict(color=WARN, width=1.2, dash="dot"), row=2, col=1)
     if highlight is not None:
         for r in (1, 2):
             fig.add_vrect(x0=highlight - 0.5, x1=highlight + 0.5, fillcolor="rgba(250,178,25,0.10)", line=dict(color=WARN, width=1), row=r, col=1)
     _layout(fig, height, legend=False)
     fig.update_annotations(font=dict(color=INK, size=13))
     all_years = sorted(set(years) | set(env.years))
-    fig.update_xaxes(range=[min(all_years) - 0.7, max(all_years) + 0.7], **_winter_ticks(all_years))
-    fig.update_xaxes(title_text="Winter", row=2, col=1)
+    fig.update_xaxes(range=[min(all_years) - 0.7, max(all_years) + 0.7], **_winter_ticks(all_years, step=6))
+    fig.update_xaxes(title_text="Winter. Dotted line: Dec 31, the end of the Oct to Dec environmental window", row=2, col=1)
     fig.update_yaxes(title_text=var.unit, row=1, col=1)
     vals = list(ok.open_day) + list(ok.close_day)
     _date_ticks(fig, vals, row=2, col=1)
