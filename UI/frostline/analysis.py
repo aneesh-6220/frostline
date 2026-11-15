@@ -228,6 +228,35 @@ def _direction(var: Variable, slope) -> str:
     return var.up_word if slope > 0 else var.down_word
 
 
+T_SELECTION = ("Selection caveat: {where} was chosen as the primary case after its road-date trend had been seen, so this result is "
+               "selection-biased. The q-value from the all-route family of {n} tests is the adjustment.")
+T_FRAGILE = ("Window sensitivity: in the other approved window ({period}) the same test {verdict} (q = {q} within {family}). "
+             "A result that holds in one window and not the other is fragile.")
+FAMILY_SHORT = {"F1_all_extended": "the 126-test extended family", "F4_road_record_all_routes": "the 51-test all-route family"}
+SELECTION_BIASED_LOCATIONS = ("dettah_bay",)   # docs/SCIENTIFIC_METHODS.md section F
+
+
+def _road_context_sentences(ds: Dataset, loc, var: Variable, first: int, last: int, q: float | None) -> list:
+    """Caveats required beside a road-date result (docs/APPROVED_FINDINGS.md sections B and C).
+
+    The selection caveat applies to every estimated road result at a selection-biased location; the window-sensitivity
+    sentence applies to an approved fixed window whose verdict differs from the other approved window.
+    """
+    out = []
+    if loc.id in SELECTION_BIASED_LOCATIONS:
+        fam = {f["family_id"]: f["n_tests"] for f in ds.facts["families"]}
+        out.append(T_SELECTION.format(where=loc.short, n=int(fam["F4_road_record_all_routes"])))
+    if q is None:
+        return out
+    other = next((w for w in var.fixed_windows if tuple(w) != (first, last)), None)
+    if other is not None:
+        o = _stored_fixed(ds, loc, var, int(other[0]), int(other[1]))
+        if o is not None and (o["q"] < ALPHA) != (q < ALPHA):
+            out.append(T_FRAGILE.format(period=fmt.period(*other), verdict="survives correction" if o["q"] < ALPHA else "does not survive correction",
+                                        q=fmt.pval(o["q"]), family=FAMILY_SHORT[o["family"]]))
+    return out
+
+
 # --------------------------------------------------------------------- trends
 @functools.lru_cache(maxsize=2048)
 def trend(ds: Dataset, location_id: str, variable_id: str, first: int, last: int) -> Finding:
@@ -277,11 +306,15 @@ def trend(ds: Dataset, location_id: str, variable_id: str, first: int, last: int
             state, sentence = UNRESOLVED, T_INCONCLUSIVE.format(p=fmt.pval(nums["p"]), q=fmt.pval(q))
         else:
             state, sentence = UNRESOLVED, T_NONSIG
+        if var.kind == "road":
+            extra.extend(_road_context_sentences(ds, loc, var, first, last, q))
         nums.update(slope=stored["slope"], ci_low=stored["ci_low"], ci_high=stored["ci_high"], bb_low=stored["bb_low"], bb_high=stored["bb_high"],
                     p=stored["p"], lag1=stored["lag1"])
         return Finding(**base, state=state, window_kind="fixed", q=q, q_family=stored["family"], q_family_n=int(fam_n), holm=stored["holm"],
                        stored_source=stored["source"], cross_checked=True, sentence=sentence, extra_sentences=tuple(extra), **nums)
     sentence = T_EXPL_SMALL_P.format(p=fmt.pval(nums["p"])) if nums["p"] < ALPHA else T_EXPL_NONSIG
+    if var.kind == "road":
+        extra.extend(_road_context_sentences(ds, loc, var, first, last, None))
     return Finding(**base, state=EXPLORATORY, window_kind="exploratory", sentence=sentence, extra_sentences=tuple(extra), **nums)
 
 

@@ -753,7 +753,11 @@ class AtlasSync(unittest.TestCase):
         c = DS["corridors"].set_index("corridor_id")
         for lid, p in pts.items():
             self.assertEqual((p["lat"], p["lon"]), (float(c.loc[lid, "lat"]), float(c.loc[lid, "lon"])))
-        self.assertEqual({l["@@type"] for l in deck["layers"]}, {"PolygonLayer", "ScatterplotLayer", "TextLayer"})   # no route lines, no heatmap
+        self.assertEqual({l["@@type"] for l in deck["layers"]}, {"PolygonLayer", "ScatterplotLayer", "TextLayer", "PathLayer"})   # no heatmap
+        # the only line on the map is the Arctic Circle reference: one constant-latitude path, never route geometry
+        paths = [l for l in deck["layers"] if l["@@type"] == "PathLayer"]
+        self.assertEqual([l["id"] for l in paths], ["arctic_circle"])
+        self.assertEqual({round(pt[1], 3) for row in paths[0]["data"] for pt in row["path"]}, {66.563})
 
     def test_grid_cell_is_the_documented_merra2_cell(self):
         c = merra2_cell(62.43, -114.34)

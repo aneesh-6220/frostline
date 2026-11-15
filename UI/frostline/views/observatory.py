@@ -39,11 +39,13 @@ def render(ds):
 
     ui.section("What the evidence shows so far", "Computed from the approved data on every load")
     op = an.trend(ds, "dettah_bay", "open_day", 1993, 2024)
+    op_n = an.trend(ds, "dettah_bay", "open_day", 2001, 2024)
     env = an.trend(ds, "dettah_bay", "fdd_octdec", 2001, 2024)
     b, e = ds.facts["bias"], ds.facts["extended_126"]
     ui.metrics([
         ("Road record · Dettah", fmt.num(op.slope, 1, True), "days per decade",
-         f"The ice road opened later over {fmt.period(op.first, op.last)} (95% interval {fmt.interval(op.ci_low, op.ci_high, 1)}; q = {fmt.pval(op.q)} across {op.q_family_n} route tests). Exploratory.",
+         f"The ice road opened later over {fmt.period(op.first, op.last)} (95% interval {fmt.interval(op.ci_low, op.ci_high, 1)}; q = {fmt.pval(op.q)} across {op.q_family_n} route tests). "
+         f"Exploratory and selection-biased; not supported after correction in the NASA-era window {fmt.period(op_n.first, op_n.last)} (q = {fmt.pval(op_n.q)}).",
          "NWT Bureau of Statistics, Table 108"),
         ("NASA freezing accumulation · Dettah", fmt.num(env.slope, 0, True), "°C-days per decade",
          f"95% interval {fmt.interval(env.ci_low, env.ci_high, 0)} over {env.n} winters: not statistically distinguishable from no change. That is not proof of no change.",

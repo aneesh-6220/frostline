@@ -12,6 +12,14 @@ from ..registry import ROAD_KIND_LABEL, primary_locations
 
 COLORS = {"dettah_bay": [76, 155, 232], "aklavik_delta": [224, 119, 63]}   # charts.LOCATION_COLOR
 
+# Orientation labels only: approximate positions of well-known places and water bodies, drawn so a first-time viewer can
+# read the map. They are not data, not measurement sites and not road geometry.
+REFERENCE_PLACES = (
+    ("Great Slave Lake", 61.55, -115.6, "water"),
+    ("Great Bear Lake", 65.55, -121.2, "water"), ("Beaufort Sea", 70.6, -137.5, "water"), ("NORTHWEST TERRITORIES", 64.4, -126.5, "region"),
+)
+ARCTIC_CIRCLE_LAT = 66.563   # latitude of the Arctic Circle (epoch value)
+
 
 def build_deck(ds, selected: str) -> pdk.Deck:
     locs = primary_locations(an.locations(ds))
@@ -25,7 +33,14 @@ def build_deck(ds, selected: str) -> pdk.Deck:
                           polygon=[[c["west"], c["south"]], [c["east"], c["south"]], [c["east"], c["north"]], [c["west"], c["north"]]],
                           tip="MERRA-2 0.5 x 0.625 degree cell containing the sampling point (calculated from the grid definition)"))
         labels.append(dict(text=l.short, lon=l.lon, lat=l.lat))
+    ref = [dict(text=t, lat=la, lon=lo, color=[150, 200, 236, 230] if k == "water" else [196, 205, 216, 235] if k == "town" else [150, 160, 175, 170],
+                size=12 if k != "region" else 11) for t, la, lo, k in REFERENCE_PLACES]
+    circle = [dict(name="Arctic Circle", tip="Latitude 66.56 N (reference line)", path=[[lon, ARCTIC_CIRCLE_LAT] for lon in range(-145, -99, 1)])]
     layers = [
+        pdk.Layer("PathLayer", id="arctic_circle", data=circle, get_path="path", get_color=[140, 203, 240, 110], width_min_pixels=1, get_width=1, pickable=False),
+        pdk.Layer("TextLayer", id="reference", data=ref + [dict(text="Arctic Circle", lat=ARCTIC_CIRCLE_LAT + 0.3, lon=-137.0, color=[140, 203, 240, 190], size=11)],
+                  get_position="[lon, lat]", get_text="text", get_size="size", get_color="color", font_family="'Inter, -apple-system, sans-serif'",
+                  font_weight=500, get_text_anchor="'middle'", get_alignment_baseline="'center'"),
         pdk.Layer("PolygonLayer", id="cells", data=cells, get_polygon="polygon", get_fill_color="color", get_line_color="line", line_width_min_pixels=1.5, stroked=True, filled=True, pickable=True),
         pdk.Layer("ScatterplotLayer", id="locations", data=points, get_position="[lon, lat]", get_fill_color="color", get_line_color="line", get_radius="radius",
                   radius_units="'pixels'", stroked=True, line_width_units="'pixels'", get_line_width=2, pickable=True, auto_highlight=True),
@@ -64,7 +79,7 @@ def render(ds):
                 ui.set_investigation(ds, location_id=picked)
                 st.rerun()
         ui.html("<div class='fl-src'>Markers are calculated sampling points, not measurement sites. Shaded rectangles are the MERRA-2 grid cells (calculated from the grid definition). "
-                "No road line is drawn: the app holds no verified route geometry. Background map by CARTO with OpenStreetMap data, loaded only if a connection is available; "
+                "No road line is drawn: the app holds no verified route geometry. Blue and grey place names and the Arctic Circle are orientation labels only. Background map by CARTO with OpenStreetMap data, loaded only if a connection is available; "
                 "the list on the right works without it.</div>")
     with right:
         for l in primary_locations(locs):

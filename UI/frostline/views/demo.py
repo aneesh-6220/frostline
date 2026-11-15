@@ -4,6 +4,7 @@ Every stage renders the same components, data and analysis functions as the free
 The stage only fixes the starting selection; the sidebar controls stay live throughout.
 """
 import streamlit as st
+import streamlit.components.v1 as components
 
 from .. import analysis as an
 from .. import charts, evidence as ev, fmt, ui
@@ -16,6 +17,7 @@ STAGES = ["The problem", "The geography", "The NASA data", "The scientific findi
 def _go(ds, step):
     step = max(0, min(len(STAGES) - 1, step))
     st.session_state["demo_step"] = step
+    st.session_state["demo_scroll_top"] = True
     if step in (2, 3):
         ui.set_investigation(ds, variable_id="fdd_octdec", question_id="freezing")
     elif step == 4:
@@ -37,8 +39,17 @@ def _nav(ds, step):
                 ui.goto("detective")
 
 
+def _scroll_to_top(step: int) -> None:
+    """After Back or Next, show the new stage from its top (a presenter should not land mid-page)."""
+    if st.session_state.pop("demo_scroll_top", False):
+        components.html("<script>/* stage %d */ const d = window.parent.document; "
+                        "for (const el of d.querySelectorAll('[data-testid=\"stMain\"], section.main, .stMain')) { el.scrollTo({top: 0}); } "
+                        "window.parent.scrollTo({top: 0});</script>" % step, height=0)
+
+
 def render(ds):
     step = int(st.session_state.get("demo_step", 0))
+    _scroll_to_top(step)
     inv = ui.current()
     locs = an.locations(ds)
     loc = locs[inv.location_id]
