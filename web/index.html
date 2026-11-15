@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frostline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="/static/vendor/maplibre-gl.css" rel="stylesheet">
+<link href="/static/styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="shell">
+  <aside class="nav" aria-label="Primary">
+    <div class="brand"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Frostline</span></div>
+    <nav>
+      <a href="#overview" data-view="overview">Overview</a>
+      <a href="#explore" data-view="explore">Explore</a>
+      <a href="#atlas" data-view="atlas">Atlas</a>
+      <a href="#compare" data-view="compare">Compare</a>
+      <a href="#road" data-view="road">Road history</a>
+      <a href="#evidence" data-view="evidence">Evidence</a>
+      <a href="#reports" data-view="reports">Reports</a>
+    </nav>
+    <div class="nav-foot">Strongest Soldiers<br>NASA Space Apps 2026</div>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="ctx" id="ctx" aria-live="polite"></header>
+    <div id="error" class="banner error" role="alert" hidden></div>
+
+    <section class="view" id="view-overview">
+      <h1>Understand the changing northern winter</h1>
+      <p class="lede">Frostline lets you investigate historical winter conditions at two Northwest Territories ice-road settings using NASA POWER daily reanalysis (MERRA-2), ECCC station records and NWT Bureau of Statistics road-operations records. Every number is computed from the committed per-winter data with the project's approved methods.</p>
+      <div class="ov-grid" id="ov-grid"></div>
+      <div class="ov-scope">
+        <h2>What Frostline can and cannot tell you</h2>
+        <ul>
+          <li>It reports historical trends with 95% intervals, sample sizes and an evidence state. A result that is not resolved is reported as such.</li>
+          <li>It shows how gridded NASA temperatures disagree with the nearby ground station, so you can judge how far to trust them.</li>
+          <li>It does not forecast anything and does not assess road safety. Road dates are records of operations, not ice measurements.</li>
+        </ul>
+        <a class="btn primary" href="#explore">Open the workspace</a>
+      </div>
+    </section>
+
+    <section class="view" id="view-explore">
+      <div class="controls" id="explore-controls">
+        <label>Location<select id="sel-location"></select></label>
+        <label>Variable<select id="sel-variable"></select></label>
+        <label>From winter<select id="sel-first"></select></label>
+        <label>To winter<select id="sel-last"></select></label>
+        <button class="btn ghost" id="btn-reset" type="button">Full record</button>
+      </div>
+      <div class="grid-2">
+        <div class="panel chart-panel"><div class="panel-h"><h2 id="chart-title">Series</h2><span class="muted" id="chart-sub"></span></div><div id="chart-main" class="chart" role="img"></div><p class="legend-note" id="chart-note"></p></div>
+        <div class="panel"><div class="panel-h"><h2>Result</h2><span class="state" id="state-chip"></span></div><p class="sentence" id="sentence"></p><dl class="stats" id="stats"></dl><p class="caveat" id="caveat" hidden></p><p class="muted small" id="provenance"></p></div>
+      </div>
+      <div class="panel"><div class="panel-h"><h2>Plain-language reading</h2></div><p id="plain"></p><p class="muted small" id="definition"></p></div>
+    </section>
+
+    <section class="view" id="view-atlas">
+      <div class="atlas">
+        <div id="map" class="map" aria-label="Map of study locations"></div>
+        <div class="panel atlas-side" id="atlas-side"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-compare">
+      <div class="controls">
+        <label>Location A<select id="cmp-a"></select></label>
+        <label>Location B<select id="cmp-b"></select></label>
+        <label>Variable<select id="cmp-var"></select></label>
+        <label>From winter<select id="cmp-first"></select></label>
+        <label>To winter<select id="cmp-last"></select></label>
+      </div>
+      <div class="panel chart-panel"><div class="panel-h"><h2 id="cmp-title">Comparison</h2><span class="muted" id="cmp-sub"></span></div><div id="chart-cmp" class="chart" role="img"></div></div>
+      <div class="panel"><div class="panel-h"><h2>Trends on matched winters</h2><span class="state" id="cmp-chip"></span></div><div class="table-wrap"><table class="tbl" id="cmp-table"></table></div><p class="sentence" id="cmp-sentence"></p><p class="caveat" id="cmp-caveat" hidden></p></div>
+    </section>
+
+    <section class="view" id="view-road">
+      <div class="controls"><label>Road<select id="road-loc"></select></label></div>
+      <div class="panel" id="road-context"></div>
+      <div class="panel chart-panel"><div class="panel-h"><h2>Opening and closing dates</h2><span class="muted">NWT Bureau of Statistics Table 108, verified rows</span></div><div id="chart-road" class="chart" role="img"></div></div>
+      <div class="panel"><div class="panel-h"><h2>Road-operations trends</h2><span class="muted">separate from environmental trends</span></div><div class="table-wrap"><table class="tbl" id="road-trends"></table></div><p class="caveat" id="road-caveat"></p></div>
+      <div class="panel chart-panel"><div class="panel-h"><h2>Environmental conditions, same winters</h2><span class="muted">NASA POWER Oct-Dec freezing degree-days</span></div><div id="chart-road-env" class="chart short" role="img"></div></div>
+      <div class="panel"><div class="panel-h"><h2>Exploratory associations</h2><span class="muted">association, not cause</span></div><div class="table-wrap"><table class="tbl" id="road-assoc"></table></div></div>
+    </section>
+
+    <section class="view" id="view-evidence">
+      <div class="panel"><div class="panel-h"><h2>Evidence for the current investigation</h2></div><p class="sentence" id="ev-headline"></p><p id="ev-suit"></p><div id="ev-dims" class="dims"></div></div>
+      <div class="panel chart-panel"><div class="panel-h"><h2>NASA POWER versus ECCC station, Oct-Dec FDD</h2><span class="muted">Yellowknife cell and airport station</span></div><div id="chart-station" class="chart short" role="img"></div><p id="station-note"></p></div>
+      <div class="panel" id="ev-layers"></div>
+      <div class="panel" id="ev-sources"></div>
+    </section>
+
+    <section class="view" id="view-reports">
+      <div class="panel"><div class="panel-h"><h2>Evidence brief for the current investigation</h2></div>
+        <p id="rep-summary"></p>
+        <div class="actions">
+          <a class="btn primary" id="dl-html" download>Download brief (HTML)</a>
+          <a class="btn" id="dl-csv" download>Download observations (CSV)</a>
+          <a class="btn" id="dl-json" download>Download record (JSON)</a>
+        </div>
+        <p class="muted small">Files are generated on request from the same engine and selection shown in Explore. PDF is not offered: use your browser's print to PDF on the HTML brief.</p>
+      </div>
+      <div class="panel"><iframe id="rep-preview" title="Brief preview" class="preview"></iframe></div>
+    </section>
+  </main>
+</div>
+<nav class="tabbar" aria-label="Primary mobile">
+  <a href="#explore" data-view="explore">Explore</a><a href="#atlas" data-view="atlas">Atlas</a><a href="#compare" data-view="compare">Compare</a><a href="#road" data-view="road">Roads</a><a href="#evidence" data-view="evidence">Evidence</a><a href="#reports" data-view="reports">Reports</a>
+</nav>
+<script src="/static/vendor/echarts.min.js"></script>
+<script src="/static/vendor/maplibre-gl.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
