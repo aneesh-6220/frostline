@@ -51,14 +51,14 @@ def _layout(fig: go.Figure, height: int = 420, title: str | None = None, legend:
         height=height, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
         font=dict(family=FONT, size=12, color=INK_2), margin=dict(l=60, r=16, t=(64 if title else 40) if legend else (44 if title else 16), b=48),
         title=dict(text=title, font=dict(size=14, color=INK), x=0, xanchor="left", y=0.98) if title else None,
-        showlegend=legend, legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="left", x=0, font=dict(color=INK_2, size=12), bgcolor="rgba(0,0,0,0)",
+        showlegend=legend, legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="left", x=0, font=dict(color=INK_2, size=12.5), bgcolor="rgba(0,0,0,0)",
                                        itemwidth=30, traceorder="normal"),
         hoverlabel=dict(bgcolor=HOVER_BG, bordercolor=HOVER_LINE, font=dict(family=FONT, size=12.5, color=INK), align="left"), hovermode="closest",
         modebar=dict(bgcolor="rgba(0,0,0,0)", color=INK_3, activecolor=INK),
     )
-    fig.update_xaxes(showgrid=False, linecolor=AXIS, tickcolor=AXIS, ticks="outside", ticklen=4, tickfont=dict(color=INK_3, size=11.5), title_font=dict(color=INK_3, size=11.5),
+    fig.update_xaxes(showgrid=False, linecolor=AXIS, tickcolor=AXIS, ticks="outside", ticklen=4, tickfont=dict(color=INK_3, size=12.5), title_font=dict(color=INK_3, size=12.5),
                      zeroline=False, title_standoff=10)
-    fig.update_yaxes(gridcolor=GRID, linecolor="rgba(0,0,0,0)", tickfont=dict(color=INK_3, size=11.5), title_font=dict(color=INK_3, size=11.5), zeroline=False, title_standoff=8)
+    fig.update_yaxes(gridcolor=GRID, linecolor="rgba(0,0,0,0)", tickfont=dict(color=INK_3, size=12.5), title_font=dict(color=INK_3, size=12.5), zeroline=False, title_standoff=8)
     return fig
 
 

@@ -127,7 +127,16 @@ button[data-testid^="stBaseButton"]:disabled{opacity:.42}
 [data-testid="stButtonGroup"] button{min-height:36px}
 [data-testid="stRadio"] label p{font-size:14px}
 [data-testid="stVerticalBlockBorderWrapper"]{border-color:var(--line)}
-[data-testid="stIFrame"]{border-radius:var(--r);background:#fff}
+[data-testid="stIFrame"],iframe[title="streamlit_folium.st_folium"]{border-radius:var(--r-lg);background:var(--bg);border:1px solid var(--line)!important}
+
+/* map legend: one quiet line of keys under the map */
+.fl-legend{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);margin:var(--s3) 0 0;font-size:12.5px;color:var(--ink-2)}
+.fl-legend span{display:inline-flex;align-items:center;gap:var(--s2)}
+.fl-legend i{display:inline-block;flex:none}
+.fl-legend .dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 2px var(--bg)}
+.fl-legend .ring{width:10px;height:10px;border-radius:50%;border:2px solid var(--ink);background:var(--bg)}
+.fl-legend .cell{width:14px;height:10px;border:1.5px solid var(--ink-2);background:rgba(163,174,189,.14);border-radius:1px}
+.fl-legend .dash{width:16px;height:0;border-top:1.5px dashed var(--frost)}
 
 /* ---------- type ---------- */
 .fl-page{margin:0 0 var(--s5)}
@@ -241,6 +250,13 @@ button[data-testid^="stBaseButton"]:disabled{opacity:.42}
 .fl-rows h4{font-size:15px;font-weight:600;margin:0 0 var(--s1);padding:0;color:var(--ink);letter-spacing:-.01em}
 .fl-rows p{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0}
 
+/* journey (landing): the investigation path as one numbered line */
+.fl-journey{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));list-style:none;margin:var(--s6) 0 0;padding:0;max-width:560px}
+.fl-journey li{position:relative;overflow-wrap:normal;word-break:normal;hyphens:none;display:flex;flex-direction:column;gap:var(--s2);font-size:12.5px;line-height:1.35;color:var(--ink-2);margin:0;padding:0 var(--s2) 0 0}
+.fl-journey li span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line-strong);background:var(--bg);font-size:11px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums;position:relative;z-index:1}
+.fl-journey li:first-child span{border-color:var(--frost);color:var(--frost)}
+.fl-journey li:not(:last-child)::after{content:"";position:absolute;top:11px;left:30px;right:6px;height:1px;background:var(--line-strong)}
+
 /* stepper */
 .fl-steps{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);list-style:none;margin:var(--s3) 0 0;padding:0;counter-reset:s}
 .fl-steps li{display:flex;align-items:center;gap:var(--s2);font-size:13px;color:var(--ink-3);margin:0;padding:0;counter-increment:s}
@@ -275,6 +291,8 @@ button[data-testid^="stBaseButton"]:disabled{opacity:.42}
 /* ---------- responsive ---------- */
 @media (max-width:1100px){
   .fl-grid{--cols:2!important}
+  .fl-hero h1{font-size:36px}
+  .fl-journey li{font-size:12px;padding-right:4px}
   [data-testid="stMainBlockContainer"],.block-container{padding-left:var(--s5);padding-right:var(--s5)}
 }
 @media (max-width:767px){
@@ -527,13 +545,16 @@ def finding_card(ds, f: an.Finding, title: str | None = None, show_table: bool =
     head = _head(title or var.short + " · " + loc.short, chip(f.state_label, tone))
     if f.estimated:
         big = (f"<div class='big'>{fmt.num(f.slope, d, True)}<small>{esc(var.unit_per_decade)} · {esc(f.direction)}</small></div>"
-               f"<p class='dim'>95% interval {fmt.interval(f.ci_low, f.ci_high, d)} · n = {f.n} winters · {fmt.period(f.first, f.last)}</p>")
+               f"<p class='dim'>95% interval {fmt.interval(f.ci_low, f.ci_high, d)} · n = {f.n} winters · {fmt.period(f.first, f.last)}"
+               + (f" · p = {fmt.pval(f.p)}" if f.p is not None else "")
+               + (f", q = {fmt.pval(f.q)} across {f.q_family_n} tests" if f.q is not None and f.q_family_n else
+                  " · not adjusted for multiple testing" if f.window_kind == "exploratory" else "") + "</p>")
     else:
         big = f"<div class='big'>Not estimated</div><p class='dim'>n = {f.n} winters · {fmt.period(f.first, f.last)}</p>"
     body = f"<p>{esc(f.sentence)}</p>" + "".join(f"<p class='dim'>{esc(s)}</p>" for s in f.extra_sentences)
     html(f"<section class='fl-finding {tone}'>{head}{big}{body}<div class='fl-src'>{esc(provenance_line(ds, var, loc))}</div></section>")
     if show_table:
-        with st.expander("Full statistical record", expanded=True):
+        with st.expander("Full statistical record: intervals, p, q and autocorrelation", expanded=False):
             html(kv_table(brief_mod.stat_rows(ds, f)))
     if var.is_temperature:
         bias_caveat(ds)
@@ -570,6 +591,11 @@ def steps(labels, active: int | None = None) -> None:
         parts.append(f"<li class='{cls}'" + (" aria-current='step'" if active == i else "") + f">{esc(lab)}</li>")
     bar = f"<div class='fl-progress' aria-hidden='true'><i style='width:{(active + 1) / len(labels) * 100:.1f}%'></i></div>" if active is not None else ""
     html("<ol class='fl-steps'>" + "".join(parts) + "</ol>" + bar)
+
+
+def journey(labels) -> None:
+    """The investigation path as one quiet numbered line (landing page)."""
+    html("<ol class='fl-journey' aria-label='How an investigation works'>" + "".join(f"<li><span>{i + 1}</span>{esc(l)}</li>" for i, l in enumerate(labels)) + "</ol>")
 
 
 def card(kicker_text: str, title: str, text: str) -> str:

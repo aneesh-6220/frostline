@@ -48,8 +48,7 @@ def render(ds):
                 ui.goto("demo")
             if st.button("Explore the Data on the map", key="home_explore", icon=":material/map:"):
                 ui.goto("atlas")
-        ui.html("<div class='fl-label' style='margin-top:var(--s5)'>The guided investigation</div>")
-        ui.steps(["Location", "Environmental Evidence", "Trend", "Comparison", "Road History", "Evidence Brief"])
+        ui.journey(["Choose a place", "Retrieve NASA data", "Measure the trend", "Weigh the evidence", "Export a brief"])
     with right:
         f = an.trend(ds, DEFAULT_LOCATION, DEFAULT_VARIABLE, 2001, 2024)
         with st.container(key="fl_frame_home"):
@@ -82,30 +81,17 @@ def render(ds):
 
     c = st.columns([1.1, 1], gap="large")
     with c[0]:
-        ui.section("What you can do here")
-        ui.html("<div class='fl-rows'>"
-                "<div><span class='n'>01</span><div><div class='k'>Map</div><h4>Choose any northern location</h4>"
-                "<p>Click a documented ice road, or any point from 50 to 75° N. For a new point Frostline requests 44 winters of daily temperature from the NASA POWER API.</p></div></div>"
-                "<div><span class='n'>02</span><div><div class='k'>Trend</div><h4>Measure the change and its uncertainty</h4>"
-                "<p>A rate of change per decade with a 95% interval and a significance test that always match your selection, on NASA POWER daily data "
-                "or the 1980 to 2025 NASA Giovanni monthly record.</p></div></div>"
-                "<div><span class='n'>03</span><div><div class='k'>Evidence</div><h4>Judge the evidence, then export it</h4>"
-                "<p>Limitations, disagreements between sources and corrections for multiple testing sit beside each result. Every investigation exports as a reproducible Evidence Brief.</p></div></div>"
-                "</div>")
-        with st.container(horizontal=True, gap="small"):
-            st.page_link(ui.PAGES["atlas"], label="Map", icon=":material/arrow_forward:")
-            st.page_link(ui.PAGES["giovanni"], label="Giovanni record", icon=":material/arrow_forward:")
-            st.page_link(ui.PAGES["evidence"], label="Evidence Engine", icon=":material/arrow_forward:")
-    with c[1]:
         ui.section("Why it matters")
         ui.html("<p class='fl-sub'>Seasonal roads built on frozen lakes and rivers connect northern communities and carry supplies each winter. "
                 "Asking how winter conditions and road seasons have changed means finding NASA datasets, cleaning daily records, computing seasonal indicators, "
                 "fitting trends, locating government records and working out what can honestly be concluded. Frostline compresses that workflow into one guided, reproducible investigation.</p>")
+    with c[1]:
+        ui.section("Scope and data in this release")
         s = ds.facts["status_counts"]
         p = ds.facts["periods"]
         days = (dt.date.fromisoformat(p["nasa_daily_last"]) - dt.date.fromisoformat(p["nasa_daily_first"])).days + 1
+        ui.note("Frostline is a scientific investigation tool. It does not measure ice thickness, assess road safety, recommend routes or predict opening dates, "
+                "and it does not show what produced any change in the road record.", "Scope")
         ui.caption(f"In this release: {fmt.count(days)} days of NASA daily data at each of two documented locations, "
                    f"{s['total_rows']} route-winters of government road records ({s['counts']['verified']} verified) across {s['routes']} NWT routes, "
                    f"and {fmt.count(b['paired_days'])} paired station days for validation.")
-        ui.note("Frostline is a scientific investigation tool. It does not measure ice thickness, assess road safety, recommend routes or predict opening dates, "
-                "and it does not show what produced any change in the road record.", "Scope")

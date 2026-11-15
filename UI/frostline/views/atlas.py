@@ -37,6 +37,20 @@ TILES = (("Dark (Esri Dark Gray Canvas)", ESRI.format("Canvas/World_Dark_Gray_Ba
          ("Topographic (Esri World Topo)", ESRI.format("World_Topo_Map"), ESRI_ATTR, False, False),
          ("OpenStreetMap", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", OSM_ATTR, False, False),
          ("Place labels (Esri)", ESRI.format("Canvas/World_Dark_Gray_Reference"), ESRI_ATTR, True, True))
+# Leaflet chrome restyled to match the app: dark container while tiles load, compact attribution, quiet controls.
+MAP_CSS = """<style>
+.leaflet-container{background:#0B0E13;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.leaflet-control-attribution{font-size:10.5px!important;line-height:1.5;background:rgba(11,14,19,.78)!important;color:#A3AEBD!important;padding:2px 8px!important;border-top-left-radius:6px}
+.leaflet-control-attribution a{color:#8CCBF0!important}
+.leaflet-control-attribution svg{display:none!important}
+.leaflet-bar,.leaflet-control-layers{border:1px solid #2E3644!important;border-radius:8px!important;box-shadow:0 4px 16px rgba(0,0,0,.35)!important;overflow:hidden}
+.leaflet-bar a,.leaflet-control-layers-toggle{background-color:#151A22!important;color:#E7ECF2!important;border-bottom-color:#2E3644!important}
+.leaflet-bar a:hover{background-color:#1B212B!important}
+.leaflet-control-layers-expanded{background:#151A22!important;color:#E7ECF2!important;font-size:12.5px;padding:8px 12px!important}
+.leaflet-control-scale-line{background:rgba(11,14,19,.7)!important;color:#A3AEBD!important;border-color:#7D8898!important;font-size:10.5px}
+.leaflet-tooltip{background:#151A22;color:#E7ECF2;border:1px solid #2E3644;border-radius:6px;font-size:12.5px;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.leaflet-tooltip-left:before{border-left-color:#2E3644}.leaflet-tooltip-right:before{border-right-color:#2E3644}
+</style>"""
 STEPS = ["Select a place", "Choose a question", "Retrieve observations", "Analyze the trend", "Understand the evidence", "Export"]
 MATCH_TOL = 1e-4
 
@@ -62,6 +76,7 @@ def build_map(ds, selected: str | None, point: tuple | None = None) -> folium.Ma
                             fill_color=COLORS[loc.id], fill_opacity=1.0,
                             tooltip=folium.Tooltip(f"<b>{loc.name}</b><br>Curated case study · NASA data + road records" + ("<br><i>selected</i>" if on else ""), sticky=True)).add_to(m)
     folium.LayerControl(position="topright", collapsed=True).add_to(m)
+    m.get_root().header.add_child(folium.Element(MAP_CSS))
     return m
 
 
@@ -127,12 +142,12 @@ def result_chart(r: ex.ExploreResult, height: int = 380) -> go.Figure:
     t = r.table
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=t.season_start_year, y=t[r.question_id], mode="markers+lines", name="NASA POWER, this point",
-                             line=dict(color=ch._rgba(EXPLORE_COLOR, 0.25), width=1), marker=dict(color=EXPLORE_COLOR, size=7),
+                             line=dict(color=ch._rgba(ch.C_PRIMARY, 0.55), width=1.25), marker=dict(color=ch.C_PRIMARY, size=8, line=dict(color=ch.BG, width=2)),
                              customdata=t.winter, hovertemplate="<b>Winter %{customdata}</b><br>%{y:.1f} " + r.q["unit"] + "<extra></extra>"))
     if r.estimated:
-        fig.add_trace(go.Scatter(x=t.season_start_year, y=ex.fitted(r), mode="lines", name="Theil-Sen trend", line=dict(color=ch.C_PRIMARY, width=2.5),
+        fig.add_trace(go.Scatter(x=t.season_start_year, y=ex.fitted(r), mode="lines", name="Theil-Sen trend", line=dict(color=ch.TREND, width=2.5),
                                  hoverinfo="skip"))
-    fig.update_yaxes(title_text=r.q["unit"])
+    fig.update_yaxes(title_text=f"{r.q['short']} ({r.q['unit']})")
     fig.update_xaxes(**ch._winter_ticks(t.season_start_year.tolist()), title_text="Winter")
     return ch._layout(fig, height=height)
 
@@ -245,16 +260,20 @@ def render(ds):
     left, right = st.columns([1.55, 1], gap="large")
     with left:
         ui.section("1 · Select a place")
-        out = st_folium(build_map(ds, None if point else inv.location_id), feature_group_to_add=selection_layer(point), key="xp_map", height=480,
+        out = st_folium(build_map(ds, None if point else inv.location_id), feature_group_to_add=selection_layer(point), key="xp_map", height=560,
                         use_container_width=True, returned_objects=["last_clicked", "last_object_clicked"])
         click = new_click(out)
         if click:
             kind, val = resolve_click(ds, click["lat"], click["lng"])
             apply_selection(ds, kind, val)
             st.rerun()
-        ui.html("<div class='fl-src'>Coloured dots: curated case studies (NASA daily data plus government road records). White ring: your exploratory point. "
-                "Shaded rectangles: calculated NASA MERRA-2 grid cells. Dashed outline: area supported for exploration. No road line, risk layer or raster is drawn. "
-                "Basemap and labels &copy; Esri and contributors, including &copy; OpenStreetMap contributors (other basemaps in the layer menu, top right). If tiles do not load, markers still work, and the case-study buttons and coordinate form beside the map (below it on a phone) need no map.</div>")
+        ui.html("<div class='fl-legend'><span><i class='dot' style='background:%s'></i>Dettah case study</span>"
+                "<span><i class='dot' style='background:%s'></i>Aklavik case study</span>"
+                "<span><i class='ring'></i>Your exploratory point</span><span><i class='cell'></i>NASA MERRA-2 grid cell (calculated)</span>"
+                "<span><i class='dash'></i>Area open to exploration</span></div>"
+                "<div class='fl-src'>Curated case studies combine NASA daily data with government road records. No road line, risk layer or raster is drawn. "
+                "Basemap and labels &copy; Esri and contributors, including &copy; OpenStreetMap contributors; other basemaps are in the layer menu (top right). "
+                "If tiles do not load, the markers still work, and the case-study list beside the map (below it on a phone) needs no map.</div>" % (COLORS["dettah_bay"], COLORS["aklavik_delta"]))
         if ss.get("xp_outside"):
             o = ss["xp_outside"]
             st.warning(f"{o[0]:.2f}, {o[1]:.2f} is outside the supported area ({pa.COVERAGE['south']:.0f} to {pa.COVERAGE['north']:.0f} N, "

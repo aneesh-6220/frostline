@@ -30,18 +30,20 @@ except data.DataError as exc:
 
 ui.init_state(ds)
 
+# (key, title, module, icon, group). Groups follow the investigation path: start, explore, understand, share.
+# An empty group renders as a top-level link; named groups render as compact menus in the top navigation.
 VIEWS = [
-    ("observatory", "Observatory", observatory, ":material/ac_unit:"),
-    ("demo", "Guided demo", demo, ":material/play_circle:"),
-    ("atlas", "Map", atlas, ":material/map:"),
-    ("questions", "Questions", questions, ":material/help:"),
-    ("detective", "Trend Detective", detective, ":material/show_chart:"),
-    ("compare", "Compare", compare, ":material/compare_arrows:"),
-    ("giovanni", "Giovanni record", giovanni_view, ":material/satellite_alt:"),
-    ("corridor", "Corridor", corridor, ":material/route:"),
-    ("evidence", "Evidence", evidence_view, ":material/fact_check:"),
-    ("brief", "Brief", brief_view, ":material/description:"),
-    ("methods", "Methods", methods, ":material/menu_book:"),
+    ("observatory", "Home", observatory, ":material/ac_unit:", ""),
+    ("atlas", "Map", atlas, ":material/map:", ""),
+    ("demo", "Guided demo", demo, ":material/play_circle:", ""),
+    ("detective", "Trend Detective", detective, ":material/show_chart:", "Explore"),
+    ("giovanni", "Giovanni record (1980 to 2025)", giovanni_view, ":material/satellite_alt:", "Explore"),
+    ("corridor", "Winter-road corridor", corridor, ":material/route:", "Explore"),
+    ("compare", "Compare regions", compare, ":material/compare_arrows:", "Explore"),
+    ("questions", "Guiding questions", questions, ":material/help:", "Explore"),
+    ("evidence", "Evidence and uncertainty", evidence_view, ":material/fact_check:", "Understand"),
+    ("methods", "Methods and sources", methods, ":material/menu_book:", "Understand"),
+    ("brief", "Evidence Brief", brief_view, ":material/description:", ""),
 ]
 
 
@@ -56,10 +58,12 @@ start = st.session_state.get("start_view", "observatory")
 if start not in {v[0] for v in VIEWS}:
     start = "observatory"
 ui.PAGES.clear()
-for key, title, module, icon in VIEWS:
+groups: dict = {}
+for key, title, module, icon, group in VIEWS:
     ui.PAGES[key] = _page(key, title, module, icon, key == start)
+    groups.setdefault(group, []).append(ui.PAGES[key])
 
-nav = st.navigation(list(ui.PAGES.values()), position="top")
+nav = st.navigation(groups, position="top")
 try:
     ui.console(ds)
     nav.run()
